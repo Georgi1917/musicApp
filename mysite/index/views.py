@@ -17,8 +17,9 @@ def register_user(request):
             password = form.cleaned_data['password1']
             user = authenticate(request, username=username, password=password)
             login(request, user)
+            curr_user = request.user
             messages.success(request, ("You have been registered succesfully!!"))
-            return redirect('main-page')
+            return redirect('main-page', user_id=curr_user.id)
         else:
             messages.success(request, ("There was an error, please try again!"))
             return redirect('register')
@@ -34,8 +35,9 @@ def login_user(request):
         user = authenticate(request, username=user_username, password=user_password)
         if user is not None:
             login(request, user)
+            curr_user = request.user
             messages.success(request, ("You have been logged in succesfully!!"))
-            return redirect("main-page")
+            return redirect("main-page", user_id=curr_user.id)
         else:
             messages.success(request, ("There was an error!"))
             return redirect("login")
@@ -46,7 +48,10 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.success(request, ("You have been succesfully logged out!"))
-    return redirect("login")
+    return redirect("home")
     
-def show_main_page(request):
-    return render(request, "main-page.html")
+def show_main_page(request, user_id):
+    context = {
+        "id": user_id
+    }
+    return render(request, "main-page.html", context)

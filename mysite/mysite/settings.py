@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'index',
+    'album_song_creation',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
-                 os.path.join(BASE_DIR, 'index/templates')],
+                 os.path.join(BASE_DIR, 'index/templates'),
+                 os.path.join(BASE_DIR, 'album_song_creation/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

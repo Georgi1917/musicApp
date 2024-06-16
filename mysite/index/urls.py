@@ -5,6 +5,6 @@ urlpatterns = [
     path('', home_page_index, name="home"),
     path('log-in-page', login_user, name="login"),
     path('register-page', register_user, name="register"),
-    path('main-page', show_main_page, name="main-page"),
+    path('main-page/<int:user_id>', show_main_page, name="main-page"),
     path('logout_user', logout_user, name="logout")
 ]
