@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+from album_song_creation.models import Playlist
 
 # Create your views here.
 
@@ -51,7 +52,10 @@ def logout_user(request):
     return redirect("home")
     
 def show_main_page(request, user_id):
+    user_playlists = Playlist.objects.filter(user__pk=user_id).all()
+
     context = {
-        "id": user_id
+        "user_playlists": user_playlists,
     }
+
     return render(request, "main-page.html", context)
