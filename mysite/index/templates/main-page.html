@@ -14,18 +14,24 @@
         <a href="{% url 'login' %}">LogIn</a><br>
     {% endif %}
 
-    <a href="{% url 'album' user_id=user.id %}">Create a New Album</a>
+    <a href="{% url 'album' user_id=user.id %}">Create a New Album</a> <br>
 
     {% if messages %}
         {% for msg in messages %}
-            {{ msg }}
+            {{ msg }} <br>
         {% endfor %}
     {% endif %}
-    <br> <br>
+
     {% if user_playlists %}
-        {% for playlist in user_playlists %}
-            <img src="{{ playlist.logo.url }}" alt="{{ playlist.name }}">
-        {% endfor %}
+        <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
+            {% for playlist in user_playlists %}
+            <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
+                <p style="margin: 0;">{{playlist.name}}</p>
+                <a href="{% url 'edit_album' user_id=user.id album_id=playlist.id %}">Edit</a> <br>
+                <a href="#">Songs</a>
+            </div>
+            {% endfor %}
+        </div>
     {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

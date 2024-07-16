@@ -32,3 +32,21 @@ def show_album_creation_page(request, user_id):
         }
 
         return render(request, 'create-album.html', context)
+    
+def show_album_edit_page(request, user_id, album_id):
+    chosen_album = Playlist.objects.get(pk=album_id)
+
+    album_form = PlaylistForm(request.POST or None, instance=chosen_album)
+
+    context = {
+        "form": album_form,
+    }
+
+    if request.method == "POST":
+
+        if album_form.is_valid():
+            album_form.save()
+
+            return redirect("main-page", user_id=user_id)
+
+    return render(request, 'edit_album.html', context)
