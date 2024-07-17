@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')),
     path('', include('index.urls')),
-    path('main-page/<int:user_id>/', include('album_song_creation.urls'))
+    path('main-page/<int:user_id>/', include('album_song_creation.urls')),
+    path('main-page/<int:user_id>/', include('song_creation.urls'))
 ]
 
 

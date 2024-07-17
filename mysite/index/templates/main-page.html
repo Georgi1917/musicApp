@@ -28,7 +28,7 @@
             <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
                 <p style="margin: 0;">{{playlist.name}}</p>
                 <a href="{% url 'edit_album' user_id=user.id album_id=playlist.id %}">Edit</a> <br>
-                <a href="#">Songs</a>
+                <a href="{% url 'song-page' user_id=user.id album_id=playlist.id %}">Songs</a>
             </div>
             {% endfor %}
         </div>
