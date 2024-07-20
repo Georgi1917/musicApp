@@ -17,20 +17,26 @@ def show_songs_page(request, user_id, album_id):
     return render(request, 'song-page.html', context=context)
 
 def create_song(request, user_id, album_id):
-    song_form = SongForm()
-
-    context = {
-        'form': song_form
-    }
-
     if request.method == "POST":
+        song_form = SongForm(request.POST, request.FILES)
+
         if song_form.is_valid():
-            song_form.save()
-            return redirect('main-page', user_id=user_id)
+            song_name = song_form.cleaned_data["name"]
+            song_file = song_form.cleaned_data["file"]
+            curr_album = Playlist.objects.get(pk=album_id)
+
+            Song.objects.create(name=song_name, file=song_file, album=curr_album)
+
+            return redirect('song-page', user_id=user_id, album_id=album_id)
         else:
             messages.success(request, ('There was an error, try again!'))
             return redirect("song-page", user_id=user_id, album_id=album_id)
 
     else:
+        song_form = SongForm()
+
+        context = {
+            'form': song_form
+        }
 
         return render(request, 'create-song-page.html', context=context)
