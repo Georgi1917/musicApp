@@ -9,8 +9,8 @@
 <body>
     {% if songs %}
         {% for song in songs %}
-            {{ song.name }}
-            <a href="#">Edit</a> <br>
+            {{ song.name }} - {{song.author}}
+            <a href="{% url 'edit-song' user_id=user.id album_id=album_id song_id=song.id %}">Edit</a> <br>
         {% endfor %}
 
     {% else %}

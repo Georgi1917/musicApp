@@ -22,10 +22,11 @@ def create_song(request, user_id, album_id):
 
         if song_form.is_valid():
             song_name = song_form.cleaned_data["name"]
+            song_author = song_form.cleaned_data["author"]
             song_file = song_form.cleaned_data["file"]
             curr_album = Playlist.objects.get(pk=album_id)
 
-            Song.objects.create(name=song_name, file=song_file, album=curr_album)
+            Song.objects.create(name=song_name, author=song_author, file=song_file, album=curr_album)
 
             return redirect('song-page', user_id=user_id, album_id=album_id)
         else:
@@ -40,3 +41,24 @@ def create_song(request, user_id, album_id):
         }
 
         return render(request, 'create-song-page.html', context=context)
+    
+def edit_song(request, user_id, album_id, song_id):
+
+    needed_song_instance = Song.objects.get(pk=song_id)
+
+    if request.method == "POST":
+        song_form = SongForm(request.POST or None, instance=needed_song_instance)
+
+        if song_form.is_valid():
+            song_form.save()
+
+            return redirect("song-page", user_id=user_id, album_id=album_id)
+
+    else:
+        song_form = SongForm(request.POST or None, instance=needed_song_instance)
+
+        context = {
+            "form": song_form
+        }
+
+        return render(request, 'edit-song-page.html', context=context)
