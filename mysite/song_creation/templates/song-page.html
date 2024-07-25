@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +10,11 @@
 <body>
     {% if songs %}
         {% for song in songs %}
+        <div value="{{song.file.url}}">
             {{ song.name }} - {{song.author}}
+            <button>Play</button>
             <a href="{% url 'edit-song' user_id=user.id album_id=album_id song_id=song.id %}">Edit</a> <br>
+        </div>
         {% endfor %}
 
     {% else %}
@@ -26,5 +30,6 @@
     <a href="{% url 'create-song' user_id=user.id album_id=album_id %}">Add a Song</a>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{% static 'js-files/play_song_script.js' %}"></script>
 </body>
 </html>
