@@ -29,13 +29,17 @@ def create_song(request, user_id, album_id):
             song_file = song_form.cleaned_data["file"]
             curr_album = Playlist.objects.get(pk=album_id)
 
-            Song.objects.create(name=song_name, author=song_author, file=song_file, album=curr_album)
+            curr_song = Song.objects.create(name=song_name, author=song_author, file=song_file, album=curr_album)
 
             processed_file_name = helper_functions.remove_unwanted_symbols(str(song_file))
 
             filepath = os.path.join(settings.MEDIA_ROOT, 'song_files', "_".join(processed_file_name.split(" ")))
 
-            print(helper_functions.get_song_length(filepath))
+            song_length = helper_functions.get_song_length(filepath)
+
+            print(song_length)
+            curr_song.duration = song_length
+            curr_song.save()
 
             return redirect('song-page', user_id=user_id, album_id=album_id)
         else:

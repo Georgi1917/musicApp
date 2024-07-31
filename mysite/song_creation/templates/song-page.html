@@ -11,7 +11,7 @@
     {% if songs %}
         {% for song in songs %}
         <div value="{{song.file.url}}">
-            {{ song.name }} - {{song.author}}
+            {{ song.name }} - {{song.author}} | <span value="current-duration">0:0:0</span> / <span value="song-duration">{{song.duration}}</span>
             <button>Play</button>
             <a href="{% url 'edit-song' user_id=user.id album_id=album_id song_id=song.id %}">Edit</a> <br>
         </div>
@@ -31,5 +31,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{% static 'js-files/play_song_script.js' %}"></script>
+    <script src="{% static 'js-files/song_duration_script.js' %}"></script>
 </body>
 </html>
