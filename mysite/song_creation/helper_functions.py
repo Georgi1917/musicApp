@@ -1,6 +1,12 @@
 import mutagen
 from mutagen.mp3 import MP3
 
+def get_song_length_in_seconds(filepath):
+
+    audio = MP3(filepath)
+
+    return str(int(audio.info.length))
+
 
 def get_song_length(filepath):
     
@@ -10,8 +16,8 @@ def get_song_length(filepath):
     minutes = str(int((audio.info.length % 3600) // 60))
     seconds = str(int((audio.info.length % 3600) % 60))
 
-    # return audio.info.length
     return f"{hours}:{minutes}:{seconds}"
+
 
 def remove_unwanted_symbols(sequence):
     forbidden_symbols = ["\'"]

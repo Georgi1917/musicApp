@@ -36,9 +36,12 @@ def create_song(request, user_id, album_id):
             filepath = os.path.join(settings.MEDIA_ROOT, 'song_files', "_".join(processed_file_name.split(" ")))
 
             song_length = helper_functions.get_song_length(filepath)
+            song_length_in_seconds = helper_functions.get_song_length_in_seconds(filepath)
 
             print(song_length)
+            print(song_length_in_seconds)
             curr_song.duration = song_length
+            curr_song.duration_in_seconds = song_length_in_seconds
             curr_song.save()
 
             return redirect('song-page', user_id=user_id, album_id=album_id)

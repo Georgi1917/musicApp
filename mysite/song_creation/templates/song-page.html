@@ -12,7 +12,7 @@
         {% for song in songs %}
         <div value="{{song.file.url}}">
             {{ song.name }} - {{song.author}} | <span value="current-duration">0:0:0</span> / <span value="song-duration">{{song.duration}}</span>
-            <button>Play</button>
+            <button value="{{song.duration_in_seconds}}">Play</button>
             <a href="{% url 'edit-song' user_id=user.id album_id=album_id song_id=song.id %}">Edit</a> <br>
         </div>
         {% endfor %}
