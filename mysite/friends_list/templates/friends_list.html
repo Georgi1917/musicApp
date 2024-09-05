@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="get">
+        {% csrf_token %}
+
+        <input type="text" name="searched_names" id="searched_names" value="{{ searched_user }}" placeholder="Search for users...">
+        <input type="submit" value="Search">
+    </form>
+
+    {% if users %}
+        {% for user in users %}
+            <p>{{ user }}</p>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

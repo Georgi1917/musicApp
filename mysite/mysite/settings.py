@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'index',
     'album_song_creation',
     'song_creation',
+    'friends_list',
 ]
 
 MIDDLEWARE = [

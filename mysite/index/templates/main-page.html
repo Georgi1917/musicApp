@@ -16,6 +16,8 @@
 
     <a href="{% url 'album' user_id=user.id %}">Create a New Album</a> <br>
 
+    <a href="{% url 'friends-list' user_id=user.id %}">Friends List</a>
+
     {% if messages %}
         {% for msg in messages %}
             {{ msg }} <br>
