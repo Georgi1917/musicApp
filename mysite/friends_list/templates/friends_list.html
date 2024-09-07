@@ -14,9 +14,10 @@
     </form>
 
     {% if users %}
-        {% for user in users %}
-            <p>{{ user }}</p>
+        {% for searched_user in users %}
+            {{ searched_user }} <a href="{% url 'send-request' user_id=user.id receiver_id=searched_user.id %}">Send Request</a> <br>
         {% endfor %}
     {% endif %}
+
 </body>
 </html>
