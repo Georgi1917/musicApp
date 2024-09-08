@@ -14,10 +14,38 @@
     </form>
 
     {% if users %}
-        {% for searched_user in users %}
-            {{ searched_user }} <a href="{% url 'send-request' user_id=user.id receiver_id=searched_user.id %}">Send Request</a> <br>
+        {% for searched_users in users %}
+            {{ searched_users }} <a href="{% url 'send-request' user_id=user.id receiver_id=searched_users.id %}">Send Request</a> <br>
         {% endfor %}
     {% endif %}
+
+    <br>
+    <br>
+    <br>
+
+    <div class="friends">
+        Perkele
+    </div>
+
+    <div class="pending-requests">
+        {% if sent_friend_requests %}
+            {% for reqs in sent_friend_requests %}
+                {{ reqs.receiver_id }} - Pending
+            {% endfor %}
+        {% else %}
+            <p>Kur1</p>
+        {% endif %}
+    </div>
+
+    <div class="awaiting_acceptance">
+        {% if received_friend_requests %}
+            {% for recs in received_friend_requests %}
+                {{ recs.sender_id }}
+            {% endfor %}
+        {% else %}
+            <p>Kur2</p>
+        {% endif %}
+    </div>
 
 </body>
 </html>
