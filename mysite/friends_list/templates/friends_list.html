@@ -30,7 +30,7 @@
     <div class="pending-requests">
         {% if sent_friend_requests %}
             {% for reqs in sent_friend_requests %}
-                {{ reqs.receiver_id }} - Pending
+                {{ reqs.receiver.username }} - Pending
             {% endfor %}
         {% else %}
             <p>Kur1</p>
@@ -40,7 +40,7 @@
     <div class="awaiting_acceptance">
         {% if received_friend_requests %}
             {% for recs in received_friend_requests %}
-                {{ recs.sender_id }}
+                {{ recs.sender.username }} - Accept
             {% endfor %}
         {% else %}
             <p>Kur2</p>
