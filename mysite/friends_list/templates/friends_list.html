@@ -24,13 +24,17 @@
     <br>
 
     <div class="friends">
-        Perkele
+        {% if friends_list %}
+            {% for friend in friends_list %}
+                {{ friend.username }} <br>
+            {% endfor %}
+        {% endif %}
     </div>
 
     <div class="pending-requests">
         {% if sent_friend_requests %}
             {% for reqs in sent_friend_requests %}
-                {{ reqs.receiver.username }} - Pending
+                {{ reqs.receiver.username }} - Pending <br>
             {% endfor %}
         {% else %}
             <p>Kur1</p>
@@ -40,7 +44,7 @@
     <div class="awaiting_acceptance">
         {% if received_friend_requests %}
             {% for recs in received_friend_requests %}
-                {{ recs.sender.username }} - Accept
+                {{ recs.sender.username }} - <a href="{% url 'accept-request' user_id=user.id sender_id=recs.sender_id %}">Accept</a> <br>
             {% endfor %}
         {% else %}
             <p>Kur2</p>
