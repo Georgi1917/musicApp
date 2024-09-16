@@ -10,3 +10,7 @@ class Song(models.Model):
     duration = models.CharField(max_length=30, null=True)
     duration_in_seconds = models.CharField(max_length=30, null=True)
     album = models.ForeignKey(to=Playlist, on_delete=models.CASCADE, default=None)
+
+    def delete(self, *args, **kwargs):
+        self.file.delete()
+        super(Song, self).delete(*args, **kwargs)

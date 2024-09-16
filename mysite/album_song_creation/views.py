@@ -3,6 +3,8 @@ from django.contrib import messages
 from album_song_creation.forms import PlaylistForm
 from album_song_creation.models import Playlist
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from song_creation.models import Song
 
 # Create your views here.
 
@@ -44,9 +46,21 @@ def show_album_edit_page(request, user_id, album_id):
 
     if request.method == "POST":
 
-        if album_form.is_valid():
-            album_form.save()
+        if "edit" in request.POST:
 
+            if album_form.is_valid():
+                album_form.save()
+
+                return redirect("main-page", user_id=user_id)
+        
+        else:
+            needed_songs = Song.objects.filter(album_id=album_id)
+
+            for song in needed_songs:
+                song.delete()
+
+            chosen_album.delete()
+            
             return redirect("main-page", user_id=user_id)
 
     return render(request, 'edit_album.html', context)

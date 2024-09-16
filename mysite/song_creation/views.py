@@ -71,7 +71,6 @@ def edit_song(request, user_id, album_id, song_id):
 
                 return redirect("song-page", user_id=user_id, album_id=album_id)
         elif "delete" in request.POST:
-            os.remove(os.path.join(settings.MEDIA_ROOT, needed_song_instance.file.name))
 
             needed_song_instance.delete()
 
