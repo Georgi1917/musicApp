@@ -26,7 +26,7 @@
     <div class="friends">
         {% if friends_list %}
             {% for friend in friends_list %}
-                {{ friend.username }} <br>
+                {{ friend.username }} - <a href="{% url 'see-profile' user_id=user.id friend_id=friend.id %}">See Profile</a> <br>
             {% endfor %}
         {% endif %}
     </div>

@@ -12,3 +12,6 @@ class Playlist(models.Model):
     def delete(self, *args, **kwargs):
         self.logo.delete()
         super(Playlist, self).delete(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return self.name

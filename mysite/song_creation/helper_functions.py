@@ -20,7 +20,7 @@ def get_song_length(filepath):
 
 
 def remove_unwanted_symbols(sequence):
-    forbidden_symbols = ["\'"]
+    forbidden_symbols = ["\'", "+"]
     sequence = list(sequence)
 
     for i in range(0, len(sequence) - 1):

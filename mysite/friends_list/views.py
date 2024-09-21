@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.urls import reverse
 from friends_list.models import FriendRequestList, FriendList
+from album_song_creation.models import Playlist
+from song_creation.models import Song
 from django.db.models import Q
 
 # Create your views here.
@@ -89,4 +91,26 @@ def accept_friend_request(request, user_id, sender_id):
 
     return redirect("friends-list", user_id=user_id)
 
+def see_friends_profile(request, user_id, friend_id):
+
+    friend_playlists = Playlist.objects.filter(user_id=friend_id)
+
+    context = {
+        "friend_playlists": friend_playlists,
+        "friend_id": friend_id,
+    }
     
+    return render(request, 'friend_profile.html', context=context)
+
+def see_friends_songs(request, user_id, friend_id, friend_album_id):
+    songs = Song.objects.filter(album_id=friend_album_id)
+
+    context = {
+        "songs": songs
+    }
+    
+    return render(request, 'friend_songs.html', context=context)
+
+def see_friends_friendlist(request, user_id, friend_id):
+
+    pass
