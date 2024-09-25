@@ -21,7 +21,10 @@ def show_friends_list(request, user_id):
         Q(receiver_id=request.user.id) & Q(status="Pending")
     )
 
-    friends_list = FriendList.objects.get(user_id=user_id).friends.all()
+    try:
+        friends_list = FriendList.objects.filter(user_id=user_id).first().friends.all()
+    except AttributeError:
+        friends_list = []
 
     needed_users = [
         x for x in users
@@ -113,4 +116,22 @@ def see_friends_songs(request, user_id, friend_id, friend_album_id):
 
 def see_friends_friendlist(request, user_id, friend_id):
 
-    pass
+    try:
+        friends_list = FriendList.objects.filter(user_id=friend_id).first().friends.all()
+    except AttributeError:
+        friends_list = []
+
+    try:
+        logged_in_user_friends_list = FriendList.objects.filter(user_id=user_id).first().friends.all()
+    except AttributeError:
+        logged_in_user_friends_list = []
+
+    context = {
+        "friends_list": friends_list,
+        "loggen_in_list": logged_in_user_friends_list
+    }
+
+    print(friends_list)
+    print(logged_in_user_friends_list)
+
+    return render(request, "friends_friend_list.html", context=context)

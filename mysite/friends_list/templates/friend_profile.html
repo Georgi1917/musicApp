@@ -7,6 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
+    <div>
+        <a href="{% url 'see-friends' user_id=user.id friend_id=friend_id %}">FriendsList</a>
+    </div>
+
     {% if friend_playlists %}
         <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
             {% for playlist in friend_playlists %}
