@@ -128,7 +128,7 @@ def see_friends_friendlist(request, user_id, friend_id):
 
     context = {
         "friends_list": friends_list,
-        "loggen_in_list": logged_in_user_friends_list
+        "logged_in_list": logged_in_user_friends_list
     }
 
     print(friends_list)

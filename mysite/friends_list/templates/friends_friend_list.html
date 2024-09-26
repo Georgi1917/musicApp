@@ -8,7 +8,15 @@
 </head>
 <body>
     {% if friends_list %}
-        <p>Perkele</p>
+        {% for friend in friends_list %}
+            {% if friend.id == user.id %}
+                {{ friend }} - <a href="{% url 'main-page' user_id=user.id %}">See Profile</a> <br>
+            {% elif friend in logged_in_list %}
+                {{ friend }} - <a href="{% url 'see-profile' user_id=user.id friend_id=friend.id %}">See Profile</a> <br>
+            {% else %}
+                {{ friend }} - <a href="#">Add Friend</a> <br>
+            {% endif %}
+        {% endfor %}
     {% else %}
         <p>This user has no friends</p>
     {% endif %}
