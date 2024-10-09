@@ -8,6 +8,7 @@ from django.db.models import Q
 
 # Create your views here.
 
+
 def show_friends_list(request, user_id):
     searched_user = request.GET.get('searched_names', '')
 
@@ -45,6 +46,7 @@ def show_friends_list(request, user_id):
 
     return render(request, 'friends_list.html', context=context)
 
+
 def send_friend_request(request, user_id, receiver_id):
     sender = get_object_or_404(User, id=user_id)
     receiver = get_object_or_404(User, id=receiver_id)
@@ -52,6 +54,7 @@ def send_friend_request(request, user_id, receiver_id):
     friend_request = FriendRequestList.objects.create(sender=sender, receiver=receiver, status="Pending")
 
     return redirect("friends-list", user_id=user_id)
+
 
 def accept_friend_request(request, user_id, sender_id):
     sender_user = User.objects.get(pk=sender_id)
@@ -94,6 +97,7 @@ def accept_friend_request(request, user_id, sender_id):
 
     return redirect("friends-list", user_id=user_id)
 
+
 def see_friends_profile(request, user_id, friend_id):
 
     friend_playlists = Playlist.objects.filter(user_id=friend_id)
@@ -105,6 +109,7 @@ def see_friends_profile(request, user_id, friend_id):
     
     return render(request, 'friend_profile.html', context=context)
 
+
 def see_friends_songs(request, user_id, friend_id, friend_album_id):
     songs = Song.objects.filter(album_id=friend_album_id)
 
@@ -113,6 +118,7 @@ def see_friends_songs(request, user_id, friend_id, friend_album_id):
     }
     
     return render(request, 'friend_songs.html', context=context)
+
 
 def see_friends_friendlist(request, user_id, friend_id):
 
@@ -126,9 +132,17 @@ def see_friends_friendlist(request, user_id, friend_id):
     except AttributeError:
         logged_in_user_friends_list = []
 
+    pending_request_in_list = FriendRequestList.objects.filter(
+        Q(sender_id=user_id) | Q(receiver_id=user_id) & Q(status="Pending")
+    )
+
+
+
     context = {
         "friends_list": friends_list,
-        "logged_in_list": logged_in_user_friends_list
+        "logged_in_list": logged_in_user_friends_list,
+        "pending_requests_senders_ids": list(map(lambda x: x.sender_id, pending_request_in_list)),
+        "pending_requests_receivers_ids": list(map(lambda x: x.receiver_id, pending_request_in_list))
     }
 
     print(friends_list)

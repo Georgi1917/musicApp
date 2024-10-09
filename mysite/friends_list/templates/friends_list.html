@@ -28,6 +28,8 @@
             {% for friend in friends_list %}
                 {{ friend.username }} - <a href="{% url 'see-profile' user_id=user.id friend_id=friend.id %}">See Profile</a> <br>
             {% endfor %}
+        {% else %}
+            Kur0
         {% endif %}
     </div>
 
