@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.urls import reverse
+from django.urls import reverse, resolve
 from friends_list.models import FriendRequestList, FriendList
 from album_song_creation.models import Playlist
 from song_creation.models import Song
@@ -48,10 +48,11 @@ def show_friends_list(request, user_id):
 
 
 def send_friend_request(request, user_id, receiver_id):
+
     sender = get_object_or_404(User, id=user_id)
     receiver = get_object_or_404(User, id=receiver_id)
 
-    friend_request = FriendRequestList.objects.create(sender=sender, receiver=receiver, status="Pending")
+    FriendRequestList.objects.create(sender=sender, receiver=receiver, status="Pending")
 
     return redirect("friends-list", user_id=user_id)
 
@@ -92,9 +93,6 @@ def accept_friend_request(request, user_id, sender_id):
     friend_request.status = "Accepted"
     friend_request.save()
 
-    print(friend_list_receiver.friends.all())
-    print(friend_list_sender.friends.all())
-
     return redirect("friends-list", user_id=user_id)
 
 
@@ -121,6 +119,9 @@ def see_friends_songs(request, user_id, friend_id, friend_album_id):
 
 
 def see_friends_friendlist(request, user_id, friend_id):
+    curr_url = resolve(request.path)
+
+    print(curr_url)
 
     try:
         friends_list = FriendList.objects.filter(user_id=friend_id).first().friends.all()
@@ -135,9 +136,6 @@ def see_friends_friendlist(request, user_id, friend_id):
     pending_request_in_list = FriendRequestList.objects.filter(
         (Q(sender_id=user_id) | Q(receiver_id=user_id)) & Q(status="Pending")
     )
-
-    pending_request_senders_ids = list(map(lambda x: x.sender_id, pending_request_in_list))
-    pending_request_receivers_ids = list(map(lambda x: x.receiver_id, pending_request_in_list))
 
 
     context = {

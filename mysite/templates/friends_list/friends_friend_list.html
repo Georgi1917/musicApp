@@ -18,7 +18,7 @@
             {% elif friend in logged_in_list %}
                 {{ friend }} - <a href="{% url 'see-profile' user_id=user.id friend_id=friend.id %}">See Profile</a> <br>
             {% else %}
-                {{ friend }} - <a href="#">Add Friend</a> <br>
+                {{ friend }} - <a href="{% url 'send-request' user_id=user.id receiver_id=friend.id %}">Add Friend</a> <br>
             {% endif %}
         {% endfor %}
     {% else %}
