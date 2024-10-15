@@ -133,9 +133,11 @@ def see_friends_friendlist(request, user_id, friend_id):
         logged_in_user_friends_list = []
 
     pending_request_in_list = FriendRequestList.objects.filter(
-        Q(sender_id=user_id) | Q(receiver_id=user_id) & Q(status="Pending")
+        (Q(sender_id=user_id) | Q(receiver_id=user_id)) & Q(status="Pending")
     )
 
+    pending_request_senders_ids = list(map(lambda x: x.sender_id, pending_request_in_list))
+    pending_request_receivers_ids = list(map(lambda x: x.receiver_id, pending_request_in_list))
 
 
     context = {
@@ -144,8 +146,5 @@ def see_friends_friendlist(request, user_id, friend_id):
         "pending_requests_senders_ids": list(map(lambda x: x.sender_id, pending_request_in_list)),
         "pending_requests_receivers_ids": list(map(lambda x: x.receiver_id, pending_request_in_list))
     }
-
-    print(friends_list)
-    print(logged_in_user_friends_list)
 
     return render(request, "friends_list/friends_friend_list.html", context=context)
