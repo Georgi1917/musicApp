@@ -17,7 +17,7 @@ def show_songs_page(request, user_id, album_id):
         'album_id': album_id
         }
 
-    return render(request, 'song-page.html', context=context)
+    return render(request, 'song_creation/song-page.html', context=context)
 
 def create_song(request, user_id, album_id):
     if request.method == "POST":
@@ -56,7 +56,7 @@ def create_song(request, user_id, album_id):
             'form': song_form
         }
 
-        return render(request, 'create-song-page.html', context=context)
+        return render(request, 'song_creation/create-song-page.html', context=context)
     
 def edit_song(request, user_id, album_id, song_id):
 
@@ -83,4 +83,4 @@ def edit_song(request, user_id, album_id, song_id):
             "form": song_form
         }
 
-        return render(request, 'edit-song-page.html', context=context)
+        return render(request, 'song_creation/edit-song-page.html', context=context)

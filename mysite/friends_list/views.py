@@ -44,7 +44,7 @@ def show_friends_list(request, user_id):
         "friends_list": friends_list
     }
 
-    return render(request, 'friends_list.html', context=context)
+    return render(request, 'friends_list/friends_list.html', context=context)
 
 
 def send_friend_request(request, user_id, receiver_id):
@@ -107,7 +107,7 @@ def see_friends_profile(request, user_id, friend_id):
         "friend_id": friend_id,
     }
     
-    return render(request, 'friend_profile.html', context=context)
+    return render(request, 'friends_list/friend_profile.html', context=context)
 
 
 def see_friends_songs(request, user_id, friend_id, friend_album_id):
@@ -117,7 +117,7 @@ def see_friends_songs(request, user_id, friend_id, friend_album_id):
         "songs": songs
     }
     
-    return render(request, 'friend_songs.html', context=context)
+    return render(request, 'friends_list/friend_songs.html', context=context)
 
 
 def see_friends_friendlist(request, user_id, friend_id):
@@ -148,4 +148,4 @@ def see_friends_friendlist(request, user_id, friend_id):
     print(friends_list)
     print(logged_in_user_friends_list)
 
-    return render(request, "friends_friend_list.html", context=context)
+    return render(request, "friends_list/friends_friend_list.html", context=context)
