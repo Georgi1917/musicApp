@@ -6,7 +6,6 @@ var time;
 
 function set_button_to_normal() {
     for (const neededDiv of neededDivs) {
-        console.log(1)
         const mButton = neededDiv.querySelector("button")
         let curDuration = neededDiv.querySelector("span[value='current-duration']")
         mButton.textContent = "Play"
@@ -16,6 +15,7 @@ function set_button_to_normal() {
 
 for (const div of neededDivs) {
     const musicButton = div.querySelector("button")
+    const volumeCont = div.querySelector("input")
     musicButton.addEventListener('click', playSound)
 
     let currDuration = div.querySelector("span[value='current-duration']")
@@ -54,6 +54,9 @@ for (const div of neededDivs) {
             set_button_to_normal()
             clearInterval(time)
             sound.src = div.getAttribute("value")
+            normalize_audio(sound)
+            changeVolume(sound, volumeCont)
+            console.log(sound.volume)
             sound.play()
             time = setInterval(change_duration_of_song, 1000)
             musicButton.textContent = "Stop"

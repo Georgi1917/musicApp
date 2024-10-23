@@ -6,8 +6,8 @@ from album_song_creation.models import Playlist
 def home_page_index(request):
     return render(request, "index/index.html")
     
-def show_main_page(request, user_id):
-    user_playlists = Playlist.objects.filter(user__pk=user_id).all()
+def show_main_page(request):
+    user_playlists = Playlist.objects.filter(user__pk=request.user.id).all()
 
     context = {
         "user_playlists": user_playlists,

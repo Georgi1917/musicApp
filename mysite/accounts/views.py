@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+from accounts.forms import LoginForm
 
 # Create your views here.
 
@@ -17,7 +18,7 @@ def register_user(request):
             login(request, user)
             curr_user = request.user
             messages.success(request, ("You have been registered succesfully!!"))
-            return redirect('main-page', user_id=curr_user.id)
+            return redirect('main-page')
         else:
             messages.success(request, ("There was an error, please try again!"))
             return redirect('register')
@@ -28,20 +29,26 @@ def register_user(request):
     
 def login_user(request):
     if request.method == "POST":
-        user_username = request.POST["username"]
-        user_password = request.POST["password"]
-        user = authenticate(request, username=user_username, password=user_password)
-        if user is not None:
-            login(request, user)
-            curr_user = request.user
-            messages.success(request, ("You have been logged in succesfully!!"))
-            return redirect("main-page", user_id=curr_user.id)
-        else:
-            messages.success(request, ("There was an error!"))
-            return redirect("login")
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            user_username = login_form.cleaned_data["username"]
+            user_password = login_form.cleaned_data["password"]
+            user = authenticate(request, username=user_username, password=user_password)
+            if user is not None:
+                login(request, user)
+                curr_user = request.user
+                messages.success(request, ("You have been logged in succesfully!!"))
+                return redirect("main-page")
+            else:
+                messages.success(request, ("Incorrect username or password! Try again"))
+                return redirect("login")
 
     else:
-        return render(request, "accounts/log-in.html")
+        login_form = LoginForm()
+        context = {
+            "login_form": login_form
+        }
+        return render(request, "accounts/log-in.html", context)
     
 def logout_user(request):
     logout(request)

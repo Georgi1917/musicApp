@@ -3,5 +3,5 @@ from index.views import home_page_index, show_main_page
 
 urlpatterns = [
     path('', home_page_index, name="home"),
-    path('main-page/<int:user_id>', show_main_page, name="main-page"),
+    path('main-page/', show_main_page, name="main-page"),
 ]

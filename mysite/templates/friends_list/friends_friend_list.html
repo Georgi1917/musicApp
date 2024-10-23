@@ -10,7 +10,7 @@
     {% if friends_list %}
         {% for friend in friends_list %}
             {% if friend.id == user.id %}
-                {{ friend }} - <a href="{% url 'main-page' user_id=user.id %}">See Profile</a> <br>
+                {{ friend }} - <a href="{% url 'main-page' %}">See Profile</a> <br>
             {% elif friend.id in pending_requests_senders_ids %}
                 {{ friend }} - Pending <br>
             {% elif friend.id in pending_requests_receivers_ids %}
