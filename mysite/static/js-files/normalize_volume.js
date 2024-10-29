@@ -1,4 +1,4 @@
-function normalize_audio(audio) {
+function normalize_audio(audio, value) {
 
-    audio.volume = 0.5
+    audio.volume = value
 }
