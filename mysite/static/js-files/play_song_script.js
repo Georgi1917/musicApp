@@ -39,14 +39,14 @@ for (const div of neededDivs) {
         } else {
             currentDurationArray[2] = currentDurationArray[2] + 1
         }
-
+    
         currDuration.textContent = currentDurationArray.join(":")
-
+    
         if (currDuration.textContent === songDuration.textContent) {
             musicButton.textContent = "Play"
             currDuration.textContent = "0:0:0"
             volumeCont.disabled = true
-
+    
             clearInterval(time)
         }
     }

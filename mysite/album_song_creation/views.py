@@ -20,7 +20,7 @@ def show_album_creation_page(request, user_id):
             curr_user = User.objects.get(id=user_id)
             Playlist.objects.create(name=name, description=desc, logo=logo, user=curr_user)
 
-            return redirect("main-page", user_id=user_id)
+            return redirect("main-page")
 
         else:
             messages.success(request, ("There was an error, please try again"))
@@ -51,7 +51,7 @@ def show_album_edit_page(request, user_id, album_id):
             if album_form.is_valid():
                 album_form.save()
 
-                return redirect("main-page", user_id=user_id)
+                return redirect("main-page")
         
         else:
             needed_songs = Song.objects.filter(album_id=album_id)
@@ -61,6 +61,6 @@ def show_album_edit_page(request, user_id, album_id):
 
             chosen_album.delete()
             
-            return redirect("main-page", user_id=user_id)
+            return redirect("main-page")
 
     return render(request, 'album_song_creation/edit_album.html', context)
