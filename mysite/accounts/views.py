@@ -19,13 +19,11 @@ def register_user(request):
             curr_user = request.user
             messages.success(request, ("You have been registered succesfully!!"))
             return redirect('main-page')
-        else:
-            messages.success(request, ("There was an error, please try again!"))
-            return redirect('register')
 
     else:
         form = UserCreationForm()
-        return render(request, "accounts/register.html", {'form': form})
+        
+    return render(request, "accounts/register.html", {'form': form})
     
 def login_user(request):
     if request.method == "POST":
@@ -39,16 +37,15 @@ def login_user(request):
                 curr_user = request.user
                 messages.success(request, ("You have been logged in succesfully!!"))
                 return redirect("main-page")
-            else:
-                messages.success(request, ("Incorrect username or password! Try again"))
-                return redirect("login")
 
     else:
         login_form = LoginForm()
-        context = {
-            "login_form": login_form
-        }
-        return render(request, "accounts/log-in.html", context)
+
+    context = {
+        "login_form": login_form
+    }
+
+    return render(request, "accounts/log-in.html", context)
     
 def logout_user(request):
     logout(request)
