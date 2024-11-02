@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-from accounts.forms import LoginForm
+from accounts.forms import LoginForm, EditUserForm
 
 # Create your views here.
 
@@ -51,3 +51,22 @@ def logout_user(request):
     logout(request)
     messages.success(request, ("You have been succesfully logged out!"))
     return redirect("home")
+
+def edit_account_page(request):
+
+    if request.method == "POST":
+        user_form = EditUserForm(request.POST, instance=request.user)
+
+        if user_form.is_valid():
+            user_form.save()
+
+            return redirect("main-page")
+
+    else:
+        user_form = EditUserForm(instance=request.user)
+
+    context = {
+        "form": user_form
+    }
+
+    return render(request, "accounts/account-page.html", context)
