@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-from accounts.forms import LoginForm, EditUserForm
+from accounts.forms import LoginForm, EditUserForm, ChangeUserPasswordForm
 
 # Create your views here.
 
@@ -70,3 +70,13 @@ def edit_account_page(request):
     }
 
     return render(request, "accounts/account-page.html", context)
+
+def change_account_password(request):
+
+    form = ChangeUserPasswordForm()
+
+    context = {
+        "form": form
+    }
+
+    return render(request, "accounts/change-password.html", context)
