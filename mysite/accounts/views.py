@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
-from accounts.forms import LoginForm, EditUserForm, ChangeUserPasswordForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from accounts.forms import LoginForm, EditUserForm
 
 # Create your views here.
 
@@ -34,7 +34,6 @@ def login_user(request):
             user = authenticate(request, username=user_username, password=user_password)
             if user is not None:
                 login(request, user)
-                curr_user = request.user
                 messages.success(request, ("You have been logged in succesfully!!"))
                 return redirect("main-page")
 
@@ -73,10 +72,26 @@ def edit_account_page(request):
 
 def change_account_password(request):
 
-    form = ChangeUserPasswordForm()
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+
+        if form.is_valid():
+            user = form.save()
+
+            update_session_auth_hash(request, user)
+
+            return redirect("edit-account")
+
+    else:
+
+        form = PasswordChangeForm(request.user)
 
     context = {
         "form": form
     }
 
     return render(request, "accounts/change-password.html", context)
+
+def delete_account(request):
+
+    return render(request, "accounts/delete-account.html")
