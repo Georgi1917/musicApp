@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-    Hello World
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button>Delete</button>
+    </form>
 </body>
 {% endblock %}

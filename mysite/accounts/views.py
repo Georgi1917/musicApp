@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from accounts.forms import LoginForm, EditUserForm
+from accounts.forms import LoginForm, EditUserForm, PasswordConfirmationForm
 
 # Create your views here.
 
@@ -94,4 +94,24 @@ def change_account_password(request):
 
 def delete_account(request):
 
-    return render(request, "accounts/delete-account.html")
+    if request.method == "POST":
+        form = PasswordConfirmationForm(request.POST, request.user)
+
+        if form.is_valid():
+            
+            user = request.user
+
+            user.delete()
+
+            messages.success(request, "Your account has been succesfully deleted.")
+
+            return redirect("home")
+
+    else:
+        form = PasswordConfirmationForm()
+
+    context = {
+        "form": form
+    }
+
+    return render(request, "accounts/delete-account.html", context)
