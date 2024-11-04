@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from accounts.forms import LoginForm, EditUserForm, PasswordConfirmationForm
+from album_song_creation.models import Playlist
+from song_creation.models import Song
 
 # Create your views here.
 
@@ -101,7 +103,16 @@ def delete_account(request):
             
             user = request.user
 
-            user.delete()
+            user_albums = Playlist.objects.filter(user=user)
+
+            for album in user_albums:
+                songs_in_album = Song.objects.filter(album=album)
+                for song in songs_in_album:
+                    song.delete()
+                
+                album.delete()
+
+            user.delete() 
 
             messages.success(request, "Your account has been succesfully deleted.")
 
