@@ -49,9 +49,10 @@ def login_user(request):
     return render(request, "accounts/log-in.html", context)
     
 def logout_user(request):
-    logout(request)
-    messages.success(request, ("You have been succesfully logged out!"))
-    return redirect("home")
+    if request.method == "POST":
+        logout(request)
+        messages.success(request, ("You have been succesfully logged out!"))
+        return redirect("home")
 
 def edit_account_page(request):
 

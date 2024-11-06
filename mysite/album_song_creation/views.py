@@ -8,7 +8,7 @@ from song_creation.models import Song
 
 # Create your views here.
 
-def show_album_creation_page(request, user_id):
+def show_album_creation_page(request):
     if request.method == "POST":
         form = PlaylistForm(request.POST, request.FILES)
 
@@ -17,14 +17,14 @@ def show_album_creation_page(request, user_id):
             desc = form.cleaned_data["description"]
             logo = form.cleaned_data["logo"]
 
-            curr_user = User.objects.get(id=user_id)
+            curr_user = User.objects.get(id=request.user.id)
             Playlist.objects.create(name=name, description=desc, logo=logo, user=curr_user)
 
             return redirect("main-page")
 
         else:
             messages.success(request, ("There was an error, please try again"))
-            return redirect("album", user_id=user_id)
+            return redirect("album", user_id=request.user.id)
 
     else:
         form = PlaylistForm()
@@ -35,7 +35,7 @@ def show_album_creation_page(request, user_id):
 
         return render(request, 'album_song_creation/create-album.html', context)
     
-def show_album_edit_page(request, user_id, album_id):
+def show_album_edit_page(request, album_id):
     chosen_album = Playlist.objects.get(pk=album_id)
 
     album_form = PlaylistForm(request.POST or None, instance=chosen_album)

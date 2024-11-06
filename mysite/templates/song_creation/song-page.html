@@ -9,7 +9,7 @@
             <button value="{{song.duration_in_seconds}}">Play</button>
             <label for="volumeControl">Volume:</label>
             <input type="range" class="volumeControl" min="0" max="1" step="0.01" value="0.5" disabled>
-            <a href="{% url 'edit-song' user_id=user.id album_id=album_id song_id=song.id %}">Edit</a> <br>
+            <a href="{% url 'edit-song' album_id=album_id song_id=song.id %}">Edit</a> <br>
         </div>
         {% endfor %}
 
@@ -23,7 +23,7 @@
         {% endfor %}
     {% endif %}
     <br>
-    <a href="{% url 'create-song' user_id=user.id album_id=album_id %}">Add a Song</a>
+    <a href="{% url 'create-song' album_id=album_id %}">Add a Song</a>
     <button id="play-all">Play Playlist</button>
 
     <script src="{% static 'js-files/normalize_volume.js' %}"></script>

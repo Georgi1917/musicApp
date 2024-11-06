@@ -2,7 +2,7 @@
 {% block content %}
 <body>
     <div>
-        <a href="{% url 'see-friends' user_id=user.id friend_id=friend_id %}">FriendsList</a>
+        <a href="{% url 'see-friends' friend_id=friend_id %}">FriendsList</a>
     </div>
 
     {% if friend_playlists %}
@@ -10,7 +10,7 @@
             {% for playlist in friend_playlists %}
             <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
                 <p style="margin: 0;">{{playlist.name}}</p>
-                <a href="{% url 'see-songs' user_id=user.id friend_id=friend_id friend_album_id=playlist.id %}">Songs</a>
+                <a href="{% url 'see-songs' friend_id=friend_id friend_album_id=playlist.id %}">Songs</a>
             </div>
             {% endfor %}
         </div>

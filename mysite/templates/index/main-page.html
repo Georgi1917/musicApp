@@ -3,14 +3,14 @@
 <body>
     <p>Hello, <a href="{% url 'edit-account' %}">{{user.username}}!</a></p>
     {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">LogOut</a><br>
+        <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">LogOut</a><br>
     {% else %}
         <a href="{% url 'login' %}">LogIn</a><br>
     {% endif %}
 
-    <a href="{% url 'album' user_id=user.id %}">Create a New Album</a> <br>
+    <a href="{% url 'album' %}">Create a New Album</a> <br>
 
-    <a href="{% url 'friends-list' user_id=user.id %}">Friends List</a>
+    <a href="{% url 'friends-list' %}">Friends List</a>
 
     {% if messages %}
         {% for msg in messages %}
@@ -23,12 +23,16 @@
             {% for playlist in user_playlists %}
             <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
                 <p style="margin: 0;">{{playlist.name}}</p>
-                <a href="{% url 'edit_album' user_id=user.id album_id=playlist.id %}">Edit</a> <br>
-                <a href="{% url 'song-page' user_id=user.id album_id=playlist.id %}">Songs</a>
+                <a href="{% url 'edit_album' album_id=playlist.id %}">Edit</a> <br>
+                <a href="{% url 'song-page' album_id=playlist.id %}">Songs</a>
             </div>
             {% endfor %}
         </div>
     {% endif %}
-
+    
+    <form action="{% url 'logout' %}" method="POST" id="logout-form" display="none">
+        {% csrf_token %}
+    </form>
 </body>
+
 {% endblock %}

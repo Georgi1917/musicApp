@@ -9,7 +9,7 @@ from song_creation import helper_functions
 
 # Create your views here.
 
-def show_songs_page(request, user_id, album_id):
+def show_songs_page(request, album_id):
     needed_songs = Song.objects.filter(album__pk=album_id)
 
     context = {
@@ -19,7 +19,7 @@ def show_songs_page(request, user_id, album_id):
 
     return render(request, 'song_creation/song-page.html', context=context)
 
-def create_song(request, user_id, album_id):
+def create_song(request, album_id):
     if request.method == "POST":
         song_form = SongForm(request.POST, request.FILES)
 
@@ -44,10 +44,10 @@ def create_song(request, user_id, album_id):
             curr_song.duration_in_seconds = song_length_in_seconds
             curr_song.save()
 
-            return redirect('song-page', user_id=user_id, album_id=album_id)
+            return redirect('song-page', album_id=album_id)
         else:
             messages.success(request, ('There was an error, try again!'))
-            return redirect("song-page", user_id=user_id, album_id=album_id)
+            return redirect("song-page", album_id=album_id)
 
     else:
         song_form = SongForm()
@@ -58,7 +58,7 @@ def create_song(request, user_id, album_id):
 
         return render(request, 'song_creation/create-song-page.html', context=context)
     
-def edit_song(request, user_id, album_id, song_id):
+def edit_song(request, album_id, song_id):
 
     needed_song_instance = Song.objects.get(pk=song_id)
 
@@ -69,12 +69,12 @@ def edit_song(request, user_id, album_id, song_id):
             if song_form.is_valid():
                 song_form.save()
 
-                return redirect("song-page", user_id=user_id, album_id=album_id)
+                return redirect("song-page", album_id=album_id)
         elif "delete" in request.POST:
 
             needed_song_instance.delete()
 
-            return redirect("song-page", user_id=user_id, album_id=album_id)
+            return redirect("song-page", album_id=album_id)
 
     else:
         song_form = SongForm(request.POST or None, instance=needed_song_instance)

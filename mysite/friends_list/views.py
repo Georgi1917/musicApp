@@ -9,7 +9,7 @@ from django.db.models import Q
 # Create your views here.
 
 
-def show_friends_list(request, user_id):
+def show_friends_list(request):
     searched_user = request.GET.get('searched_names', '')
 
     users = User.objects.filter(username__icontains=searched_user) if searched_user else []
@@ -23,7 +23,7 @@ def show_friends_list(request, user_id):
     )
 
     try:
-        friends_list = FriendList.objects.filter(user_id=user_id).first().friends.all()
+        friends_list = FriendList.objects.filter(user_id=request.user.id).first().friends.all()
     except AttributeError:
         friends_list = []
 
@@ -47,19 +47,19 @@ def show_friends_list(request, user_id):
     return render(request, 'friends_list/friends_list.html', context=context)
 
 
-def send_friend_request(request, user_id, receiver_id):
+def send_friend_request(request, receiver_id):
 
-    sender = get_object_or_404(User, id=user_id)
+    sender = get_object_or_404(User, id=request.user.id)
     receiver = get_object_or_404(User, id=receiver_id)
 
     FriendRequestList.objects.create(sender=sender, receiver=receiver, status="Pending")
 
-    return redirect("friends-list", user_id=user_id)
+    return redirect("friends-list", user_id=request.user.id)
 
 
-def accept_friend_request(request, user_id, sender_id):
+def accept_friend_request(request, sender_id):
     sender_user = User.objects.get(pk=sender_id)
-    receiver_user = User.objects.get(pk=user_id)
+    receiver_user = User.objects.get(pk=request.user.id)
 
     friend_list_receiver = FriendList.objects.filter(user=receiver_user).first()
 
@@ -88,15 +88,15 @@ def accept_friend_request(request, user_id, sender_id):
             friend_list_sender.friends.add(receiver_user)
 
     friend_request = FriendRequestList.objects.get(
-        Q(receiver_id=user_id) & Q(sender_id=sender_id)
+        Q(receiver_id=request.user.id) & Q(sender_id=sender_id)
     )
     friend_request.status = "Accepted"
     friend_request.save()
 
-    return redirect("friends-list", user_id=user_id)
+    return redirect("friends-list", user_id=request.user.id)
 
 
-def see_friends_profile(request, user_id, friend_id):
+def see_friends_profile(request, friend_id):
 
     friend_playlists = Playlist.objects.filter(user_id=friend_id)
 
@@ -108,7 +108,7 @@ def see_friends_profile(request, user_id, friend_id):
     return render(request, 'friends_list/friend_profile.html', context=context)
 
 
-def see_friends_songs(request, user_id, friend_id, friend_album_id):
+def see_friends_songs(request, friend_id, friend_album_id):
     songs = Song.objects.filter(album_id=friend_album_id)
 
     context = {
