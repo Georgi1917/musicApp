@@ -38,8 +38,6 @@ def create_song(request, album_id):
             song_length = helper_functions.get_song_length(filepath)
             song_length_in_seconds = helper_functions.get_song_length_in_seconds(filepath)
 
-            print(song_length)
-            print(song_length_in_seconds)
             curr_song.duration = song_length
             curr_song.duration_in_seconds = song_length_in_seconds
             curr_song.save()
