@@ -119,9 +119,6 @@ def see_friends_songs(request, friend_id, friend_album_id):
 
 
 def see_friends_friendlist(request, user_id, friend_id):
-    curr_url = resolve(request.path)
-
-    print(curr_url)
 
     try:
         friends_list = FriendList.objects.filter(user_id=friend_id).first().friends.all()
