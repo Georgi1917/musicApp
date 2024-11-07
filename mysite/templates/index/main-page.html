@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
     <p>Hello, <a href="{% url 'edit-account' %}">{{user.username}}!</a></p>
     {% if user.is_authenticated %}
-        <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">LogOut</a><br>
+        <a href="#" id="logout-button">LogOut</a><br>
     {% else %}
         <a href="{% url 'login' %}">LogIn</a><br>
     {% endif %}
@@ -33,6 +34,8 @@
     <form action="{% url 'logout' %}" method="POST" id="logout-form" display="none">
         {% csrf_token %}
     </form>
+
+    <script src="{% static 'js-files/logout.js' %}"></script>
 </body>
 
 {% endblock %}
