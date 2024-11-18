@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "musicAppDB",
+        "NAME": "LoopPlayDB",
         "USER": "postgres",
         "PASSWORD": "password",
         "HOST": "127.0.0.1",

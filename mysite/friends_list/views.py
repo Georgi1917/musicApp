@@ -5,43 +5,43 @@ from friends_list.models import FriendRequestList, FriendList
 from album_song_creation.models import Playlist
 from song_creation.models import Song
 from django.db.models import Q
+from friends_list.forms import SearchForm
 
 # Create your views here.
 
 
-def show_friends_list(request):
-    searched_user = request.GET.get('searched_names', '')
+def search_friends(request):
+    form = SearchForm()
 
-    users = User.objects.filter(username__icontains=searched_user) if searched_user else []
+    search_query = request.GET.get('searched_user', '')
 
-    sent_friend_requests = FriendRequestList.objects.filter(
-        Q(sender_id=request.user.id) & Q(status="Pending")
-    )
+    form.initial["searched_user"] = search_query
 
-    received_friend_requests = FriendRequestList.objects.filter(
-        Q(receiver_id=request.user.id) & Q(status="Pending")
-    )
-
-    try:
-        friends_list = FriendList.objects.filter(user_id=request.user.id).first().friends.all()
-    except AttributeError:
-        friends_list = []
+    searched_users = User.objects.filter(username__icontains=search_query).exclude(id=request.user.id) if search_query else []
 
     needed_users = [
-        x for x in users
+        user for user in searched_users
         if (
-        (x.pk not in list(map(lambda x: x.receiver_id, sent_friend_requests))) and
-        (x.pk not in list(map(lambda x: x.sender_id,received_friend_requests))) and
-        (x not in friends_list) and
-        (x.pk != request.user.id))
+            (user.id not in list(map(lambda x: x.receiver_id, request.user.sent_friend_request.all()))) and
+            (user.id not in list(map(lambda x: x.sender_id, request.user.received_friend_request.all()))) and
+            (user.id not in list(map(lambda x: x.id, request.user.all_friends.all())))
+        )
     ]
 
     context = {
-        "users": needed_users,
-        "searched_user": searched_user,
-        "sent_friend_requests": sent_friend_requests,
-        "received_friend_requests": received_friend_requests,
-        "friends_list": friends_list
+        "form": form,
+        "searched_users": needed_users
+    }
+    
+    return render(request, "friends_list/search_friends.html", context)
+
+
+def show_friends_list(request):
+
+    context = {
+        "sent_friend_requests": request.user.sent_friend_request.filter(status="Pending").all(),
+        "received_friend_requests": request.user.received_friend_request.filter(status="Pending").all(),
+        "friends_list": request.user.all_friends.all()
     }
 
     return render(request, 'friends_list/friends_list.html', context=context)
@@ -54,7 +54,7 @@ def send_friend_request(request, receiver_id):
 
     FriendRequestList.objects.create(sender=sender, receiver=receiver, status="Pending")
 
-    return redirect("friends-list", user_id=request.user.id)
+    return redirect("friends-list")
 
 
 def accept_friend_request(request, sender_id):
@@ -93,7 +93,7 @@ def accept_friend_request(request, sender_id):
     friend_request.status = "Accepted"
     friend_request.save()
 
-    return redirect("friends-list", user_id=request.user.id)
+    return redirect("friends-list")
 
 
 def see_friends_profile(request, friend_id):
@@ -118,26 +118,17 @@ def see_friends_songs(request, friend_id, friend_album_id):
     return render(request, 'friends_list/friend_songs.html', context=context)
 
 
-def see_friends_friendlist(request, user_id, friend_id):
+def see_friends_friendlist(request, friend_id):
 
-    try:
-        friends_list = FriendList.objects.filter(user_id=friend_id).first().friends.all()
-    except AttributeError:
-        friends_list = []
-
-    try:
-        logged_in_user_friends_list = FriendList.objects.filter(user_id=user_id).first().friends.all()
-    except AttributeError:
-        logged_in_user_friends_list = []
+    friend_user = get_object_or_404(User, pk=friend_id)
 
     pending_request_in_list = FriendRequestList.objects.filter(
-        (Q(sender_id=user_id) | Q(receiver_id=user_id)) & Q(status="Pending")
+        (Q(sender_id=request.user.id) | Q(receiver_id=request.user.id)) & Q(status="Pending")
     )
 
-
     context = {
-        "friends_list": friends_list,
-        "logged_in_list": logged_in_user_friends_list,
+        "friends_list": friend_user.all_friends.all(),
+        "logged_in_list": request.user.all_friends.all(),
         "pending_requests_senders_ids": list(map(lambda x: x.sender_id, pending_request_in_list)),
         "pending_requests_receivers_ids": list(map(lambda x: x.receiver_id, pending_request_in_list))
     }

@@ -4,16 +4,16 @@
     
     {% if friends_list %}
         {% for friend in friends_list %}
-            {% if friend.id == user.id %}
+            {% if friend.user.id == user.id %}
                 {{ friend }} - <a href="{% url 'main-page' %}">See Profile</a> <br>
-            {% elif friend.id in pending_requests_senders_ids %}
+            {% elif friend.user.id in pending_requests_senders_ids %}
                 {{ friend }} - Pending <br>
-            {% elif friend.id in pending_requests_receivers_ids %}
+            {% elif friend.user.id in pending_requests_receivers_ids %}
                 {{ friend }} - Pending <br>
             {% elif friend in logged_in_list %}
-                {{ friend }} - <a href="{% url 'see-profile' friend_id=friend.id %}">See Profile</a> <br>
+                {{ friend }} - <a href="{% url 'see-profile' friend_id=friend.user.id %}">See Profile</a> <br>
             {% else %}
-                {{ friend }} - <a href="{% url 'send-request' receiver_id=friend.id %}">Add Friend</a> <br>
+                {{ friend }} - <a href="{% url 'send-request' receiver_id=friend.user.id %}">Add Friend</a> <br>
             {% endif %}
         {% endfor %}
     {% else %}

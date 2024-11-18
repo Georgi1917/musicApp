@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <form method="GET">
+        {{ form.searched_user }}
+
+        <button>Search</button>
+    </form>
+
+    {% for searched_user in searched_users %}
+        {{ searched_user.username }} - <a href="{% url 'send-request' receiver_id=searched_user.id %}">Send Request</a>
+    {% empty %}
+        <p>Kur</p>
+    {% endfor %}
+</body>
+{% endblock %}

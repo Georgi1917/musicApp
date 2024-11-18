@@ -1,27 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-    <form method="get">
-        {% csrf_token %}
 
-        <input type="text" name="searched_names" id="searched_names" value="{{ searched_user }}" placeholder="Search for users...">
-        <input type="submit" value="Search">
-    </form>
+    <div class="add-friends">
+        <a href="{% url 'find-friends' %}">Add Friends</a>
+    </div>
 
-    {% if users %}
-        {% for searched_users in users %}
-            {{ searched_users }} <a href="{% url 'send-request' receiver_id=searched_users.id %}">Send Request</a> <br>
-        {% endfor %}
-    {% endif %}
-
-    <br>
     <br>
     <br>
 
     <div class="friends">
         {% if friends_list %}
             {% for friend in friends_list %}
-                {{ friend.username }} - <a href="{% url 'see-profile' friend_id=friend.id %}">See Profile</a> <br>
+                {{ friend.user.username }} - <a href="{% url 'see-profile' friend_id=friend.user.id %}">See Profile</a> <br>
             {% endfor %}
         {% else %}
             Kur0
