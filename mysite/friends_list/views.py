@@ -52,7 +52,8 @@ def send_friend_request(request, receiver_id):
 
     receiver = get_object_or_404(User, id=receiver_id)
 
-    FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
+    if not (receiver.received_friend_request.all().filter(Q(status="Pending") & Q(sender=request.user))):
+        FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
 
     return redirect("friends-list")
 
