@@ -60,29 +60,12 @@ def send_friend_request(request, receiver_id):
 
 def accept_friend_request(request, sender_id):
     sender_user = User.objects.get(pk=sender_id)
-
-    friend_list_receiver = FriendList.objects.filter(user=request.user).first()
-
-    print(request.user.main_friend.first())
-
-    if not friend_list_receiver:
-        friend_list_receiver = FriendList.objects.create(user=request.user)
         
-    if sender_user not in friend_list_receiver.friends.all():
-        friend_list_receiver.friends.add(sender_user)
+    if sender_user not in request.user.all_friends.all():
+        request.user.main_friend.friends.add(sender_user)
 
-
-    friend_list_sender = FriendList.objects.filter(user=sender_user).first()
-
-    print(sender_user.main_friend.first())
-
-    if not friend_list_sender:
-        friend_list_sender = FriendList.objects.create(user=sender_user)
-
-    if request.user not in friend_list_sender.friends.all():
-        friend_list_sender.friends.add(request.user)
-
-    print(sender_user.main_friend.first())
+    if request.user not in sender_user.all_friends.all():
+        sender_user.main_friend.friends.add(request.user)
 
     friend_request = FriendRequestList.objects.get(
         Q(receiver_id=request.user.id) & Q(sender_id=sender_id)

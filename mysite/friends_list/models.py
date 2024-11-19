@@ -13,7 +13,7 @@ class FriendRequestList(models.Model):
     
 
 class FriendList(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="main_friend")
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="main_friend")
     friends = models.ManyToManyField(to=User, related_name="all_friends")
 
     def __str__(self):
