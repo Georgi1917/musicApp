@@ -18,7 +18,6 @@ def register_user(request):
             password = form.cleaned_data['password1']
             user = authenticate(request, username=username, password=password)
             login(request, user)
-            curr_user = request.user
             messages.success(request, ("You have been registered succesfully!!"))
             return redirect('main-page')
 
@@ -49,7 +48,9 @@ def login_user(request):
     return render(request, "accounts/log-in.html", context)
     
 def logout_user(request):
+
     if request.method == "POST":
+        
         logout(request)
         messages.success(request, ("You have been succesfully logged out!"))
         return redirect("home")

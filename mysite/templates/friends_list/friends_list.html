@@ -12,7 +12,7 @@
     <div class="friends">
         {% if friends_list %}
             {% for friend in friends_list %}
-                {{ friend.user.username }} - <a href="{% url 'see-profile' friend_id=friend.user.id %}">See Profile</a> <br>
+                {{ friend.user.username }} - <a href="{% url 'see-profile' friend_id=friend.user.id %}">See Profile</a> | <a href="{% url 'remove-friend' friend_id=friend.user.id %}">Unfriend</a><br>
             {% endfor %}
         {% else %}
             Kur0
@@ -22,7 +22,7 @@
     <div class="pending-requests">
         {% if sent_friend_requests %}
             {% for reqs in sent_friend_requests %}
-                {{ reqs.receiver.username }} - Pending <br>
+                {{ reqs.receiver.username }} - Pending | <a href="{% url 'remove-request' friend_request_id=reqs.id %}">Remove</a> <br>
             {% endfor %}
         {% else %}
             <p>Kur1</p>
@@ -32,7 +32,7 @@
     <div class="awaiting_acceptance">
         {% if received_friend_requests %}
             {% for recs in received_friend_requests %}
-                {{ recs.sender.username }} - <a href="{% url 'accept-request' sender_id=recs.sender_id %}">Accept</a> <br>
+                {{ recs.sender.username }} - <a href="{% url 'accept-request' sender_id=recs.sender_id %}">Accept</a> | <a href="{% url 'remove-request' friend_request_id=recs.id %}">Remove</a> <br>
             {% endfor %}
         {% else %}
             <p>Kur2</p>

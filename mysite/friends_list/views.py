@@ -71,8 +71,7 @@ def accept_friend_request(request, sender_id):
         Q(receiver_id=request.user.id) & Q(sender_id=sender_id)
     )
 
-    friend_request.status = "Accepted"
-    friend_request.save()
+    friend_request.delete()
 
     return redirect("friends-list")
 
@@ -115,3 +114,22 @@ def see_friends_friendlist(request, friend_id):
     }
 
     return render(request, "friends_list/friends_friend_list.html", context=context)
+
+
+def remove_friend_request(request, friend_request_id):
+
+    needed_obj = FriendRequestList.objects.get(pk=friend_request_id)
+    needed_obj.delete()
+
+    return redirect('friends-list')
+
+
+def remove_friend(request, friend_id):
+    
+    friend_user = get_object_or_404(User, pk=friend_id)
+
+    if friend_user in list(map(lambda x: x.user, request.user.all_friends.all())):
+        request.user.main_friend.friends.remove(friend_user)
+        friend_user.main_friend.friends.remove(request.user)
+
+    return redirect('friends-list')
