@@ -24,9 +24,10 @@ def search_friends(request):
         if (
             (user.id not in list(map(lambda x: x.receiver_id, request.user.sent_friend_request.all()))) and
             (user.id not in list(map(lambda x: x.sender_id, request.user.received_friend_request.all()))) and
-            (user.id not in list(map(lambda x: x.id, request.user.all_friends.all())))
+            (user.id not in list(map(lambda x: x.user.id, request.user.all_friends.all())))
         )
     ]
+
 
     context = {
         "form": form,
@@ -49,47 +50,43 @@ def show_friends_list(request):
 
 def send_friend_request(request, receiver_id):
 
-    sender = get_object_or_404(User, id=request.user.id)
     receiver = get_object_or_404(User, id=receiver_id)
 
-    FriendRequestList.objects.create(sender=sender, receiver=receiver, status="Pending")
+    FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
 
     return redirect("friends-list")
 
 
 def accept_friend_request(request, sender_id):
     sender_user = User.objects.get(pk=sender_id)
-    receiver_user = User.objects.get(pk=request.user.id)
 
-    friend_list_receiver = FriendList.objects.filter(user=receiver_user).first()
+    friend_list_receiver = FriendList.objects.filter(user=request.user).first()
+
+    print(request.user.main_friend.first())
 
     if not friend_list_receiver:
-        friend_list_receiver = FriendList.objects.create(user=receiver_user)
+        friend_list_receiver = FriendList.objects.create(user=request.user)
         
-        if sender_user not in friend_list_receiver.friends.all():
-            friend_list_receiver.friends.add(sender_user)
+    if sender_user not in friend_list_receiver.friends.all():
+        friend_list_receiver.friends.add(sender_user)
 
-    else:
-
-        if sender_user not in friend_list_receiver.friends.all():
-            friend_list_receiver.friends.add(sender_user)
 
     friend_list_sender = FriendList.objects.filter(user=sender_user).first()
+
+    print(sender_user.main_friend.first())
 
     if not friend_list_sender:
         friend_list_sender = FriendList.objects.create(user=sender_user)
 
-        if receiver_user not in friend_list_sender.friends.all():
-            friend_list_sender.friends.add(receiver_user)
+    if request.user not in friend_list_sender.friends.all():
+        friend_list_sender.friends.add(request.user)
 
-    else:
-
-        if receiver_user not in friend_list_sender.friends.all():
-            friend_list_sender.friends.add(receiver_user)
+    print(sender_user.main_friend.first())
 
     friend_request = FriendRequestList.objects.get(
         Q(receiver_id=request.user.id) & Q(sender_id=sender_id)
     )
+
     friend_request.status = "Accepted"
     friend_request.save()
 
