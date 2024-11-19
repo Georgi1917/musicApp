@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from accounts.forms import LoginForm, EditUserForm, PasswordConfirmationForm
+from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm
 from album_song_creation.models import Playlist
 from song_creation.models import Song
 
@@ -28,18 +28,15 @@ def register_user(request):
     
 def login_user(request):
     if request.method == "POST":
-        login_form = LoginForm(request.POST)
+        login_form = LoginUserForm(request=request, data=request.POST)
         if login_form.is_valid():
-            user_username = login_form.cleaned_data["username"]
-            user_password = login_form.cleaned_data["password"]
-            user = authenticate(request, username=user_username, password=user_password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, ("You have been logged in succesfully!!"))
-                return redirect("main-page")
+            user = login_form.get_user()
+            login(request, user)
+            messages.success(request, ("You have been logged in succesfully!!"))
+            return redirect("main-page")
 
     else:
-        login_form = LoginForm()
+        login_form = LoginUserForm()
 
     context = {
         "login_form": login_form
