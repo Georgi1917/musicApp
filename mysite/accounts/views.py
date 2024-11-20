@@ -23,8 +23,12 @@ def register_user(request):
 
     else:
         form = UserCreationForm()
+
+    context = {
+        "form": form
+    }
         
-    return render(request, "accounts/register.html", {'form': form})
+    return render(request, "accounts/register.html", context)
     
 def login_user(request):
     if request.method == "POST":
@@ -99,19 +103,15 @@ def delete_account(request):
         form = PasswordConfirmationForm(request.POST, request.user)
 
         if form.is_valid():
-            
-            user = request.user
 
-            user_albums = Playlist.objects.filter(user=user)
-
-            for album in user_albums:
-                songs_in_album = Song.objects.filter(album=album)
-                for song in songs_in_album:
+            for album in request.user.playlist_set.all():
+                
+                for song in album.song_set.all():
                     song.delete()
                 
                 album.delete()
 
-            user.delete() 
+            request.user.delete()
 
             messages.success(request, "Your account has been succesfully deleted.")
 
