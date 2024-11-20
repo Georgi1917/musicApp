@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.urls import reverse, resolve
 from friends_list.models import FriendRequestList, FriendList
-from album_song_creation.models import Playlist
+from album_creation.models import Playlist
 from song_creation.models import Song
 from django.db.models import Q
 from friends_list.forms import SearchForm

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from album_song_creation.forms import PlaylistForm
-from album_song_creation.models import Playlist
+from album_creation.forms import PlaylistForm
+from album_creation.models import Playlist
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from song_creation.models import Song

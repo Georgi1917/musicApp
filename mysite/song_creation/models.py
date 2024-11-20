@@ -1,5 +1,5 @@
 from django.db import models
-from album_song_creation.models import Playlist
+from album_creation.models import Playlist
 
 # Create your models here.
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from album_song_creation.models import Playlist
+from album_creation.models import Playlist
 
 # Create your views here.
 

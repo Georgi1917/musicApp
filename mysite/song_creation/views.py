@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from album_song_creation.models import Playlist
+from album_creation.models import Playlist
 from song_creation.models import Song
 from song_creation.forms import SongForm
 from django.contrib import messages

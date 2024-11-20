@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'index',
     'accounts',
-    'album_song_creation',
+    'album_creation',
     'song_creation',
     'friends_list',
     "forum",
