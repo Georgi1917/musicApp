@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from accounts.validators import validate_name
@@ -21,6 +21,12 @@ class BaseUserForm(forms.ModelForm):
 class LoginUserForm(AuthenticationForm):
 
     pass
+
+
+class RegisterUserForm(UserCreationForm):
+
+    class Meta(UserCreationForm.Meta):
+        fields = ["email", "username"]
 
 
 class EditUserForm(BaseUserForm):

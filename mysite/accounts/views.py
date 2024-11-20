@@ -2,16 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm
-from album_song_creation.models import Playlist
-from song_creation.models import Song
+from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm, RegisterUserForm
 
 # Create your views here.
 
 
 def register_user(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data['username']
@@ -22,7 +20,7 @@ def register_user(request):
             return redirect('main-page')
 
     else:
-        form = UserCreationForm()
+        form = RegisterUserForm()
 
     context = {
         "form": form
