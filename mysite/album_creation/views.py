@@ -33,7 +33,7 @@ def show_album_creation_page(request):
             "form": form
         }
 
-        return render(request, 'album_song_creation/create-album.html', context)
+        return render(request, 'album_creation/create-album.html', context)
     
 def show_album_edit_page(request, album_id):
     chosen_album = Playlist.objects.get(pk=album_id)
@@ -63,4 +63,4 @@ def show_album_edit_page(request, album_id):
             
             return redirect("main-page")
 
-    return render(request, 'album_song_creation/edit_album.html', context)
+    return render(request, 'album_creation/edit_album.html', context)

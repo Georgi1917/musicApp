@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+
+    <a href="{% url 'create-post' %}">Add Post</a>
+    <br><br>
+    {% for post in posts %}
+    <a href="{% url 'show-post' post_id=post.id %}" style="text-decoration: none; color: black;">
+        <div>
+            By: {{ post.user }} <br>
+            {{post.title}} <br>
+            {{post.content}} <br>
+            Upvotes : {{ post.upvotes }} <span>   |    </span> Comments : {{post.number_of_comments}}
+        </div>
+    </a>
+        <br><br>
+    {% empty %}
+        <p>No posts</p>
+    {% endfor %}
+</body>
+{% endblock %}
