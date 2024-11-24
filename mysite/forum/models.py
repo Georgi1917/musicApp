@@ -20,3 +20,9 @@ class CommentPost(CreatedUpdatedAtMixIn, UpvotesContentMixIn):
     
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="comments")
     post = models.ForeignKey(to=ForumPost, on_delete=models.CASCADE, related_name="post_comments")
+
+
+class LikePost(models.Model):
+
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="likes")
+    post = models.ForeignKey(to=ForumPost, on_delete=models.CASCADE, related_name="post_likes")

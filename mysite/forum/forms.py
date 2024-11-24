@@ -5,11 +5,11 @@ class ForumCreationForm(forms.ModelForm):
 
     class Meta:
         model = ForumPost
-        fields = ["title", "content", "hide_upvotes"]
+        fields = ["title", "content"]
 
 
 class CommentCreationForm(forms.ModelForm):
 
     class Meta:
         model = CommentPost
-        fields = ["content", "hide_upvotes"]
+        fields = ["content"]

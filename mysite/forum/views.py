@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from forum.models import ForumPost, CommentPost
+from forum.models import ForumPost, CommentPost, LikePost
 from forum.forms import ForumCreationForm, CommentCreationForm
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 def show_forum_page(request):
@@ -85,3 +87,49 @@ def delete_comment(request, post_id, comment_id):
     comment.delete()
 
     return redirect('show-post', post_id=post_id)
+
+
+def delete_post(request, post_id):
+
+    post = request.user.forums.filter(id=post_id).first()
+
+    if post:
+
+        post.delete()
+
+    return redirect('forum')
+
+
+@api_view(["GET"])
+def like_post(request, post_id):
+
+    post = ForumPost.objects.get(id=post_id)
+    like = LikePost.objects.filter(post=post, user=request.user).first()
+
+    if like:
+        like.delete()
+        post.upvotes = post.post_likes.count()
+        post.save()
+
+        response_data = {
+            "status": "unliked",
+            "likes_count": post.upvotes
+        }
+
+        print("Response: ", response_data)
+
+        return Response(response_data)
+    
+    LikePost.objects.create(post=post, user=request.user)
+    post.upvotes = post.post_likes.count()
+    print(post.upvotes)
+    post.save()
+
+    response_data = {
+            "status": "liked",
+            "likes_count": post.upvotes
+    }
+
+    print("Response: ", response_data)
+
+    return Response(response_data)

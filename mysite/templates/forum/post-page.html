@@ -5,7 +5,10 @@
         By: {{ post.user }} | Created: {{ post.created_at }} <br>
         {{ post.title }} <br>
         {{ post.content }} <br>
-        Upvotes : {{ post.upvotes }} | <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.number_of_comments }}</a> <br>
+        Upvotes : {{ post.upvotes }} | <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.number_of_comments }}</a> |
+        {% if post.user == request.user %}
+            <a href="{% url 'delete-post' post_id=post.id %}">Delete</a>
+        {% endif %}
     </div> <br> <br>
 
     <div>

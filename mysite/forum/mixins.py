@@ -10,9 +10,6 @@ class UpvotesContentMixIn(models.Model):
     upvotes = models.IntegerField(
         default=0
     )
-    hide_upvotes = models.BooleanField(
-        default=False
-    )
 
     class Meta:
         abstract = True

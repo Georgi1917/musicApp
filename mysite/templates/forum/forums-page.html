@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
 
@@ -6,16 +7,24 @@
     <br><br>
     {% for post in posts %}
     <a href="{% url 'show-post' post_id=post.id %}" style="text-decoration: none; color: black;">
-        <div>
+        <div class="post">
             By: {{ post.user }} <br>
             {{post.title}} <br>
             {{post.content}} <br>
-            Upvotes : {{ post.upvotes }} <span>   |    </span> Comments : {{post.number_of_comments}}
+            Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.upvotes }}</span> <span>   |    </span> Comments : {{post.number_of_comments}}   |
+            {% if request.user == post.user %}
+                <a href="{% url 'delete-post' post_id=post.id %}">Delete</a>
+            {% endif %}
+            <br>
+            <span class="like-button">Like</span>
         </div>
     </a>
         <br><br>
     {% empty %}
         <p>No posts</p>
     {% endfor %}
+
+
+    <script src="{% static 'js-files/forum/toggle-like.js' %}"></script>
 </body>
 {% endblock %}

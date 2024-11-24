@@ -26,9 +26,9 @@
     <a href="{% url 'create-song' album_id=album_id %}">Add a Song</a>
     <button id="play-all">Play Playlist</button>
 
-    <script src="{% static 'js-files/normalize_volume.js' %}"></script>
-    <script src="{% static 'js-files/play_song_script.js' %}"></script>
-    <script src="{% static 'js-files/change_volume.js' %}"></script>
-    <script src="{% static 'js-files/play_all_songs_automatically.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/normalize_volume.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/play_song_script.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/change_volume.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/play_all_songs_automatically.js' %}"></script>
 </body>
 {% endblock %}
