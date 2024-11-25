@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
-    <div>
+    <div class="post">
         By: {{ post.user }} | Created: {{ post.created_at }} <br>
         {{ post.title }} <br>
         {{ post.content }} <br>
-        Upvotes : {{ post.upvotes }} | <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.number_of_comments }}</a> |
+        Likes : <span value="post-likes" id="{{ post.id }}">{{ post.upvotes }}</span> | 
+        <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.number_of_comments }}</a> 
+        | 
+        {% if likes %}
+        <span class="like-button">Unlike</span>
+        {% else %}
+        <span class="like-button">Like</span>
+        {% endif %}
         {% if post.user == request.user %}
             <a href="{% url 'delete-post' post_id=post.id %}">Delete</a>
         {% endif %}
@@ -26,5 +34,7 @@
             <p>No comments</p>
         {% endfor %}
     </div>
+
+    <script src="{% static 'js-files/forum/toggle-like.js' %}"></script>
 </body>
 {% endblock %}

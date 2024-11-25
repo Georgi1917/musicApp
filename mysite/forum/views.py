@@ -7,10 +7,9 @@ from rest_framework.decorators import api_view
 
 def show_forum_page(request):
 
-    all_forum_posts = ForumPost.objects.all()
-
     context = {
-        "posts": all_forum_posts,
+        "posts": ForumPost.objects.all(),
+        "likes": list(map(lambda x: x.post, request.user.likes.all()))
     }
 
     return render(request, "forum/forums-page.html", context)
@@ -38,13 +37,11 @@ def show_forum_create_page(request):
 
 
 def show_post(request, post_id):
-    post = ForumPost.objects.get(id=post_id)
-
-    comments = CommentPost.objects.filter(post=post)
 
     context = {
-        "post": post,
-        "comments": comments,
+        "post": ForumPost.objects.get(id=post_id),
+        "comments": CommentPost.objects.filter(post_id=post_id),
+        "likes": request.user.likes.filter(post_id=post_id)
     }
 
     return render(request, "forum/post-page.html", context)
@@ -116,20 +113,15 @@ def like_post(request, post_id):
             "likes_count": post.upvotes
         }
 
-        print("Response: ", response_data)
-
         return Response(response_data)
     
     LikePost.objects.create(post=post, user=request.user)
     post.upvotes = post.post_likes.count()
-    print(post.upvotes)
     post.save()
 
     response_data = {
             "status": "liked",
             "likes_count": post.upvotes
     }
-
-    print("Response: ", response_data)
 
     return Response(response_data)

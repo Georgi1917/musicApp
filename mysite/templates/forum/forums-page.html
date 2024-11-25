@@ -6,19 +6,24 @@
     <a href="{% url 'create-post' %}">Add Post</a>
     <br><br>
     {% for post in posts %}
-    <a href="{% url 'show-post' post_id=post.id %}" style="text-decoration: none; color: black;">
         <div class="post">
-            By: {{ post.user }} <br>
-            {{post.title}} <br>
-            {{post.content}} <br>
-            Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.upvotes }}</span> <span>   |    </span> Comments : {{post.number_of_comments}}   |
+            <a href="{% url 'show-post' post_id=post.id %}" style="text-decoration: none; color: black;">
+                <div class="post-link">
+                        By: {{ post.user }} <br>
+                        {{post.title}} <br>
+                        {{post.content}} <br>
+                        Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.upvotes }}</span> <span> |</span> Comments : {{post.number_of_comments}} |
+                </div>
+            </a>
             {% if request.user == post.user %}
-                <a href="{% url 'delete-post' post_id=post.id %}">Delete</a>
+                <a href="{% url 'delete-post' post_id=post.id %}">Delete</a> <br>
             {% endif %}
-            <br>
+            {% if post in likes %}
+            <span class="like-button">Unlike</span>
+            {% else %}
             <span class="like-button">Like</span>
+            {% endif %}
         </div>
-    </a>
         <br><br>
     {% empty %}
         <p>No posts</p>
