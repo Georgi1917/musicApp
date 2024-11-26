@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_control
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
-from forum.forms import ForumCreationForm, CommentCreationForm
+from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def show_forum_page(request):
 
     context = {
@@ -96,6 +98,27 @@ def delete_post(request, post_id):
         post.delete()
 
     return redirect('forum')
+
+
+def edit_post(request, post_id):
+    
+    form = ForumEditForm(instance=request.user.forums.get(id=post_id))
+
+    if request.method == "POST":
+
+        form = ForumCreationForm(request.POST, instance=request.user.forums.get(id=post_id))
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect('forum')
+
+    context = {
+        "form": form
+    }
+
+    return render(request, "forum/edit-post.html", context)
 
 
 @api_view(["GET"])
