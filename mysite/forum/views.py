@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from forum.models import ForumPost, CommentPost, LikePost
+from forum.models import ForumPost, CommentPost, LikePost, LikeComment
 from forum.forms import ForumCreationForm, CommentCreationForm
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -41,7 +41,8 @@ def show_post(request, post_id):
     context = {
         "post": ForumPost.objects.get(id=post_id),
         "comments": CommentPost.objects.filter(post_id=post_id),
-        "likes": request.user.likes.filter(post_id=post_id)
+        "likes": request.user.likes.filter(post_id=post_id),
+        "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all()))
     }
 
     return render(request, "forum/post-page.html", context)
@@ -102,26 +103,49 @@ def like_post(request, post_id):
 
     post = ForumPost.objects.get(id=post_id)
     like = LikePost.objects.filter(post=post, user=request.user).first()
+    status = "liked"
 
     if like:
+
         like.delete()
-        post.upvotes = post.post_likes.count()
-        post.save()
+        status = "unliked"
 
-        response_data = {
-            "status": "unliked",
-            "likes_count": post.upvotes
-        }
+    else:
 
-        return Response(response_data)
-    
-    LikePost.objects.create(post=post, user=request.user)
+        LikePost.objects.create(post=post, user=request.user)
+
     post.upvotes = post.post_likes.count()
     post.save()
 
-    response_data = {
-            "status": "liked",
-            "likes_count": post.upvotes
-    }
+    return Response({
+        "status": status,
+        "likes_count": post.upvotes
+    })
 
-    return Response(response_data)
+
+@api_view(["GET"])
+def like_comment(request, post_id, comment_id):
+    
+    comment = CommentPost.objects.get(id=comment_id)
+    like = LikeComment.objects.filter(user=request.user, comment=comment)
+    status = "liked"
+
+    if like:
+
+        like.delete()
+        status = "unliked"
+
+    else:
+
+        LikeComment.objects.create(
+            user=request.user,
+            comment=comment
+        )
+
+    comment.upvotes = comment.comment_likes.count()
+    comment.save()
+
+    return Response({
+        "status": status,
+        "likes_count": comment.upvotes
+    })

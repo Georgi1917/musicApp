@@ -26,3 +26,9 @@ class LikePost(models.Model):
 
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="likes")
     post = models.ForeignKey(to=ForumPost, on_delete=models.CASCADE, related_name="post_likes")
+
+
+class LikeComment(models.Model):
+
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="liked_comments")
+    comment = models.ForeignKey(to=CommentPost, on_delete=models.CASCADE, related_name="comment_likes")

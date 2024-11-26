@@ -8,6 +8,7 @@ urlpatterns = [
         path('post/', include([
             path('<int:post_id>/', views.show_post, name="show-post"),
             path('<int:post_id>/like/', views.like_post, name="like-post"),
+            path('<int:post_id>/like/<int:comment_id>/', views.like_comment, name="like-comment"),
             path('<int:post_id>/delete/', views.delete_post, name="delete-post"),
             path('<int:post_id>/create-comment/', views.create_comment, name="create-comment"),
             path('<int:post_id>/delete-comment/<int:comment_id>/', views.delete_comment, name="delete-comment")

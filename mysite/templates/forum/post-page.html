@@ -8,7 +8,7 @@
         {{ post.content }} <br>
         Likes : <span value="post-likes" id="{{ post.id }}">{{ post.upvotes }}</span> | 
         <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.number_of_comments }}</a> 
-        | 
+        | <br>
         {% if likes %}
         <span class="like-button">Unlike</span>
         {% else %}
@@ -21,10 +21,18 @@
 
     <div>
         {% for comment in comments %}
-        <div>
+        <div class="comment">
             By: {{ comment.user }} <br>
             {{ comment.content }} <br>
-            Posted: {{ comment.created_at }}
+            Posted: {{ comment.created_at }} <br>
+            Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.upvotes }}</span>
+            <br>
+            {% if comment in liked_comments %}
+                <span class="like-comment">Unlike</span>
+            {% else %}
+                <span class="like-comment">Like</span>
+            {% endif %}
+            |
             {% if comment.user == request.user %}
                 <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}">Delete</a>
             {% endif %}
@@ -35,6 +43,7 @@
         {% endfor %}
     </div>
 
-    <script src="{% static 'js-files/forum/toggle-like.js' %}"></script>
+    <script src="{% static 'js-files/forum/toggle-post-like.js' %}"></script>
+    <script src="{% static 'js-files/forum/toggle-comment-like.js' %}"></script>
 </body>
 {% endblock %}
