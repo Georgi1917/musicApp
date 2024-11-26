@@ -34,7 +34,7 @@
             {% endif %}
             |
             {% if comment.user == request.user %}
-                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}">Delete</a>
+                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}">Delete</a> | <a href="#">Edit</a>
             {% endif %}
         </div>
         <br>

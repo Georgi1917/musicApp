@@ -121,6 +121,11 @@ def edit_post(request, post_id):
     return render(request, "forum/edit-post.html", context)
 
 
+def edit_comment(request, post_id, comment_id):
+
+    pass
+
+
 @api_view(["GET"])
 def like_post(request, post_id):
 
