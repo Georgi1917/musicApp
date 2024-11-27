@@ -15,7 +15,10 @@ def show_forum_page(request):
 
     queryset = get_queryset(request.GET.get("filter_by", ""))
 
+    queryset = queryset.filter(title__icontains=request.GET.get("searched_post", ""))
+
     form.initial["filter_by"] = request.GET.get("filter_by", "Newest")
+    search_form.initial["searched_post"] = request.GET.get("searched_post", "")
 
     context = {
         "posts": queryset,

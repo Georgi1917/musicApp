@@ -4,14 +4,11 @@
 <body>
 
     <a href="{% url 'create-post' %}">Add Post</a>
-    <form method="GET">
-        {{ search_form }}
-        <button>Search</button>
-    </form>
     <br>
     <form method="GET">
+        {{ search_form }}
         {{ form }}
-        <button>Apply Filter</button>
+        <button>Search</button>
     </form>
     <br>
     {% for post in posts %}
