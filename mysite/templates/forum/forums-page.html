@@ -12,11 +12,11 @@
                         By: {{ post.user }} <br>
                         {{post.title}} <br>
                         {{post.content}} <br>
-                        Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.upvotes }}</span> <span> |</span> Comments : {{post.number_of_comments}} |
+                        Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.get_like_count }}</span> <span> |</span> Comments : {{post.get_comment_count}} |
                 </div>
             </a>
             {% if request.user == post.user %}
-                <a href="{% url 'delete-post' post_id=post.id %}">Delete</a> | <a href="{% url 'edit-post' post_id=post.id %}">Edit</a> <br>
+                <a href="{% url 'delete-post' post_id=post.id %}">Delete</a><br>
             {% endif %}
             {% if post in likes %}
             <span class="like-button">Unlike</span>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
-from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm
+from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -62,9 +62,7 @@ def create_comment(request, post_id):
             comment = form.save(commit=False)
             comment.user = request.user
             comment.post = post
-            post.number_of_comments += 1
 
-            post.save()
             comment.save()
 
             return redirect('show-post', post_id=post_id)
@@ -79,11 +77,7 @@ def create_comment(request, post_id):
 def delete_comment(request, post_id, comment_id):
 
     comment = CommentPost.objects.get(id=comment_id)
-    post = ForumPost.objects.get(id=post_id)
-
-    post.number_of_comments -= 1
-
-    post.save()
+    
     comment.delete()
 
     return redirect('show-post', post_id=post_id)
@@ -112,7 +106,7 @@ def edit_post(request, post_id):
 
             form.save()
 
-            return redirect('forum')
+            return redirect('show-post', post_id=post_id)
 
     context = {
         "form": form
@@ -123,7 +117,23 @@ def edit_post(request, post_id):
 
 def edit_comment(request, post_id, comment_id):
 
-    pass
+    form = CommentEditForm(instance=request.user.comments.get(id=comment_id))
+
+    if request.method == "POST":
+
+        form = CommentEditForm(request.POST, instance=request.user.comments.get(id=comment_id))
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect('show-post', post_id=post_id)
+
+    context = {
+        "form": form
+    }
+
+    return render(request, "forum/edit-comment.html", context)
 
 
 @api_view(["GET"])
@@ -140,14 +150,14 @@ def like_post(request, post_id):
 
     else:
 
-        LikePost.objects.create(post=post, user=request.user)
-
-    post.upvotes = post.post_likes.count()
-    post.save()
+        LikePost.objects.create(
+            post=post, 
+            user=request.user
+        )
 
     return Response({
         "status": status,
-        "likes_count": post.upvotes
+        "likes_count": post.post_likes.count()
     })
 
 
@@ -170,10 +180,7 @@ def like_comment(request, post_id, comment_id):
             comment=comment
         )
 
-    comment.upvotes = comment.comment_likes.count()
-    comment.save()
-
     return Response({
         "status": status,
-        "likes_count": comment.upvotes
+        "likes_count": comment.comment_likes.count()
     })

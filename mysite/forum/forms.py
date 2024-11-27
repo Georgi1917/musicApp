@@ -25,8 +25,17 @@ class ForumEditForm(BaseForumForm):
 
     pass
 
+
+class ForumDeleteForm(BaseForumForm):
+
+    pass
+
+
 class CommentCreationForm(BaseCommentForm):
 
-    class Meta(BaseCommentForm.Meta):
+    pass
 
-        fields = ["content"]
+
+class CommentEditForm(BaseCommentForm):
+
+    pass

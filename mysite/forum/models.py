@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-from forum.mixins import CreatedUpdatedAtMixIn, UpvotesContentMixIn
+from forum.mixins import CommentAndPostMixIn
 
 
-class ForumPost(CreatedUpdatedAtMixIn, UpvotesContentMixIn):
+class ForumPost(CommentAndPostMixIn):
     
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="forums")
     title = models.CharField(
@@ -11,15 +11,24 @@ class ForumPost(CreatedUpdatedAtMixIn, UpvotesContentMixIn):
         blank=False,
         max_length=80
     )
-    number_of_comments = models.IntegerField(
-        default=0
-    )
+
+    def get_comment_count(self):
+
+        return self.post_comments.count()
+    
+    def get_like_count(self):
+
+        return self.post_likes.count()
 
 
-class CommentPost(CreatedUpdatedAtMixIn, UpvotesContentMixIn):
+class CommentPost(CommentAndPostMixIn):
     
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="comments")
     post = models.ForeignKey(to=ForumPost, on_delete=models.CASCADE, related_name="post_comments")
+
+    def get_like_count(self):
+
+        return self.comment_likes.count()
 
 
 class LikePost(models.Model):

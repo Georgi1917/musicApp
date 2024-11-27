@@ -1,21 +1,7 @@
 from django.db import models
 
 
-class UpvotesContentMixIn(models.Model):
-
-    content = models.TextField(
-        null=False,
-        blank=False
-    )
-    upvotes = models.IntegerField(
-        default=0
-    )
-
-    class Meta:
-        abstract = True
-
-
-class CreatedUpdatedAtMixIn(models.Model):
+class CommentAndPostMixIn(models.Model):
     
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -23,6 +9,11 @@ class CreatedUpdatedAtMixIn(models.Model):
 
     updated_at = models.DateTimeField(
         auto_now=True
+    )
+
+    content = models.TextField(
+        null=False,
+        blank=False
     )
 
     class Meta:

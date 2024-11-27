@@ -6,8 +6,8 @@
         By: {{ post.user }} | Created: {{ post.created_at }} <br>
         {{ post.title }} <br>
         {{ post.content }} <br>
-        Likes : <span value="post-likes" id="{{ post.id }}">{{ post.upvotes }}</span> | 
-        <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.number_of_comments }}</a> 
+        Likes : <span value="post-likes" id="{{ post.id }}">{{ post.get_like_count }}</span> | 
+        <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.get_comment_count }}</a> 
         | <br>
         {% if likes %}
         <span class="like-button">Unlike</span>
@@ -15,7 +15,8 @@
         <span class="like-button">Like</span>
         {% endif %}
         {% if post.user == request.user %}
-            <a href="{% url 'delete-post' post_id=post.id %}">Delete</a>
+            <a href="{% url 'delete-post' post_id=post.id %}">Delete</a> |
+            <a href="{% url 'edit-post' post_id=post.id %}">Edit</a>
         {% endif %}
     </div> <br> <br>
 
@@ -25,7 +26,7 @@
             By: {{ comment.user }} <br>
             {{ comment.content }} <br>
             Posted: {{ comment.created_at }} <br>
-            Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.upvotes }}</span>
+            Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.get_like_count }}</span>
             <br>
             {% if comment in liked_comments %}
                 <span class="like-comment">Unlike</span>
@@ -34,7 +35,8 @@
             {% endif %}
             |
             {% if comment.user == request.user %}
-                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}">Delete</a> | <a href="#">Edit</a>
+                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}">Delete</a> | 
+                <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}">Edit</a>
             {% endif %}
         </div>
         <br>
