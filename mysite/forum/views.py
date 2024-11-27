@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
+from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
-from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm
+from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm, FilterPostsForm, SearchPostForm
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -9,11 +10,20 @@ from rest_framework.decorators import api_view
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def show_forum_page(request):
 
-    context = {
-        "posts": ForumPost.objects.all(),
-        "likes": list(map(lambda x: x.post, request.user.likes.all()))
-    }
+    search_form = SearchPostForm()
+    form = FilterPostsForm()
 
+    queryset = get_queryset(request.GET.get("filter_by", ""))
+
+    form.initial["filter_by"] = request.GET.get("filter_by", "Newest")
+
+    context = {
+        "posts": queryset,
+        "likes": list(map(lambda x: x.post, request.user.likes.all())),
+        "form": form,
+        "search_form": search_form
+    }
+    
     return render(request, "forum/forums-page.html", context)
 
 

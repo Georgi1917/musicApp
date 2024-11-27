@@ -19,6 +19,10 @@ class ForumPost(CommentAndPostMixIn):
     def get_like_count(self):
 
         return self.post_likes.count()
+    
+    class Meta:
+
+        ordering = ["-created_at"]
 
 
 class CommentPost(CommentAndPostMixIn):
