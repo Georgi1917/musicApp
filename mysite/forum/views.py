@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
+from django.core.paginator import Paginator
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
 from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm, FilterPostsForm, SearchPostForm
 from rest_framework.response import Response
@@ -13,18 +14,29 @@ def show_forum_page(request):
     search_form = SearchPostForm()
     form = FilterPostsForm()
 
-    queryset = get_queryset(request.GET.get("filter_by", ""))
+    filter_by = request.GET.get("filter_by", "Newest")
+    searched_post = request.GET.get("searched_post", "")
 
-    queryset = queryset.filter(title__icontains=request.GET.get("searched_post", ""))
+    queryset = get_queryset(filter_by)
 
-    form.initial["filter_by"] = request.GET.get("filter_by", "Newest")
-    search_form.initial["searched_post"] = request.GET.get("searched_post", "")
+    queryset = queryset.filter(title__icontains=searched_post)
+
+    paginator = Paginator(queryset, 5)
+
+    page_num = request.GET.get("page")
+
+    page_object = paginator.get_page(page_num)
+
+    form.initial["filter_by"] = filter_by
+    search_form.initial["searched_post"] = searched_post
 
     context = {
-        "posts": queryset,
+        "posts": page_object,
         "likes": list(map(lambda x: x.post, request.user.likes.all())),
         "form": form,
-        "search_form": search_form
+        "search_form": search_form,
+        "filter_by": filter_by,
+        "searched_post": searched_post,
     }
     
     return render(request, "forum/forums-page.html", context)
@@ -89,9 +101,11 @@ def create_comment(request, post_id):
 
 def delete_comment(request, post_id, comment_id):
 
-    comment = CommentPost.objects.get(id=comment_id)
+    comment = request.user.comments.filter(id=comment_id).first()
+
+    if comment:
     
-    comment.delete()
+        comment.delete()
 
     return redirect('show-post', post_id=post_id)
 

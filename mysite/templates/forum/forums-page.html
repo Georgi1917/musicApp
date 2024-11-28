@@ -32,6 +32,23 @@
         <p>No posts</p>
     {% endfor %}
 
+    <div class="pagination">
+        <span class="step-links">
+            {% if posts.has_previous %}
+                <a href="?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page=1">&laquo; first</a>
+                <a href="?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ posts.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+            </span>
+    
+            {% if posts.has_next %}
+                <a href="?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ posts.next_page_number }}">next</a>
+                <a href="?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ posts.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 
     <script src="{% static 'js-files/forum/toggle-post-like.js' %}"></script>
 </body>

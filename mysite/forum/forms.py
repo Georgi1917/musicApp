@@ -55,23 +55,11 @@ class ForumEditForm(BaseForumForm):
     pass
 
 
-# TODO:
-class ForumDeleteForm(BaseForumForm): 
-
-    pass
-
-
 class CommentCreationForm(BaseCommentForm):
 
     pass
 
 
 class CommentEditForm(BaseCommentForm):
-
-    pass
-
-
-# TODO:
-class CommentDeleteForm(BaseCommentForm):
 
     pass
