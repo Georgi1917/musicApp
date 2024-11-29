@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <a href="{% url 'create-playlist' %}">Create Playlist</a> <br><br>
+
+    {% if user_playlists %}
+        <h1>My Playlists:</h1>
+        <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
+            {% for playlist in user_playlists %}
+            <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
+                <p style="margin: 0;">{{playlist.name}}</p>
+                <a href="{% url 'edit-playlist' album_id=playlist.id %}">Edit</a> | <a href="{% url 'delete-playlist' playlist_id=playlist.id %}">Delete</a> <br>
+                <a href="{% url 'song-page' album_id=playlist.id %}">Songs</a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No Playlists</p>
+    {% endif %}
+</body>
+{% endblock %}

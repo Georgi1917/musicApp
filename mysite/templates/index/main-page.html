@@ -9,7 +9,7 @@
         <a href="{% url 'login' %}">LogIn</a><br>
     {% endif %}
 
-    <a href="{% url 'album' %}">Create a New Album</a> <br>
+    <a href="{% url 'playlist-page' %}">Albums</a> <br>
 
     <a href="{% url 'friends-list' %}">Friends List</a> <br>
 
@@ -17,20 +17,9 @@
 
     {% if messages %}
         {% for msg in messages %}
-            {{ msg }} <br>
+            <br>
+            {{ msg }}
         {% endfor %}
-    {% endif %}
-
-    {% if user_playlists %}
-        <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
-            {% for playlist in user_playlists %}
-            <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
-                <p style="margin: 0;">{{playlist.name}}</p>
-                <a href="{% url 'edit_album' album_id=playlist.id %}">Edit</a> <br>
-                <a href="{% url 'song-page' album_id=playlist.id %}">Songs</a>
-            </div>
-            {% endfor %}
-        </div>
     {% endif %}
     
     <form action="{% url 'logout' %}" method="POST" id="logout-form" display="none">
