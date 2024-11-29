@@ -17,5 +17,24 @@
     {% else %}
         <p>No Playlists</p>
     {% endif %}
+
+    {% if followed_playlists %}
+        <h1>Followed Playlists:</h1>
+        <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
+            {% for f_playlist in followed_playlists %}
+                <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
+                    <p style="margin: 0;">
+                        {{ f_playlist.playlist.name }}
+                    </p>
+                    <a href="#">Songs</a> <br>
+                    <a href="{% url 'unfollow' playlist_id=f_playlist.id %}">Unfollow</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+
+        <p>You Follow No Playlists</p>
+
+    {% endif %}
 </body>
 {% endblock %}

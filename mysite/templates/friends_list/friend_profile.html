@@ -10,7 +10,12 @@
             {% for playlist in friend_playlists %}
             <div style="margin: 0; padding: 0.6em 3em; border: 1px solid black; border-radius: 12px;">
                 <p style="margin: 0;">{{playlist.name}}</p>
-                <a href="{% url 'see-songs' friend_id=friend_id friend_album_id=playlist.id %}">Songs</a>
+                <a href="{% url 'see-songs' friend_id=friend_id friend_album_id=playlist.id %}">Songs</a> <br>
+                {% if playlist in followed_playlists %}
+                    <a href="{% url 'follow-playlist' friend_id=friend_id playlist_id=playlist.id %}">Unfollow</a>
+                {% else %}
+                    <a href="{% url 'follow-playlist' friend_id=friend_id playlist_id=playlist.id %}">Follow</a>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

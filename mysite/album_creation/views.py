@@ -13,6 +13,7 @@ def playlist_page(request):
 
     context = {
         "user_playlists": request.user.playlists.all(),
+        "followed_playlists": request.user.followed_playlists.all()
     }
 
     return render(request, "album_creation/playlist-page.html", context)
@@ -76,3 +77,19 @@ def delete_playlist(request, playlist_id):
         playlist.delete()
 
     return redirect("playlist-page")
+
+
+def unfollow_playlist(request, playlist_id):
+
+    playlist = request.user.followed_playlists.filter(id=playlist_id).first()
+
+    if playlist:
+
+        playlist.delete()
+
+    return redirect("playlist-page")
+
+
+def followed_playlist_songs(request, playlist_id):
+
+    pass

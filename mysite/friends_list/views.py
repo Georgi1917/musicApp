@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.urls import reverse, resolve
-from friends_list.models import FriendRequestList, FriendList
-from album_creation.models import Playlist
+from friends_list.models import FriendRequestList
+from album_creation.models import Playlist, FollowedPlaylist
 from song_creation.models import Song
 from django.db.models import Q
 from friends_list.forms import SearchForm
@@ -86,11 +85,10 @@ def accept_friend_request(request, sender_id):
 
 def see_friends_profile(request, friend_id):
 
-    friend_playlists = Playlist.objects.filter(user_id=friend_id)
-
     context = {
-        "friend_playlists": friend_playlists,
+        "friend_playlists": Playlist.objects.filter(user_id=friend_id),
         "friend_id": friend_id,
+        "followed_playlists": list(map(lambda x: x.playlist , request.user.followed_playlists.all()))
     }
     
     return render(request, 'friends_list/friend_profile.html', context=context)
@@ -141,3 +139,20 @@ def remove_friend(request, friend_id):
         friend_user.main_friend.friends.remove(request.user)
 
     return redirect('friends-list')
+
+
+def follow_playlist(request, friend_id, playlist_id):
+
+    playlist = Playlist.objects.get(id=playlist_id)
+    
+    followed_playlist = FollowedPlaylist.objects.filter(user=request.user, playlist=playlist).first()
+
+    if followed_playlist:
+
+        followed_playlist.delete()
+
+    else:
+
+        FollowedPlaylist.objects.create(user=request.user, playlist=playlist)
+
+    return redirect("see-profile", friend_id=friend_id)
