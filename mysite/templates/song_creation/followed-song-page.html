@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body>
+    {% if songs %}
+        {% for song in songs %}
+        <div value="{{song.file.url}}">
+            {{ song.name }} - {{song.author}} | <span value="current-duration">0:0:0</span> / <span value="song-duration">{{song.duration}}</span>
+            <button value="{{song.duration_in_seconds}}">Play</button>
+            <label for="volumeControl">Volume:</label>
+            <input type="range" class="volumeControl" min="0" max="1" step="0.01" value="0.5" disabled>
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <p>Looks like this user has no songs</p>
+    {% endif %}
+
+    <button id="play-all">Play Playlist</button>
+
+    <script src="{% static 'js-files/song_creation/normalize_volume.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/play_song_script.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/change_volume.js' %}"></script>
+    <script src="{% static 'js-files/song_creation/play_all_songs_automatically.js' %}"></script>
+</body>
+{% endblock %}

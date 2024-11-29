@@ -88,8 +88,3 @@ def unfollow_playlist(request, playlist_id):
         playlist.delete()
 
     return redirect("playlist-page")
-
-
-def followed_playlist_songs(request, playlist_id):
-
-    pass

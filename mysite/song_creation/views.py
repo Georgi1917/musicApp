@@ -82,3 +82,14 @@ def edit_song(request, album_id, song_id):
         }
 
         return render(request, 'song_creation/edit-song-page.html', context=context)
+    
+
+def followed_playlist_songs(request, playlist_id):
+
+    songs = request.user.followed_playlists.get(id=playlist_id).playlist.songs.all()
+
+    context = {
+        "songs": songs
+    }
+
+    return render(request, "song_creation/followed-song-page.html", context)

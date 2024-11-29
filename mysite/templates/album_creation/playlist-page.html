@@ -26,7 +26,7 @@
                     <p style="margin: 0;">
                         {{ f_playlist.playlist.name }}
                     </p>
-                    <a href="#">Songs</a> <br>
+                    <a href="{% url 'followed-songs' playlist_id=f_playlist.id %}">Songs</a> <br>
                     <a href="{% url 'unfollow' playlist_id=f_playlist.id %}">Unfollow</a>
                 </div>
             {% endfor %}
