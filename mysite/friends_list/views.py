@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.urls import reverse, resolve
 from friends_list.models import FriendRequestList, FriendList
 from album_creation.models import Playlist
@@ -28,10 +29,17 @@ def search_friends(request):
         )
     ]
 
+    paginator = Paginator(needed_users, 10)
+
+    page_number = request.GET.get("page")
+
+    page_obj = paginator.get_page(page_number)
 
     context = {
         "form": form,
-        "searched_users": needed_users
+        "searched_users": page_obj,
+        "paginator": paginator,
+        "search_query": search_query
     }
     
     return render(request, "friends_list/search_friends.html", context)

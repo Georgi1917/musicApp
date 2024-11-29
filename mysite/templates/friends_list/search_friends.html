@@ -8,9 +8,30 @@
     </form>
 
     {% for searched_user in searched_users %}
-        {{ searched_user.username }} - <a href="{% url 'send-request' receiver_id=searched_user.id %}">Send Request</a>
+        {{ searched_user.username }} - <a href="{% url 'send-request' receiver_id=searched_user.id %}">Send Request</a> <br>
     {% empty %}
-        <p>Kur</p>
+        <p>No users match the search query</p>
     {% endfor %}
+
+    <br><br>
+    {% if paginator.num_pages > 1 %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if searched_users.has_previous %}
+                <a href="?searched_user={{ search_query }}&page=1">&laquo; first</a>
+                <a href="?searched_user={{ search_query }}&page={{ searched_users.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ searched_users.number }} of {{ searched_users.paginator.num_pages }}.
+            </span>
+    
+            {% if searched_users.has_next %}
+                <a href="?searched_user={{ search_query }}&page={{ searched_users.next_page_number }}">next</a>
+                <a href="?searched_user={{ search_query }}&page={{ searched_users.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
 </body>
 {% endblock %}

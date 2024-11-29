@@ -15,7 +15,7 @@
                 {{ friend.user.username }} - <a href="{% url 'see-profile' friend_id=friend.user.id %}">See Profile</a> | <a href="{% url 'remove-friend' friend_id=friend.user.id %}">Unfriend</a><br>
             {% endfor %}
         {% else %}
-            Kur0
+            <p>No Friends</p>
         {% endif %}
     </div>
 
@@ -25,7 +25,7 @@
                 {{ reqs.receiver.username }} - Pending | <a href="{% url 'remove-request' friend_request_id=reqs.id %}">Remove</a> <br>
             {% endfor %}
         {% else %}
-            <p>Kur1</p>
+            <p>No Pending Requests</p>
         {% endif %}
     </div>
 
@@ -35,7 +35,7 @@
                 {{ recs.sender.username }} - <a href="{% url 'accept-request' sender_id=recs.sender_id %}">Accept</a> | <a href="{% url 'remove-request' friend_request_id=recs.id %}">Remove</a> <br>
             {% endfor %}
         {% else %}
-            <p>Kur2</p>
+            <p>No Requests Awaiting Acceptance</p>
         {% endif %}
     </div>
 
