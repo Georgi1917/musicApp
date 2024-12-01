@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
-# Create your models here.
+UserModel = get_user_model()
 
 class Playlist(models.Model):
     name = models.CharField(max_length=15)
@@ -13,7 +13,7 @@ class Playlist(models.Model):
         blank=True,
         null=True,
     )
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, default=None, related_name="playlists")
+    user = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, default=None, related_name="playlists")
 
     def delete(self, *args, **kwargs):
         self.logo.delete()
@@ -25,5 +25,5 @@ class Playlist(models.Model):
 
 class FollowedPlaylist(models.Model):
 
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="followed_playlists")
+    user = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name="followed_playlists")
     playlist = models.ForeignKey(to=Playlist, on_delete=models.CASCADE, related_name="users_following")

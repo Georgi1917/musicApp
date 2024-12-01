@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm, RegisterUserForm
 
 # Create your views here.
@@ -65,7 +65,17 @@ def edit_account_page(request):
             return redirect("main-page")
 
     else:
-        user_form = EditUserForm(instance=request.user)
+
+        user_profile = request.user.profile
+
+        initial_data = {
+            "email": request.user.email,
+            "username": request.user.username,
+            "first_name": user_profile.first_name,
+            "last_name": user_profile.last_name
+        }
+
+        user_form = EditUserForm(initial=initial_data)
 
     context = {
         "form": user_form
@@ -83,7 +93,7 @@ def change_account_password(request):
 
             update_session_auth_hash(request, user)
 
-            return redirect("edit-account")
+            return redirect("main-page")
 
     else:
 
@@ -102,9 +112,9 @@ def delete_account(request):
 
         if form.is_valid():
 
-            for album in request.user.playlist_set.all():
+            for album in request.user.playlists.all():
                 
-                for song in album.song_set.all():
+                for song in album.songs.all():
                     song.delete()
                 
                 album.delete()

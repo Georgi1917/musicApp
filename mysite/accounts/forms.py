@@ -1,21 +1,35 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
+from accounts.models import Profile
+from django.contrib.auth import get_user_model
 from accounts.validators import validate_name
 from accounts.utils import append_validators, remove_help_text
 from django.contrib.auth.hashers import check_password
 
+UserModel = get_user_model()
+
 class BaseUserForm(forms.ModelForm):
 
+    first_name = forms.CharField(
+        max_length=150,
+        required=False,
+        validators=[validate_name, ]
+    )
+
+    last_name = forms.CharField(
+        max_length=150,
+        required=False,
+        validators=[validate_name, ]
+    )
+
     class Meta:
-        model = User
+        model = UserModel
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super(BaseUserForm, self).__init__(*args, **kwargs)
         remove_help_text(self)
-        append_validators(self, ["first_name", "last_name"], validate_name)
 
 
 class LoginUserForm(AuthenticationForm):
@@ -26,13 +40,33 @@ class LoginUserForm(AuthenticationForm):
 class RegisterUserForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
+        model = UserModel
         fields = ["email", "username"]
 
 
 class EditUserForm(BaseUserForm):
 
     class Meta(BaseUserForm.Meta):
-        fields = ["email", "username", "first_name", "last_name"]
+        fields = ["email", "username"]
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        profile = Profile.objects.get(user=instance)
+
+        profile.first_name = self.cleaned_data["first_name"]
+        profile.last_name = self.cleaned_data["last_name"]
+
+        if commit:
+            instance.save()
+            profile.save()
+
+        return instance
 
 
 class PasswordConfirmationForm(forms.Form):
