@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from friends_list.models import FriendRequestList
 from album_creation.models import Playlist, FollowedPlaylist
@@ -7,8 +7,7 @@ from song_creation.models import Song
 from django.db.models import Q
 from friends_list.forms import SearchForm
 
-# Create your views here.
-
+UserModel = get_user_model()
 
 def search_friends(request):
     form = SearchForm()
@@ -17,7 +16,7 @@ def search_friends(request):
 
     form.initial["searched_user"] = search_query
 
-    searched_users = User.objects.filter(username__icontains=search_query).exclude(id=request.user.id) if search_query else []
+    searched_users = UserModel.objects.filter(username__icontains=search_query).exclude(id=request.user.id) if search_query else []
 
     needed_users = [
         user for user in searched_users
@@ -57,7 +56,7 @@ def show_friends_list(request):
 
 def send_friend_request(request, receiver_id):
 
-    receiver = get_object_or_404(User, id=receiver_id)
+    receiver = get_object_or_404(UserModel, id=receiver_id)
 
     if not (receiver.received_friend_request.all().filter(Q(status="Pending") & Q(sender=request.user))):
         FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
@@ -66,7 +65,7 @@ def send_friend_request(request, receiver_id):
 
 
 def accept_friend_request(request, sender_id):
-    sender_user = User.objects.get(pk=sender_id)
+    sender_user = UserModel.objects.get(pk=sender_id)
         
     if sender_user not in request.user.all_friends.all():
         request.user.main_friend.friends.add(sender_user)
@@ -106,7 +105,7 @@ def see_friends_songs(request, friend_id, friend_album_id):
 
 def see_friends_friendlist(request, friend_id):
 
-    friend_user = get_object_or_404(User, pk=friend_id)
+    friend_user = get_object_or_404(UserModel, pk=friend_id)
 
     pending_request_in_list = FriendRequestList.objects.filter(
         (Q(sender_id=request.user.id) | Q(receiver_id=request.user.id)) & Q(status="Pending")
@@ -132,7 +131,7 @@ def remove_friend_request(request, friend_request_id):
 
 def remove_friend(request, friend_id):
     
-    friend_user = get_object_or_404(User, pk=friend_id)
+    friend_user = get_object_or_404(UserModel, pk=friend_id)
 
     if friend_user in list(map(lambda x: x.user, request.user.all_friends.all())):
         request.user.main_friend.friends.remove(friend_user)

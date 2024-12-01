@@ -4,8 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm, RegisterUserForm
 
-# Create your views here.
-
 
 def register_user(request):
     if request.method == "POST":
