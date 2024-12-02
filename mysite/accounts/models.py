@@ -45,6 +45,10 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
 
         return self.username
     
+    def delete(self, *args, **kwargs):
+        self.profile.profile_picture.delete(save=False)
+        super().delete(*args, **kwargs)
+    
 
 class Profile(models.Model):
 
@@ -105,10 +109,6 @@ class Profile(models.Model):
                 old_instance.profile_picture.delete(save=False)
 
         super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        self.profile_picture.delete(save=False)
-        super().delete(*args, **kwargs)
 
     def __str__(self):
 
