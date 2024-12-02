@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body>
+    <a href="{% url 'account-details' %}">Profile</a>
+    <a href="#">Playlists</a>
+    <a href="#">Posts</a>
+    <a href="#">Comments</a> <br> <br>
+
+    <div class="profile-details">
+
+        {% if app_user.profile.profile_picture %}
+            <img src="{{ app_user.profile.profile_picture.url }}" alt="Profile Picture">
+        {% else %}
+            <img src="{% static 'images/default-profile-image.jpg' %}" alt="Profile Picture">
+        {% endif %}
+
+        <p>Username: {{ app_user.username }}</p>
+
+        {% if app_user.profile.first_name %}
+            <p>First Name: {{ app_user.profile.first_name }}</p>
+        {% else %}
+            <p>First Name: Not Set</p>
+        {% endif %}
+
+        {% if app_user.profile.last_name %}
+            <p>Last Name: {{ app_user.profile.last_name }}</p>
+        {% else %}
+            <p>Last Name: Not Set</p>
+        {% endif %}
+
+        {% if app_user.profile.birthday %}
+            <p>Birthday: {{ app_user.profile.birthday }}</p>
+        {% else %}
+            <p>Birthday: Not Set</p>
+        {% endif %}
+
+        <div class="profile-stats">
+            <p>Playlists: {{ app_user.profile.get_playlist_count }}</p>
+
+            <p>Songs: {{ app_user.profile.get_songs_count }}</p>
+
+            <p>Posts: {{ app_user.profile.get_posts_count }}</p>
+
+            <p>Comments: {{ app_user.profile.get_comments_count }}</p>
+        </div>
+
+        <div class="profile-links">
+            <a href="{% url 'edit-account' %}">Edit Profile</a>
+            <a href="{% url 'change-password' %}">Change Password</a>
+            <a href="{% url 'delete-account' %}">Delete Profile</a>
+        </div>
+    </div>
+</body>
+{% endblock %}

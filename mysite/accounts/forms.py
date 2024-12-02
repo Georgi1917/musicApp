@@ -23,6 +23,14 @@ class BaseUserForm(forms.ModelForm):
         validators=[validate_name, ]
     )
 
+    birthday = forms.DateField(
+        required=False
+    )
+
+    profile_picture = forms.ImageField(
+        required=False
+    )
+
     class Meta:
         model = UserModel
         fields = "__all__"
@@ -61,6 +69,11 @@ class EditUserForm(BaseUserForm):
 
         profile.first_name = self.cleaned_data["first_name"]
         profile.last_name = self.cleaned_data["last_name"]
+        profile.birthday = self.cleaned_data["birthday"]
+        profile.profile_picture = self.cleaned_data["profile_picture"]
+
+        if "profile_picture-clear" in self.data:
+            profile.profile_picture = None
 
         if commit:
             instance.save()

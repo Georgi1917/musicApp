@@ -52,15 +52,25 @@ def logout_user(request):
         messages.success(request, ("You have been succesfully logged out!"))
         return redirect("home")
 
+
+def account_details(request):
+
+    context = {
+        "app_user": request.user
+    }
+
+    return render(request, "accounts/profile-details.html", context)
+
+
 def edit_account_page(request):
 
     if request.method == "POST":
-        user_form = EditUserForm(request.POST, instance=request.user)
+        user_form = EditUserForm(request.POST, request.FILES, instance=request.user)
 
         if user_form.is_valid():
             user_form.save()
 
-            return redirect("main-page")
+            return redirect("account-details")
 
     else:
 
@@ -70,7 +80,9 @@ def edit_account_page(request):
             "email": request.user.email,
             "username": request.user.username,
             "first_name": user_profile.first_name,
-            "last_name": user_profile.last_name
+            "last_name": user_profile.last_name,
+            "birthday": user_profile.birthday,
+            "profile_picture": user_profile.profile_picture
         }
 
         user_form = EditUserForm(initial=initial_data)
@@ -91,7 +103,7 @@ def change_account_password(request):
 
             update_session_auth_hash(request, user)
 
-            return redirect("main-page")
+            return redirect("account-details")
 
     else:
 

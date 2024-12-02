@@ -50,6 +50,14 @@ class Profile(models.Model):
 
     user = models.OneToOneField(to=AppUser, on_delete=models.CASCADE, related_name="profile")
 
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/', 
+        height_field=None, width_field=None, 
+        max_length=100,
+        blank=True,
+        null=True,
+    )
+
     first_name = models.CharField(
         max_length=150,
         null=True,
@@ -61,6 +69,47 @@ class Profile(models.Model):
         blank=True
     )
 
+    birthday = models.DateField(
+        null=True,
+        blank=True,
+    )
+
+    def get_playlist_count(self):
+
+        return self.user.playlists.count()
+    
+    def get_songs_count(self):
+
+        song_count = 0
+
+        for playlist in self.user.playlists.all():
+
+            song_count += playlist.user.songs.count()
+
+        return song_count
+    
+    def get_posts_count(self):
+
+        return self.user.forums.count()
+    
+    def get_comments_count(self):
+
+        return self.user.comments.count()
+    
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+            old_instance = Profile.objects.filter(id=self.pk).first()
+
+            if old_instance and old_instance.profile_picture:
+                old_instance.profile_picture.delete(save=False)
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.profile_picture.delete(save=False)
+        super().delete(*args, **kwargs)
+
     def __str__(self):
 
-        return self.first_name
+        return self.first_name + " " + self.last_name
