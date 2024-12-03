@@ -109,7 +109,7 @@ def delete_comment(request, post_id, comment_id):
     
         comment.delete()
     
-    return redirect('show-post', post_id=post_id)
+    return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
 
 
 def delete_post(request, post_id):
@@ -121,8 +121,11 @@ def delete_post(request, post_id):
         post.delete()
 
     if request.GET.get("ref") == "user_posts":
+
         return redirect('profile-posts')
+    
     else:
+
         return redirect('forum')
 
 
@@ -138,13 +141,7 @@ def edit_post(request, post_id):
 
             form.save()
 
-            if request.GET.get("ref") == "user_posts":
-
-                return redirect('profile-posts')
-            
-            else:
-
-                return redirect('show-post', post_id=post_id)
+            return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
             
     context = {
         "form": form
@@ -165,7 +162,7 @@ def edit_comment(request, post_id, comment_id):
 
             form.save()
 
-            return redirect('show-post', post_id=post_id)
+            return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
 
     context = {
         "form": form

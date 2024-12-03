@@ -43,8 +43,8 @@
             {% endif %}
             |
             {% if comment.user == request.user %}
-                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}">Delete</a> | 
-                <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}">Edit</a>
+                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}?ref={{ ref }}">Delete</a> | 
+                <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?ref={{ ref }}">Edit</a>
             {% endif %}
         </div>
         <br>
