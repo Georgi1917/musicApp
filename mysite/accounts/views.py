@@ -92,7 +92,7 @@ def edit_account_page(request):
         "form": user_form
     }
 
-    return render(request, "accounts/account-page.html", context)
+    return render(request, "accounts/edit-account.html", context)
 
 def change_account_password(request):
 

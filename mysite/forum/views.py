@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator
@@ -91,7 +92,7 @@ def create_comment(request, post_id):
 
             comment.save()
 
-            return redirect('show-post', post_id=post_id)
+            return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
 
     context ={
         "form": form
@@ -118,7 +119,7 @@ def delete_post(request, post_id):
     if post:
 
         post.delete()
-        
+
     if request.GET.get("ref") == "user_posts":
         return redirect('profile-posts')
     else:
@@ -137,8 +138,14 @@ def edit_post(request, post_id):
 
             form.save()
 
-            return redirect('show-post', post_id=post_id)
+            if request.GET.get("ref") == "user_posts":
 
+                return redirect('profile-posts')
+            
+            else:
+
+                return redirect('show-post', post_id=post_id)
+            
     context = {
         "form": form
     }

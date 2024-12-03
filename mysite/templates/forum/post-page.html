@@ -9,11 +9,12 @@
     {% endif %}
 
     <div class="post">
+        <h1>Post:</h1>
         By: {{ post.user }} | Created: {{ post.created_at }} <br>
         {{ post.title }} <br>
         {{ post.content }} <br>
         Likes : <span value="post-likes" id="{{ post.id }}">{{ post.get_like_count }}</span> | 
-        <a href="{% url 'create-comment' post_id=post.id %}">Comments : {{ post.get_comment_count }}</a> 
+        <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}">Comments : {{ post.get_comment_count }}</a> 
         | <br>
         {% if likes %}
         <span class="like-button">Unlike</span>
@@ -22,11 +23,12 @@
         {% endif %}
         {% if post.user == request.user %}
             <a href="{% url 'delete-post' post_id=post.id %}?ref={{ ref }}">Delete</a> |
-            <a href="{% url 'edit-post' post_id=post.id %}">Edit</a>
+            <a href="{% url 'edit-post' post_id=post.id %}?ref={{ ref }}">Edit</a>
         {% endif %}
     </div> <br> <br>
 
     <div>
+        <h1>Comments:</h1>
         {% for comment in comments %}
         <div class="comment">
             By: {{ comment.user }} <br>
