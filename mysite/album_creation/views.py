@@ -40,9 +40,11 @@ def show_album_edit_page(request, album_id):
     
     chosen_album = request.user.playlists.get(id=album_id)
 
-    album_form = PlaylistForm(request.POST or None, instance=chosen_album)
+    album_form = PlaylistForm(instance=chosen_album)
 
     if request.method == "POST":
+
+        album_form = PlaylistForm(request.POST, request.FILES, instance=chosen_album)
 
         if album_form.is_valid():
             album_form.save()

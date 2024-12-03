@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 <body>
+    {% if ref == 'all_posts' %}
+        <a href="{% url 'forum' %}">&laquo; Back</a>
+    {% else %}
+        <a href="{% url 'profile-posts' %}">&laquo; Back</a>
+    {% endif %}
+
     <div class="post">
         By: {{ post.user }} | Created: {{ post.created_at }} <br>
         {{ post.title }} <br>
@@ -15,7 +21,7 @@
         <span class="like-button">Like</span>
         {% endif %}
         {% if post.user == request.user %}
-            <a href="{% url 'delete-post' post_id=post.id %}">Delete</a> |
+            <a href="{% url 'delete-post' post_id=post.id %}?ref={{ ref }}">Delete</a> |
             <a href="{% url 'edit-post' post_id=post.id %}">Edit</a>
         {% endif %}
     </div> <br> <br>

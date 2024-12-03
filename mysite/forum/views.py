@@ -69,7 +69,8 @@ def show_post(request, post_id):
         "post": ForumPost.objects.get(id=post_id),
         "comments": CommentPost.objects.filter(post_id=post_id),
         "likes": request.user.likes.filter(post_id=post_id),
-        "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all()))
+        "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all())),
+        "ref": request.GET.get("ref", "all_posts")
     }
 
     return render(request, "forum/post-page.html", context)
@@ -106,7 +107,7 @@ def delete_comment(request, post_id, comment_id):
     if comment:
     
         comment.delete()
-
+    
     return redirect('show-post', post_id=post_id)
 
 
@@ -117,8 +118,11 @@ def delete_post(request, post_id):
     if post:
 
         post.delete()
-
-    return redirect('forum')
+        
+    if request.GET.get("ref") == "user_posts":
+        return redirect('profile-posts')
+    else:
+        return redirect('forum')
 
 
 def edit_post(request, post_id):

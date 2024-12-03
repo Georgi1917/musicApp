@@ -13,7 +13,7 @@
     <br>
     {% for post in posts %}
         <div class="post">
-            <a href="{% url 'show-post' post_id=post.id %}" style="text-decoration: none; color: black;">
+            <a href="{% url 'show-post' post_id=post.id %}?ref=all_posts" style="text-decoration: none; color: black;">
                 <div class="post-link">
                         By: {{ post.user }} | Posted: {{ post.created_at }} <br>
                         {{post.title}} <br>

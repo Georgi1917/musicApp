@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm, RegisterUserForm
+from django.views.decorators.cache import cache_control
 
 
 def register_user(request):
@@ -143,3 +144,14 @@ def delete_account(request):
     }
 
     return render(request, "accounts/delete-account.html", context)
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def user_posts(request):
+
+    context = {
+        "posts": request.user.forums.all(),
+        "likes": list(map(lambda x: x.post, request.user.likes.all()))
+    }
+
+    return render(request, "accounts/profile-posts.html", context)

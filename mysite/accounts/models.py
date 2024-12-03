@@ -88,7 +88,7 @@ class Profile(models.Model):
 
         for playlist in self.user.playlists.all():
 
-            song_count += playlist.user.songs.count()
+            song_count += playlist.songs.count()
 
         return song_count
     
