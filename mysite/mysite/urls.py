@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('index.urls')),
     path('', include('accounts.urls')),
     path('', include('forum.urls')),
+    path('contact-page/', include('contacts.urls')),    
     path('main-page/', include('album_creation.urls')),
     path('main-page/album-page/', include('song_creation.urls')),
     path('main-page/', include('friends_list.urls'))

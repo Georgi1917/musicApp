@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'song_creation',
     'friends_list',
     "forum",
+    "contacts"
 ]
 
 MIDDLEWARE = [
