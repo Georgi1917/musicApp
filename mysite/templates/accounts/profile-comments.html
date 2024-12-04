@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body>
+    <a href="{% url 'account-details' %}">&laquo; Back</a>
+    <h1>Comments:</h1>
+    {% for comment in comments %}
+    <span value="post-likes" id="{{ comment.post.id }}"></span>
+    <div class="comment">
+        <a href="{% url 'show-post' post_id=comment.post.id %}?ref=user_comments">Post: {{ comment.post.title }}</a> <br>
+        By: {{ comment.user }} <br>
+        {{ comment.content }} <br>
+        Posted: {{ comment.created_at }} <br>
+        Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.get_like_count }}</span>
+        <br>
+        {% if comment in liked_comments %}
+            <span class="like-comment">Unlike</span>
+        {% else %}
+            <span class="like-comment">Like</span>
+        {% endif %}
+        |
+        {% if comment.user == request.user %}
+            <a href="{% url 'delete-comment' post_id=comment.post.id comment_id=comment.id %}?ref=user_comments">Delete</a> | 
+            <a href="{% url 'edit-comment' post_id=comment.post.id comment_id=comment.id%}?ref=user_comments">Edit</a>
+        {% endif %}
+    </div>
+    <br>
+    {% empty %}
+        <p>No comments</p>
+    {% endfor %}
+
+    <script src="{% static 'js-files/forum/toggle-comment-like.js' %}"></script>
+
+</body>
+{% endblock %}

@@ -2,10 +2,12 @@
 {% load static %}
 {% block content %}
 <body>
-    {% if ref == 'all_posts' %}
-        <a href="{% url 'forum' %}">&laquo; Back</a>
-    {% else %}
+    {% if ref == 'user_posts' %}
         <a href="{% url 'profile-posts' %}">&laquo; Back</a>
+    {% elif ref == "user_comments" %}
+        <a href="{% url 'profile-comments' %}">&laquo; Back</a>
+    {% else %}
+        <a href="{% url 'forum' %}">&laquo; Back</a>
     {% endif %}
 
     <div class="post">

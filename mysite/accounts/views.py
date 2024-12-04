@@ -155,3 +155,14 @@ def user_posts(request):
     }
 
     return render(request, "accounts/profile-posts.html", context)
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def user_comments(request):
+
+    context = {
+        "comments": request.user.comments.all(),
+        "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all()))
+    }
+
+    return render(request, "accounts/profile-comments.html", context)
