@@ -3,6 +3,8 @@
 {% block content %}
 <body>
 
+    <a href="{% url 'account-details' %}">&laquo; Back</a>
+
     <header>
         <h1>{{request.user.username}}'s Posts:</h1>
     </header>
