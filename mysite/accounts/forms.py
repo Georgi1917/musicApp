@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from accounts.models import Profile
 from django.contrib.auth import get_user_model
-from accounts.validators import validate_name
+from accounts.validators import validate_name, validate_email
 from accounts.utils import append_validators, remove_help_text
 from django.contrib.auth.hashers import check_password
 
@@ -50,6 +50,10 @@ class RegisterUserForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = UserModel
         fields = ["email", "username"]
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterUserForm, self).__init__(*args, **kwargs)
+        self.fields["email"].validators.append(validate_email)
 
 
 class EditUserForm(BaseUserForm):
