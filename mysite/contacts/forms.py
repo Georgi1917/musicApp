@@ -7,10 +7,6 @@ class ContactForm(forms.Form):
         label="From ",
         required=True
     )
-    to = forms.EmailField(
-        label="To ",
-        required=True
-    )
     subject = forms.CharField(
         max_length=100,
     )
@@ -22,4 +18,3 @@ class ContactForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
         self.fields["from_"].disabled = True
-        self.fields["to"].disabled = True
