@@ -51,10 +51,6 @@ class RegisterUserForm(UserCreationForm):
         model = UserModel
         fields = ["email", "username"]
 
-    # def __init__(self, *args, **kwargs):
-    #     super(RegisterUserForm, self).__init__(*args, **kwargs)
-    #     self.fields["email"].validators.append(validate_email)
-
 
 class EditUserForm(BaseUserForm):
 
