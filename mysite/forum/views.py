@@ -24,7 +24,7 @@ def show_forum_page(request):
 
     paginator = Paginator(queryset, 5)
 
-    page_num = request.GET.get("page")
+    page_num = request.GET.get("page", 1)
 
     page_object = paginator.get_page(page_num)
 
@@ -38,6 +38,7 @@ def show_forum_page(request):
         "search_form": search_form,
         "filter_by": filter_by,
         "searched_post": searched_post,
+        "page_num": page_num,
     }
     
     return render(request, "forum/forums-page.html", context)
@@ -71,7 +72,10 @@ def show_post(request, post_id):
         "comments": CommentPost.objects.filter(post_id=post_id),
         "likes": request.user.likes.filter(post_id=post_id),
         "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all())),
-        "ref": request.GET.get("ref", "all_posts")
+        "ref": request.GET.get("ref", "all_posts"),
+        "searched_post": request.GET.get("searched_post"),
+        "filter_by": request.GET.get("filter_by", "Newest"),
+        "page_num": request.GET.get("page")
     }
 
     return render(request, "forum/post-page.html", context)

@@ -7,7 +7,7 @@
     {% elif ref == "user_comments" %}
         <a href="{% url 'profile-comments' %}">&laquo; Back</a>
     {% else %}
-        <a href="{% url 'forum' %}">&laquo; Back</a>
+        <a href="{% url 'forum' %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}">&laquo; Back</a>
     {% endif %}
 
     <div class="post">
