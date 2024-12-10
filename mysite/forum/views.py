@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator
@@ -73,9 +74,9 @@ def show_post(request, post_id):
         "likes": request.user.likes.filter(post_id=post_id),
         "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all())),
         "ref": request.GET.get("ref", "all_posts"),
-        "searched_post": request.GET.get("searched_post"),
+        "searched_post": request.GET.get("searched_post", ""),
         "filter_by": request.GET.get("filter_by", "Newest"),
-        "page_num": request.GET.get("page")
+        "page_num": request.GET.get("page", 1)
     }
 
     return render(request, "forum/post-page.html", context)
@@ -88,7 +89,8 @@ def create_comment(request, post_id):
     if request.method == "POST":
 
         if form.is_valid():
-            post = ForumPost.objects.get(id=post_id)
+
+            post = get_object_or_404(ForumPost, id=post_id)
 
             comment = form.save(commit=False)
             comment.user = request.user
@@ -96,7 +98,15 @@ def create_comment(request, post_id):
 
             comment.save()
 
-            return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
+            if request.GET.get("ref") == "user_posts":
+                
+                return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}")
+            
+            else:
+
+                return redirect(
+                    f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?searched_post={request.GET.get("searched_post", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref", "all_posts")}"
+                )
 
     context ={
         "form": form
@@ -116,10 +126,18 @@ def delete_comment(request, post_id, comment_id):
     if request.GET.get("ref") == "user_comments":
         
         return redirect('profile-comments')
+    
+    elif request.GET.get("ref") == "user_posts":
+
+        return redirect(
+            f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}"
+        )
 
     else:
 
-        return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
+        return redirect(
+            f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?searched_post={request.GET.get("searched_post", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref")}"
+        )
 
 
 def delete_post(request, post_id):
@@ -175,10 +193,14 @@ def edit_comment(request, post_id, comment_id):
             if request.GET.get("ref") == "user_comments":
 
                 return redirect('profile-comments')
+            
+            elif request.GET.get("ref") == "user_posts":
+
+                return redirect(f"{reverse_lazy("show-post", kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}")
 
             else:
 
-                return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
+                return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?searched_post={request.GET.get("searched_post", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref")}")
 
     context = {
         "form": form
@@ -190,7 +212,7 @@ def edit_comment(request, post_id, comment_id):
 @api_view(["GET"])
 def like_post(request, post_id):
 
-    post = ForumPost.objects.get(id=post_id)
+    post = get_object_or_404(ForumPost, id=post_id)
     like = LikePost.objects.filter(post=post, user=request.user).first()
     status = "liked"
 
@@ -215,7 +237,7 @@ def like_post(request, post_id):
 @api_view(["GET"])
 def like_comment(request, post_id, comment_id):
     
-    comment = CommentPost.objects.get(id=comment_id)
+    comment = get_object_or_404(CommentPost, id=comment_id)
     like = LikeComment.objects.filter(user=request.user, comment=comment)
     status = "liked"
 
