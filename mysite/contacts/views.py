@@ -6,6 +6,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
+def show_contacts_success_page(request):
+
+    return render(request, "contacts/contact-success.html")
+
+
 def show_contacts_error_page(request):
 
     return render(request, "contacts/contact-error.html")
@@ -42,7 +47,7 @@ def show_contacts_page(request):
 
                 return redirect("contact-error")
 
-            return redirect("main-page")
+            return redirect("contacts-success")
 
 
     context = {

@@ -28,7 +28,7 @@ def search_friends(request):
         )
     ]
 
-    paginator = Paginator(needed_users, 5) # return to 20 after testing
+    paginator = Paginator(needed_users, 20)
 
     page_number = request.GET.get("page", 1)
 
