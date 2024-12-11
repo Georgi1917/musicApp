@@ -142,7 +142,7 @@ def remove_friend(request, friend_id):
 
 def follow_playlist(request, friend_id, playlist_id):
 
-    playlist = Playlist.objects.get(id=playlist_id)
+    playlist = get_object_or_404(Playlist, id=playlist_id)
     
     followed_playlist = FollowedPlaylist.objects.filter(user=request.user, playlist=playlist).first()
 
