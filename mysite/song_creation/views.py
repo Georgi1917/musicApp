@@ -20,6 +20,7 @@ def show_songs_page(request, album_id):
     return render(request, 'song_creation/song-page.html', context=context)
 
 def create_song(request, album_id):
+
     if request.method == "POST":
         song_form = SongForm(request.POST, request.FILES)
 
@@ -43,18 +44,15 @@ def create_song(request, album_id):
             curr_song.save()
 
             return redirect('song-page', album_id=album_id)
-        else:
-            messages.success(request, ('There was an error, try again!'))
-            return redirect("song-page", album_id=album_id)
 
     else:
         song_form = SongForm()
 
-        context = {
-            'form': song_form
-        }
+    context = {
+        'form': song_form
+    }
 
-        return render(request, 'song_creation/create-song-page.html', context=context)
+    return render(request, 'song_creation/create-song-page.html', context=context)
     
 def edit_song(request, album_id, song_id):
 
