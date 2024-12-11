@@ -16,7 +16,7 @@
         {{ post.title }} <br>
         {{ post.content }} <br>
         Likes : <span value="post-likes" id="{{ post.id }}">{{ post.get_like_count }}</span> |
-        {% if ref == 'user_posts' %}
+        {% if ref == 'user_posts' or ref == 'user_comments' %}
             <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>
         {% else %}
             <a href="{% url 'create-comment' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>    
@@ -29,7 +29,11 @@
         {% endif %}
         {% if post.user == request.user %}
             <a href="{% url 'delete-post' post_id=post.id %}?ref={{ ref }}">Delete</a> |
-            <a href="{% url 'edit-post' post_id=post.id %}?ref={{ ref }}">Edit</a>
+            {% if ref == 'all_posts' %}
+                <a href="{% url 'edit-post' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
+            {% else %}
+                <a href="{% url 'edit-post' post_id=post.id%}?ref={{ ref }}">Edit</a>
+            {% endif %}
         {% endif %}
     </div> <br> <br>
 

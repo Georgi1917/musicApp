@@ -7,7 +7,7 @@
     {% for comment in comments %}
     <span value="post-likes" id="{{ comment.post.id }}"></span>
     <div class="comment">
-        <a href="{% url 'show-post' post_id=comment.post.id %}?ref=user_comments">Post: {{ comment.post.title }}</a> <br>
+        <a href="{% url 'show-post' post_id=comment.post.id %}?ref=user_comments">Re: {{ comment.post.title }}</a> <br>
         By: {{ comment.user }} <br>
         {{ comment.content }} <br>
         Posted: {{ comment.created_at }} <br>

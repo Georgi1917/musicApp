@@ -69,7 +69,7 @@ def show_forum_create_page(request):
 def show_post(request, post_id):
 
     context = {
-        "post": ForumPost.objects.get(id=post_id),
+        "post": get_object_or_404(ForumPost, id=post_id),
         "comments": CommentPost.objects.filter(post_id=post_id),
         "likes": request.user.likes.filter(post_id=post_id),
         "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all())),
@@ -98,7 +98,7 @@ def create_comment(request, post_id):
 
             comment.save()
 
-            if request.GET.get("ref") == "user_posts":
+            if request.GET.get("ref") == "user_posts" or request.GET.get("ref") == "user_comments":
                 
                 return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}")
             
@@ -136,7 +136,7 @@ def delete_comment(request, post_id, comment_id):
     else:
 
         return redirect(
-            f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?searched_post={request.GET.get("searched_post", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref")}"
+            f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?searched_post={request.GET.get("searched_post", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref", "all_posts")}"
         )
 
 
@@ -148,7 +148,11 @@ def delete_post(request, post_id):
 
         post.delete()
 
-    if request.GET.get("ref") == "user_posts":
+    if request.GET.get("ref") == "user_comments":
+
+        return redirect('profile-comments')
+
+    elif request.GET.get("ref") == "user_posts":
 
         return redirect('profile-posts')
     
@@ -169,7 +173,15 @@ def edit_post(request, post_id):
 
             form.save()
 
-            return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
+            if request.GET.get("ref") == "user_posts" or request.GET.get("ref") == "user_comments":
+
+                return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref")}")
+
+            else:
+
+                return redirect(
+                    f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?searched_post={request.GET.get("searched_post", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref")}"
+                )
             
     context = {
         "form": form
