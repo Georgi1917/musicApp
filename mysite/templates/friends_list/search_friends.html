@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
+
+    <a href="{% url 'friends-list' %}">Back</a>
+
     <form method="GET">
         {{ form.searched_user }}
 
@@ -8,7 +11,7 @@
     </form>
 
     {% for searched_user in searched_users %}
-        {{ searched_user.username }} - <a href="{% url 'send-request' receiver_id=searched_user.id %}">Send Request</a> <br>
+        {{ searched_user.username }} - <a href="{% url 'send-request' receiver_id=searched_user.id %}?searched_user={{ search_query }}&page={{ page }}">Send Request</a> <br>
     {% empty %}
         <p>No users match the search query</p>
     {% endfor %}

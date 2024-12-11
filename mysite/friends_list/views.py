@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from friends_list.models import FriendRequestList
@@ -27,9 +28,9 @@ def search_friends(request):
         )
     ]
 
-    paginator = Paginator(needed_users, 10)
+    paginator = Paginator(needed_users, 5) # return to 20 after testing
 
-    page_number = request.GET.get("page")
+    page_number = request.GET.get("page", 1)
 
     page_obj = paginator.get_page(page_number)
 
@@ -37,7 +38,8 @@ def search_friends(request):
         "form": form,
         "searched_users": page_obj,
         "paginator": paginator,
-        "search_query": search_query
+        "search_query": search_query,
+        "page": page_number
     }
     
     return render(request, "friends_list/search_friends.html", context)
@@ -61,7 +63,7 @@ def send_friend_request(request, receiver_id):
     if not (receiver.received_friend_request.all().filter(Q(status="Pending") & Q(sender=request.user))):
         FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
 
-    return redirect("friends-list")
+    return redirect(f"{reverse_lazy('find-friends')}?searched_user={request.GET.get("searched_user", "")}&page={request.GET.get("page", 1)}")
 
 
 def accept_friend_request(request, sender_id):
