@@ -78,6 +78,12 @@ class Profile(models.Model):
         blank=True,
     )
 
+    slug = models.SlugField(
+        unique=True,
+        null=True,
+        blank=True,
+    )
+
     def get_playlist_count(self):
 
         return self.user.playlists.count()

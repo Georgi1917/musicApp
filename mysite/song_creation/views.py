@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from album_creation.models import Playlist
 from song_creation.models import Song
-from song_creation.forms import SongForm
+from song_creation.forms import SongForm, SongEditForm
 from django.contrib import messages
 import os
 from django.conf import settings
@@ -28,7 +28,7 @@ def create_song(request, album_id):
             song_name = song_form.cleaned_data["name"]
             song_author = song_form.cleaned_data["author"]
             song_file = song_form.cleaned_data["file"]
-            curr_album = Playlist.objects.get(pk=album_id)
+            curr_album = request.user.playlists.get(id=album_id)
 
             curr_song = Song.objects.create(name=song_name, author=song_author, file=song_file, album=curr_album)
 
@@ -56,30 +56,38 @@ def create_song(request, album_id):
     
 def edit_song(request, album_id, song_id):
 
-    needed_song_instance = Song.objects.get(pk=song_id)
+    needed_song_instance = request.user.playlists.get(id=album_id).songs.get(id=song_id)
 
     if request.method == "POST":
-        if "edit" in request.POST:
-            song_form = SongForm(request.POST or None, instance=needed_song_instance)
+        
+        song_form = SongEditForm(request.POST, instance=needed_song_instance)
 
-            if song_form.is_valid():
-                song_form.save()
+        if song_form.is_valid():
 
-                return redirect("song-page", album_id=album_id)
-        elif "delete" in request.POST:
-
-            needed_song_instance.delete()
+            song_form.save()
 
             return redirect("song-page", album_id=album_id)
 
     else:
-        song_form = SongForm(request.POST or None, instance=needed_song_instance)
+        
+        song_form = SongEditForm(instance=needed_song_instance)
 
-        context = {
-            "form": song_form
-        }
+    context = {
+        "form": song_form
+    }
 
-        return render(request, 'song_creation/edit-song-page.html', context=context)
+    return render(request, 'song_creation/edit-song-page.html', context=context)
+    
+
+def delete_song(request, album_id, song_id):
+
+    song = request.user.playlists.filter(id=album_id).first().songs.filter(id=song_id).first()
+
+    if song:
+
+        song.delete()
+
+    return redirect('song-page', album_id=album_id)
     
 
 def followed_playlist_songs(request, playlist_id):

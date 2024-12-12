@@ -2,6 +2,9 @@
 {% load static %}
 {% block content %}
 <body>
+
+    <a href="{% url 'playlist-page' %}">&laquo; Back</a> <br>
+
     {% if songs %}
         {% for song in songs %}
         <div value="{{song.file.url}}">
@@ -9,7 +12,7 @@
             <button value="{{song.duration_in_seconds}}">Play</button>
             <label for="volumeControl">Volume:</label>
             <input type="range" class="volumeControl" min="0" max="1" step="0.01" value="0.5" disabled>
-            <a href="{% url 'edit-song' album_id=album_id song_id=song.id %}">Edit</a> <br>
+            <a href="{% url 'edit-song' album_id=album_id song_id=song.id %}">Edit</a> | <a href="{% url 'delete-song' album_id=album_id song_id=song.id %}">Delete</a> <br>
         </div>
         {% endfor %}
 

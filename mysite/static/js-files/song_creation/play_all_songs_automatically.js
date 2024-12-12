@@ -70,12 +70,10 @@ playAllButton.addEventListener("click", () => {
     if (playAllButton.textContent == "Play Playlist") {
         newAudio.addEventListener("ended", playNextTrack)
         playNextTrack();
-        console.log(currAudioIndex)
         playAllButton.textContent = "Stop Playlist"
     } else {
         newAudio.pause()
         clearInterval(changeTime)
-        console.log(currAudioIndex)
         allAudioFiles[currAudioIndex === 0 ? allAudioFiles.length - 1 : currAudioIndex - 1].querySelector("span[value='current-duration']").textContent = "0:0:0"
         allAudioFiles[currAudioIndex === 0 ? allAudioFiles.length - 1 : currAudioIndex - 1].querySelector("input").disabled = true
         allAudioFiles[currAudioIndex === 0 ? allAudioFiles.length - 1 : currAudioIndex - 1].querySelector("input").value = 0.5
