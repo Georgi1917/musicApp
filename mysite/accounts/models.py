@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 from accounts.managers import CustomUserManager
 
 
@@ -113,6 +114,10 @@ class Profile(models.Model):
 
             if old_instance and old_instance.profile_picture:
                 old_instance.profile_picture.delete(save=False)
+
+        base_slug = slugify(self.user.username)
+
+        self.slug = base_slug
 
         super().save(*args, **kwargs)
 

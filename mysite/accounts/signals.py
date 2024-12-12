@@ -16,7 +16,18 @@ def create_friend_list(sender, instance, created, **kwargs):
     
     if created:
         FriendList.objects.create(user=instance)
+
+
+@receiver(post_save, sender=UserModel)
+def create_profile_for_user(sender, instance, created, **kwargs):
+
+    if created:
+
         Profile.objects.create(user=instance)
+
+    else:
+
+        instance.profile.save()
 
 
 @receiver(post_save, sender=UserModel)
