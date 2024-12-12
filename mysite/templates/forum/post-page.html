@@ -60,6 +60,8 @@
                 <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Delete</a> | 
                 {% if ref == 'all_posts' %}
                     <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
+                {% elif ref == 'friend_posts' %}
+                    <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?ref={{ref}}&friend_slug={{ friend_slug }}">Edit</a>
                 {% else %}
                     <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id%}?ref={{ ref }}">Edit</a>
                 {% endif %}

@@ -216,6 +216,10 @@ def edit_comment(request, post_id, comment_id):
             elif request.GET.get("ref") == "user_posts":
 
                 return redirect(f"{reverse_lazy("show-post", kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}")
+            
+            elif request.GET.get("ref") == "friend_posts":
+
+                return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "friend_posts")}&friend_slug={request.GET.get("friend_slug", "")}")
 
             else:
 
