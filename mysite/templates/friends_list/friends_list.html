@@ -14,7 +14,7 @@
     <div class="friends">
         {% if friends_list %}
             {% for friend in friends_list %}
-                {{ friend.user.username }} - <a href="{% url 'see-profile' friend_id=friend.user.id %}">See Profile</a> | <a href="{% url 'remove-friend' friend_id=friend.user.id %}">Unfriend</a><br>
+                {{ friend.user.username }} - <a href="{% url 'see-profile' friend_slug=friend.user.profile.slug %}">See Profile</a> | <a href="{% url 'remove-friend' friend_id=friend.user.id %}">Unfriend</a><br>
             {% endfor %}
         {% else %}
             <p>No Friends</p>

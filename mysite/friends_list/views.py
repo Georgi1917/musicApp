@@ -7,6 +7,7 @@ from album_creation.models import Playlist, FollowedPlaylist
 from song_creation.models import Song
 from django.db.models import Q
 from friends_list.forms import SearchForm
+from accounts.models import Profile
 
 UserModel = get_user_model()
 
@@ -63,7 +64,13 @@ def send_friend_request(request, receiver_id):
     if not (receiver.received_friend_request.all().filter(Q(status="Pending") & Q(sender=request.user))):
         FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
 
-    return redirect(f"{reverse_lazy('find-friends')}?searched_user={request.GET.get("searched_user", "")}&page={request.GET.get("page", 1)}")
+    if request.GET.get("ref") == "friends_profile":
+
+        return redirect('see-friends', friend_slug=request.GET.get("friend_slug"))
+
+    else:
+
+        return redirect(f"{reverse_lazy('find-friends')}?searched_user={request.GET.get("searched_user", "")}&page={request.GET.get("page", 1)}")
 
 
 def accept_friend_request(request, sender_id):
@@ -75,27 +82,32 @@ def accept_friend_request(request, sender_id):
     if request.user not in sender_user.all_friends.all():
         sender_user.main_friend.friends.add(request.user)
 
-    friend_request = FriendRequestList.objects.get(
+    friend_request = FriendRequestList.objects.filter(
         Q(receiver_id=request.user.id) & Q(sender_id=sender_id)
-    )
+    ).first()
 
-    friend_request.delete()
+    if friend_request:
+
+        friend_request.delete()
 
     return redirect("friends-list")
 
 
-def see_friends_profile(request, friend_id):
+def see_friends_profile(request, friend_slug):
+
+    friend = Profile.objects.get(slug=friend_slug)
 
     context = {
-        "friend_playlists": Playlist.objects.filter(user_id=friend_id),
-        "friend_id": friend_id,
+        "friend_playlists": Playlist.objects.filter(user_id=friend.id),
+        "friend": friend,
         "followed_playlists": list(map(lambda x: x.playlist , request.user.followed_playlists.all()))
     }
     
     return render(request, 'friends_list/friend_profile.html', context=context)
 
 
-def see_friends_songs(request, friend_id, friend_album_id):
+def see_friends_songs(request, friend_slug, friend_album_id):
+
     songs = Song.objects.filter(album_id=friend_album_id)
 
     context = {
@@ -105,16 +117,17 @@ def see_friends_songs(request, friend_id, friend_album_id):
     return render(request, 'friends_list/friend_songs.html', context=context)
 
 
-def see_friends_friendlist(request, friend_id):
+def see_friends_friendlist(request, friend_slug):
 
-    friend_user = get_object_or_404(UserModel, pk=friend_id)
+    friend_user = Profile.objects.get(slug=friend_slug)
 
     pending_request_in_list = FriendRequestList.objects.filter(
         (Q(sender_id=request.user.id) | Q(receiver_id=request.user.id)) & Q(status="Pending")
     )
 
     context = {
-        "friends_list": friend_user.all_friends.all(),
+        "friend_user": friend_user,
+        "friends_list": friend_user.user.all_friends.all(),
         "logged_in_list": request.user.all_friends.all(),
         "pending_requests_senders_ids": list(map(lambda x: x.sender_id, pending_request_in_list)),
         "pending_requests_receivers_ids": list(map(lambda x: x.receiver_id, pending_request_in_list))
@@ -125,8 +138,11 @@ def see_friends_friendlist(request, friend_id):
 
 def remove_friend_request(request, friend_request_id):
 
-    needed_obj = FriendRequestList.objects.get(pk=friend_request_id)
-    needed_obj.delete()
+    needed_obj = FriendRequestList.objects.filter(pk=friend_request_id).first()
+
+    if needed_obj:
+
+        needed_obj.delete()
 
     return redirect('friends-list')
 
@@ -142,7 +158,7 @@ def remove_friend(request, friend_id):
     return redirect('friends-list')
 
 
-def follow_playlist(request, friend_id, playlist_id):
+def follow_playlist(request, friend_slug, playlist_id):
 
     playlist = get_object_or_404(Playlist, id=playlist_id)
     
@@ -156,4 +172,4 @@ def follow_playlist(request, friend_id, playlist_id):
 
         FollowedPlaylist.objects.create(user=request.user, playlist=playlist)
 
-    return redirect("see-profile", friend_id=friend_id)
+    return redirect("see-profile", friend_slug=friend_slug)

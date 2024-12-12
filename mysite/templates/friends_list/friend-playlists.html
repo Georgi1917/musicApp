@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-    <div>
-        <a href="{% url 'see-friends' friend_slug=friend.slug %}">FriendsList</a>
-    </div>
-
     {% if friend_playlists %}
         <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
             {% for playlist in friend_playlists %}
@@ -22,6 +18,5 @@
     {% else %}
         <p>This user has no playlists</p>
     {% endif %}
-
 </body>
 {% endblock %}
