@@ -6,6 +6,8 @@
         <a href="{% url 'profile-posts' %}">&laquo; Back</a>
     {% elif ref == "user_comments" %}
         <a href="{% url 'profile-comments' %}">&laquo; Back</a>
+    {% elif ref == "friend_posts" %}
+        <a href="{% url 'see-posts' friend_slug=friend_slug %}">&laquo; Back</a>
     {% else %}
         <a href="{% url 'forum' %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}">&laquo; Back</a>
     {% endif %}
@@ -18,6 +20,8 @@
         Likes : <span value="post-likes" id="{{ post.id }}">{{ post.get_like_count }}</span> |
         {% if ref == 'user_posts' or ref == 'user_comments' %}
             <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>
+        {% elif ref == 'friend_posts' %}
+            <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}&friend_slug={{ friend_slug }}">Comments : {{ post.get_comment_count }}</a>
         {% else %}
             <a href="{% url 'create-comment' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>    
         {% endif %} 

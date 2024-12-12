@@ -8,9 +8,12 @@ urlpatterns = [
     path('find-friends/', views.search_friends, name="find-friends"),
     path('friends-list/<int:receiver_id>/', views.send_friend_request, name="send-request"),
     path('accept-request/<int:sender_id>/', views.accept_friend_request, name="accept-request"),
-    path('friend/<slug:friend_slug>/', views.see_friends_profile, name="see-profile"),
-    path('friend/<slug:friend_slug>/playlists/', views.see_friends_playlists, name="see-playlists"),
-    path('friend/<slug:friend_slug>/songs/<int:friend_album_id>/', views.see_friends_songs, name="see-songs"),
-    path('friend/<slug:friend_slug>/follow-playlist/<int:playlist_id>/', views.follow_playlist, name="follow-playlist"),
-    path('friend/<slug:friend_slug>/friends/', views.see_friends_friendlist, name="see-friends")
+    path('friend/<slug:friend_slug>/', include([
+        path('', views.see_friends_profile, name="see-profile"),
+        path('playlists/', views.see_friends_playlists, name="see-playlists"),
+        path('songs/<int:friend_album_id>/', views.see_friends_songs, name="see-songs"),
+        path('follow-playlist/<int:playlist_id>/', views.follow_playlist, name="follow-playlist"),
+        path('friends/', views.see_friends_friendlist, name="see-friends"),
+        path('posts/', views.see_friends_posts, name="see-posts")
+    ])),
 ]

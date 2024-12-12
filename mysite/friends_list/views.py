@@ -150,6 +150,18 @@ def see_friends_friendlist(request, friend_slug):
     return render(request, "friends_list/friends_friend_list.html", context=context)
 
 
+def see_friends_posts(request, friend_slug):
+
+    friend_user = Profile.objects.get(slug=friend_slug)
+
+    context = {
+        "friend_user": friend_user,
+        "posts": friend_user.user.forums.all(),
+        "likes": list(map(lambda x: x.post, request.user.likes.all())),
+    }
+
+    return render(request, "friends_list/friend-posts.html", context)
+
 def remove_friend_request(request, friend_request_id):
 
     needed_obj = FriendRequestList.objects.filter(pk=friend_request_id).first()

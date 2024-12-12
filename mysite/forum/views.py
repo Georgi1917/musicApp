@@ -74,6 +74,7 @@ def show_post(request, post_id):
         "likes": request.user.likes.filter(post_id=post_id),
         "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all())),
         "ref": request.GET.get("ref", "all_posts"),
+        "friend_slug": request.GET.get("friend_slug", ""),
         "searched_post": request.GET.get("searched_post", ""),
         "filter_by": request.GET.get("filter_by", "Newest"),
         "page_num": request.GET.get("page", 1)
@@ -101,6 +102,12 @@ def create_comment(request, post_id):
             if request.GET.get("ref") == "user_posts" or request.GET.get("ref") == "user_comments":
                 
                 return redirect(f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}")
+            
+            elif request.GET.get("ref") == "friend_posts":
+
+                return redirect(
+                    f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "friend_posts")}&friend_slug={request.GET.get("friend_slug", "")}"
+                )
             
             else:
 

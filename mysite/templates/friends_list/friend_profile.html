@@ -1,26 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
-
-    <div>
-        <a href="#">Profile</a>
-    </div>
-
-    <div>
-        <a href="{% url 'see-friends' friend_slug=friend.slug %}">FriendsList</a>
-    </div>
-
-    <div>
-        <a href="{% url 'see-playlists' friend_slug=friend.slug %}">Playlists</a>
-    </div>
-
-    <div>
-        <a href="#">Posts</a>
-    </div>
-
-    <div>
-        <a href="#">Comments</a>
-    </div>
-
+    <a href="{% url 'main-page' %}">Home</a>
+    <a href="{% url 'see-profile' friend_slug=friend.slug %}">Profile</a>
+    <a href="{% url 'see-friends' friend_slug=friend.slug %}">FriendList</a>
+    <a href="{% url 'see-playlists' friend_slug=friend.slug %}">Playlists</a>
+    <a href="{% url 'see-posts' friend_slug=friend.slug %}">Posts</a>
+    <a href="#">Comments</a>
 </body>
 {% endblock %}
