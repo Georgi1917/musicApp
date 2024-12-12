@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <body>
+
+    <a href="{% url 'see-profile' friend_slug=friend.slug %}">&laquo; Back</a> <br>
+
     {% if friend_playlists %}
         <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">
             {% for playlist in friend_playlists %}
@@ -8,9 +11,9 @@
                 <p style="margin: 0;">{{playlist.name}}</p>
                 <a href="{% url 'see-songs' friend_slug=friend.slug friend_album_id=playlist.id %}">Songs</a> <br>
                 {% if playlist in followed_playlists %}
-                    <a href="{% url 'follow-playlist' friend_id=friend_id playlist_id=playlist.id %}">Unfollow</a>
+                    <a href="{% url 'follow-playlist' friend_slug=friend.slug playlist_id=playlist.id %}">Unfollow</a>
                 {% else %}
-                    <a href="{% url 'follow-playlist' friend_id=friend_id playlist_id=playlist.id %}">Follow</a>
+                    <a href="{% url 'follow-playlist' friend_slug=friend.slug playlist_id=playlist.id %}">Follow</a>
                 {% endif %}
             </div>
             {% endfor %}

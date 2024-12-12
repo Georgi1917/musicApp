@@ -9,6 +9,7 @@ urlpatterns = [
     path('friends-list/<int:receiver_id>/', views.send_friend_request, name="send-request"),
     path('accept-request/<int:sender_id>/', views.accept_friend_request, name="accept-request"),
     path('friend/<slug:friend_slug>/', views.see_friends_profile, name="see-profile"),
+    path('friend/<slug:friend_slug>/playlists/', views.see_friends_playlists, name="see-playlists"),
     path('friend/<slug:friend_slug>/songs/<int:friend_album_id>/', views.see_friends_songs, name="see-songs"),
     path('friend/<slug:friend_slug>/follow-playlist/<int:playlist_id>/', views.follow_playlist, name="follow-playlist"),
     path('friend/<slug:friend_slug>/friends/', views.see_friends_friendlist, name="see-friends")

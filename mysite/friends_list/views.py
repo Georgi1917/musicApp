@@ -106,12 +106,26 @@ def see_friends_profile(request, friend_slug):
     return render(request, 'friends_list/friend_profile.html', context=context)
 
 
+def see_friends_playlists(request, friend_slug):
+
+    friend = Profile.objects.get(slug=friend_slug)
+
+    context = {
+        "friend_playlists": Playlist.objects.filter(user_id=friend.id),
+        "friend": friend,
+        "followed_playlists": list(map(lambda x: x.playlist, request.user.followed_playlists.all()))
+    }
+
+    return render(request, "friends_list/friend-playlists.html", context)
+
+
 def see_friends_songs(request, friend_slug, friend_album_id):
 
     songs = Song.objects.filter(album_id=friend_album_id)
 
     context = {
-        "songs": songs
+        "songs": songs,
+        "friend_slug": friend_slug,
     }
     
     return render(request, 'friends_list/friend_songs.html', context=context)
@@ -172,4 +186,4 @@ def follow_playlist(request, friend_slug, playlist_id):
 
         FollowedPlaylist.objects.create(user=request.user, playlist=playlist)
 
-    return redirect("see-profile", friend_slug=friend_slug)
+    return redirect("see-playlists", friend_slug=friend_slug)
