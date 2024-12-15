@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
+from django.core.exceptions import ObjectDoesNotExist
 from friends_list.models import FriendRequestList
 from album_creation.models import Playlist, FollowedPlaylist
 from song_creation.models import Song
 from django.db.models import Q
+from django.http import Http404
 from friends_list.forms import SearchForm
 from accounts.models import Profile
 
@@ -62,6 +64,7 @@ def send_friend_request(request, receiver_id):
     receiver = get_object_or_404(UserModel, id=receiver_id)
 
     if not (receiver.received_friend_request.all().filter(Q(status="Pending") & Q(sender=request.user))):
+
         FriendRequestList.objects.create(sender=request.user, receiver=receiver, status="Pending")
 
     if request.GET.get("ref") == "friends_profile":
@@ -74,7 +77,16 @@ def send_friend_request(request, receiver_id):
 
 
 def accept_friend_request(request, sender_id):
+
     sender_user = UserModel.objects.get(pk=sender_id)
+
+    try:
+
+        friend_request = FriendRequestList.objects.get(sender=sender_user, receiver=request.user)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
         
     if sender_user not in request.user.all_friends.all():
         request.user.main_friend.friends.add(sender_user)
@@ -82,13 +94,7 @@ def accept_friend_request(request, sender_id):
     if request.user not in sender_user.all_friends.all():
         sender_user.main_friend.friends.add(request.user)
 
-    friend_request = FriendRequestList.objects.filter(
-        Q(receiver_id=request.user.id) & Q(sender_id=sender_id)
-    ).first()
-
-    if friend_request:
-
-        friend_request.delete()
+    friend_request.delete()
 
     return redirect("friends-list")
 
@@ -96,6 +102,10 @@ def accept_friend_request(request, sender_id):
 def see_friends_profile(request, friend_slug):
 
     friend = Profile.objects.get(slug=friend_slug)
+
+    if friend.user not in [x.user for x in request.user.all_friends.all()]:
+
+        raise Http404
 
     context = {
         "friend_playlists": Playlist.objects.filter(user_id=friend.id),
@@ -110,6 +120,10 @@ def see_friends_playlists(request, friend_slug):
 
     friend = Profile.objects.get(slug=friend_slug)
 
+    if friend.user not in [x.user for x in request.user.all_friends.all()]:
+
+        raise Http404
+
     context = {
         "friend_playlists": Playlist.objects.filter(user_id=friend.id),
         "friend": friend,
@@ -123,6 +137,12 @@ def see_friends_songs(request, friend_slug, friend_album_id):
 
     songs = Song.objects.filter(album_id=friend_album_id)
 
+    friend = Profile.objects.get(slug=friend_slug)
+
+    if friend.user not in [x.user for x in request.user.all_friends.all()]:
+
+        raise Http404
+
     context = {
         "songs": songs,
         "friend_slug": friend_slug,
@@ -134,6 +154,10 @@ def see_friends_songs(request, friend_slug, friend_album_id):
 def see_friends_friendlist(request, friend_slug):
 
     friend_user = Profile.objects.get(slug=friend_slug)
+
+    if friend_user.user not in [x.user for x in request.user.all_friends.all()]:
+
+        raise Http404
 
     pending_request_in_list = FriendRequestList.objects.filter(
         (Q(sender_id=request.user.id) | Q(receiver_id=request.user.id)) & Q(status="Pending")
@@ -153,6 +177,10 @@ def see_friends_friendlist(request, friend_slug):
 def see_friends_posts(request, friend_slug):
 
     friend_user = Profile.objects.get(slug=friend_slug)
+
+    if friend_user.user not in [x.user for x in request.user.all_friends.all()]:
+
+        raise Http404
 
     context = {
         "friend_user": friend_user,
