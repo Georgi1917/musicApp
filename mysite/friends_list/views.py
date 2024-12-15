@@ -162,6 +162,7 @@ def see_friends_posts(request, friend_slug):
 
     return render(request, "friends_list/friend-posts.html", context)
 
+
 def remove_friend_request(request, friend_request_id):
 
     needed_obj = FriendRequestList.objects.filter(pk=friend_request_id).first()

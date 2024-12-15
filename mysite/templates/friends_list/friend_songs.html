@@ -3,7 +3,7 @@
 {% block content %}
 <body>
 
-    <a href="{% url 'see-profile' friend_slug=friend_slug %}">&laquo; Back</a>
+    <a href="{% url 'see-playlists' friend_slug=friend_slug %}">&laquo; Back</a>
 
     {% if songs %}
         {% for song in songs %}
