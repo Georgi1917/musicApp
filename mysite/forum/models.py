@@ -34,6 +34,10 @@ class CommentPost(CommentAndPostMixIn):
     def get_like_count(self):
 
         return self.comment_likes.count()
+    
+    class Meta:
+
+        ordering = ["-created_at"]
 
 
 class LikePost(models.Model):

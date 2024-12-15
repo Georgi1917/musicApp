@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
 from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm, FilterPostsForm, SearchPostForm
 from rest_framework.response import Response
@@ -23,7 +25,7 @@ def show_forum_page(request):
 
     queryset = queryset.filter(title__icontains=searched_post)
 
-    paginator = Paginator(queryset, 15)
+    paginator = Paginator(queryset, 10)
 
     page_num = request.GET.get("page", 1)
 
@@ -124,7 +126,13 @@ def create_comment(request, post_id):
 
 def delete_comment(request, post_id, comment_id):
 
-    comment = request.user.comments.filter(id=comment_id).first()
+    try:
+
+        comment = request.user.comments.get(id=comment_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if comment:
     
@@ -155,7 +163,13 @@ def delete_comment(request, post_id, comment_id):
 
 def delete_post(request, post_id):
 
-    post = request.user.forums.filter(id=post_id).first()
+    try:
+
+        post = request.user.forums.get(id=post_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if post:
 
@@ -176,7 +190,13 @@ def delete_post(request, post_id):
 
 def edit_post(request, post_id):
     
-    form = ForumEditForm(instance=request.user.forums.get(id=post_id))
+    try:
+
+        form = ForumEditForm(instance=request.user.forums.get(id=post_id))
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if request.method == "POST":
 
@@ -205,7 +225,13 @@ def edit_post(request, post_id):
 
 def edit_comment(request, post_id, comment_id):
 
-    form = CommentEditForm(instance=request.user.comments.get(id=comment_id))
+    try:
+
+        form = CommentEditForm(instance=request.user.comments.get(id=comment_id))
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if request.method == "POST":
 
