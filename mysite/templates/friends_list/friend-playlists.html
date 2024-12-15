@@ -2,7 +2,13 @@
 {% block content %}
 <body>
 
-    <a href="{% url 'see-profile' friend_slug=friend.slug %}">&laquo; Back</a> <br>
+    <div class="links">
+        <a href="{% url 'main-page' %}">Home</a>
+        <a href="{% url 'see-profile' friend_slug=friend.slug %}">Profile</a>
+        <a href="{% url 'see-friends' friend_slug=friend.slug %}">FriendList</a>
+        <a href="{% url 'see-playlists' friend_slug=friend.slug %}">Playlists</a>
+        <a href="{% url 'see-posts' friend_slug=friend.slug %}">Posts</a>
+    </div>
 
     {% if friend_playlists %}
         <div style="display: flex; gap: 2em; margin-top: 1.5em; margin-left: 2em;">

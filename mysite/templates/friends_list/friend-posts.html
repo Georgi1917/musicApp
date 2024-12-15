@@ -2,7 +2,14 @@
 {% load static %}
 {% block content %}
 <body>
-    <a href="{% url 'see-profile' friend_slug=friend_user.slug %}">&laquo; Back</a>
+
+    <div class="links">
+        <a href="{% url 'main-page' %}">Home</a>
+        <a href="{% url 'see-profile' friend_slug=friend_user.slug %}">Profile</a>
+        <a href="{% url 'see-friends' friend_slug=friend_user.slug %}">FriendList</a>
+        <a href="{% url 'see-playlists' friend_slug=friend_user.slug %}">Playlists</a>
+        <a href="{% url 'see-posts' friend_slug=friend_user.slug %}">Posts</a>
+    </div>
 
     <header>
         <h1>{{friend_user.user.username}}'s Posts:</h1>
