@@ -57,7 +57,7 @@
             {% endif %}
             |
             {% if comment.user == request.user %}
-                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Delete</a> | 
+                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}&friend_slug={{ friend_slug }}">Delete</a> | 
                 {% if ref == 'all_posts' %}
                     <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
                 {% elif ref == 'friend_posts' %}

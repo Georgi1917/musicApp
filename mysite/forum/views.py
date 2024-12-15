@@ -139,6 +139,12 @@ def delete_comment(request, post_id, comment_id):
         return redirect(
             f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "user_posts")}"
         )
+    
+    elif request.GET.get("ref") == "friend_posts":
+
+        return redirect(
+            f"{reverse_lazy('show-post', kwargs={"post_id": post_id})}?ref={request.GET.get("ref", "friend_posts")}&friend_slug={request.GET.get("friend_slug", "")}"
+        )
 
     else:
 
@@ -261,7 +267,7 @@ def like_post(request, post_id):
 def like_comment(request, post_id, comment_id):
     
     comment = get_object_or_404(CommentPost, id=comment_id)
-    like = LikeComment.objects.filter(user=request.user, comment=comment)
+    like = LikeComment.objects.filter(user=request.user, comment=comment).first()
     status = "liked"
 
     if like:
