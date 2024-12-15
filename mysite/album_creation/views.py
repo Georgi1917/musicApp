@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from album_creation.forms import PlaylistForm
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 
 def playlist_page(request):
@@ -38,7 +40,13 @@ def show_album_creation_page(request):
     
 def show_album_edit_page(request, album_id):
     
-    chosen_album = request.user.playlists.get(id=album_id)
+    try:
+
+        chosen_album = request.user.playlists.get(id=album_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     album_form = PlaylistForm(instance=chosen_album)
 
@@ -60,7 +68,13 @@ def show_album_edit_page(request, album_id):
 
 def delete_playlist(request, playlist_id):
 
-    playlist = request.user.playlists.filter(id=playlist_id).first()
+    try:
+
+        playlist = request.user.playlists.get(id=playlist_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if playlist:
 
@@ -76,7 +90,13 @@ def delete_playlist(request, playlist_id):
 
 def unfollow_playlist(request, playlist_id):
 
-    playlist = request.user.followed_playlists.filter(id=playlist_id).first()
+    try:
+
+        playlist = request.user.followed_playlists.get(id=playlist_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if playlist:
 
