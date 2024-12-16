@@ -19,7 +19,7 @@
             {% elif friend.user.id in pending_requests_receivers_ids %}
                 {{ friend }} - Pending <br>
             {% elif friend in logged_in_list %}
-                {{ friend }} - <a href="{% url 'see-profile' friend_slug=friend_user.slug %}">See Profile</a> <br>
+                {{ friend }} - <a href="{% url 'see-profile' friend_slug=friend.user.profile.slug %}">See Profile</a> <br>
             {% else %}
                 {{ friend }} - <a href="{% url 'send-request' receiver_id=friend.user.id %}?ref=friends_profile&friend_slug={{ friend_user.slug }}">Add Friend</a> <br>
             {% endif %}
