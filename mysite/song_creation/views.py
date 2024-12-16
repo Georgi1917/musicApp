@@ -1,16 +1,23 @@
-from django.shortcuts import render, redirect
-from album_creation.models import Playlist
+from django.shortcuts import render, redirect, get_object_or_404
 from song_creation.models import Song
 from song_creation.forms import SongForm, SongEditForm
-from django.contrib import messages
+from album_creation.models import Playlist
 import os
 from django.conf import settings
 from song_creation import helper_functions
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 # Create your views here.
 
 def show_songs_page(request, album_id):
     needed_songs = Song.objects.filter(album__pk=album_id)
+
+    album = get_object_or_404(Playlist, id=album_id)
+
+    if album not in request.user.playlists.all():
+
+        raise Http404
 
     context = {
         'songs': needed_songs,
@@ -21,13 +28,21 @@ def show_songs_page(request, album_id):
 
 def create_song(request, album_id):
 
+    album = get_object_or_404(Playlist, id=album_id)
+
+    if album not in request.user.playlists.all():
+
+        raise Http404
+
     if request.method == "POST":
         song_form = SongForm(request.POST, request.FILES)
 
         if song_form.is_valid():
+
             song_name = song_form.cleaned_data["name"]
             song_author = song_form.cleaned_data["author"]
             song_file = song_form.cleaned_data["file"]
+
             curr_album = request.user.playlists.get(id=album_id)
 
             curr_song = Song.objects.create(name=song_name, author=song_author, file=song_file, album=curr_album)
@@ -56,7 +71,13 @@ def create_song(request, album_id):
     
 def edit_song(request, album_id, song_id):
 
-    needed_song_instance = request.user.playlists.get(id=album_id).songs.get(id=song_id)
+    try:
+
+        needed_song_instance = request.user.playlists.get(id=album_id).songs.get(id=song_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if request.method == "POST":
         
@@ -81,7 +102,13 @@ def edit_song(request, album_id, song_id):
 
 def delete_song(request, album_id, song_id):
 
-    song = request.user.playlists.filter(id=album_id).first().songs.filter(id=song_id).first()
+    try:
+
+        song = request.user.playlists.get(id=album_id).songs.get(id=song_id)
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     if song:
 
@@ -92,7 +119,13 @@ def delete_song(request, album_id, song_id):
 
 def followed_playlist_songs(request, playlist_id):
 
-    songs = request.user.followed_playlists.get(id=playlist_id).playlist.songs.all()
+    try:
+
+        songs = request.user.followed_playlists.get(id=playlist_id).playlist.songs.all()
+
+    except ObjectDoesNotExist:
+
+        raise Http404
 
     context = {
         "songs": songs
