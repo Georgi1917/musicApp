@@ -9,11 +9,19 @@ for (const div of likeDivs) {
         fetch(likeUrl)
             .then(response => response.json())
             .then(data => {
-                
-                document.getElementById(postId).textContent = data.likes_count;
+    
+                if (data.status === 403) {
 
-                if (likeButton.textContent === "Like") likeButton.textContent = "Unlike";
-                else likeButton.textContent = "Like";
+                    window.location.href = data.redirect_url;
+
+                } else {
+                    
+                    document.getElementById(postId).textContent = data.likes_count;
+
+                    if (likeButton.textContent === "Like") likeButton.textContent = "Unlike";
+                    else likeButton.textContent = "Like";
+
+                }
 
             })
     })

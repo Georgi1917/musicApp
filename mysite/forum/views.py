@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
 from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm, FilterPostsForm, SearchPostForm
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -34,9 +37,17 @@ def show_forum_page(request):
     form.initial["filter_by"] = filter_by
     search_form.initial["searched_post"] = searched_post
 
+    if request.user.is_authenticated:
+
+        likes = list(map(lambda x: x.post, request.user.likes.all()))
+    
+    else:
+
+        likes = []
+
     context = {
         "posts": page_object,
-        "likes": list(map(lambda x: x.post, request.user.likes.all())),
+        "likes": likes,
         "form": form,
         "search_form": search_form,
         "filter_by": filter_by,
@@ -47,6 +58,7 @@ def show_forum_page(request):
     return render(request, "forum/forums-page.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def show_forum_create_page(request):
 
     form = ForumCreationForm(request.POST or None)
@@ -70,11 +82,21 @@ def show_forum_create_page(request):
 
 def show_post(request, post_id):
 
+    if request.user.is_authenticated:
+
+        likes = request.user.likes.filter(post_id=post_id)
+        liked_comments = list(map(lambda x: x.comment, request.user.liked_comments.all()))
+
+    else:
+
+        likes = []
+        liked_comments = []
+
     context = {
         "post": get_object_or_404(ForumPost, id=post_id),
         "comments": CommentPost.objects.filter(post_id=post_id),
-        "likes": request.user.likes.filter(post_id=post_id),
-        "liked_comments": list(map(lambda x: x.comment, request.user.liked_comments.all())),
+        "likes": likes,
+        "liked_comments": liked_comments,
         "ref": request.GET.get("ref", "all_posts"),
         "friend_slug": request.GET.get("friend_slug", ""),
         "searched_post": request.GET.get("searched_post", ""),
@@ -85,6 +107,7 @@ def show_post(request, post_id):
     return render(request, "forum/post-page.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def create_comment(request, post_id):
 
     form = CommentCreationForm(request.POST or None)
@@ -124,6 +147,7 @@ def create_comment(request, post_id):
     return render(request, "forum/create-comment.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def delete_comment(request, post_id, comment_id):
 
     try:
@@ -134,9 +158,7 @@ def delete_comment(request, post_id, comment_id):
 
         raise Http404
 
-    if comment:
-    
-        comment.delete()
+    comment.delete()
     
     if request.GET.get("ref") == "user_comments":
         
@@ -161,6 +183,7 @@ def delete_comment(request, post_id, comment_id):
         )
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def delete_post(request, post_id):
 
     try:
@@ -171,9 +194,7 @@ def delete_post(request, post_id):
 
         raise Http404
 
-    if post:
-
-        post.delete()
+    post.delete()
 
     if request.GET.get("ref") == "user_comments":
 
@@ -188,6 +209,7 @@ def delete_post(request, post_id):
         return redirect('forum')
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def edit_post(request, post_id):
     
     try:
@@ -223,6 +245,7 @@ def edit_post(request, post_id):
     return render(request, "forum/edit-post.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def edit_comment(request, post_id, comment_id):
 
     try:
@@ -267,6 +290,13 @@ def edit_comment(request, post_id, comment_id):
 @api_view(["GET"])
 def like_post(request, post_id):
 
+    if not request.user.is_authenticated:
+
+        return Response({
+            "status": 403,
+            "redirect_url": f"{reverse_lazy("login")}?next={reverse_lazy("forum")}"
+        })
+
     post = get_object_or_404(ForumPost, id=post_id)
     like = LikePost.objects.filter(post=post, user=request.user).first()
     status = "liked"
@@ -291,6 +321,13 @@ def like_post(request, post_id):
 
 @api_view(["GET"])
 def like_comment(request, post_id, comment_id):
+
+    if not request.user.is_authenticated:
+
+        return Response({
+            "status": 403,
+            "redirect_url": f"{reverse_lazy("login")}?next={reverse_lazy("forum")}"
+        })
     
     comment = get_object_or_404(CommentPost, id=comment_id)
     like = LikeComment.objects.filter(user=request.user, comment=comment).first()

@@ -10,10 +10,18 @@ for (const commentDiv of commentDivs) {
             .then(response => response.json())
             .then(data => {
 
-                commentDiv.querySelector("span[value='comment_likes']").textContent = data.likes_count
+                if (data.status === 403) {
+
+                    window.location.href = data.redirect_url;
+
+                } else {
+
+                    commentDiv.querySelector("span[value='comment_likes']").textContent = data.likes_count
                 
-                if (likeCommentButton.textContent == "Like") likeCommentButton.textContent = "Unlike"
-                else likeCommentButton.textContent = "Like"
+                    if (likeCommentButton.textContent == "Like") likeCommentButton.textContent = "Unlike"
+                    else likeCommentButton.textContent = "Like"
+                    
+                }
 
             })
     })
