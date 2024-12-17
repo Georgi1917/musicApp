@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.decorators import login_required
 from accounts.forms import EditUserForm, PasswordConfirmationForm, LoginUserForm, RegisterUserForm
 from django.views.decorators.cache import cache_control
+from django.conf import settings
 
 
 def register_user(request):
@@ -27,14 +30,20 @@ def register_user(request):
         
     return render(request, "accounts/register.html", context)
     
+
 def login_user(request):
     if request.method == "POST":
         login_form = LoginUserForm(request=request, data=request.POST)
         if login_form.is_valid():
             user = login_form.get_user()
             login(request, user)
-            messages.success(request, ("You have been logged in succesfully!!"))
-            return redirect("main-page")
+            next_url = request.GET.get("next", "")
+
+            if not next_url:
+
+                return redirect("main-page")
+
+            return redirect(next_url)
 
     else:
         login_form = LoginUserForm()
@@ -45,15 +54,17 @@ def login_user(request):
 
     return render(request, "accounts/log-in.html", context)
     
+
 def logout_user(request):
 
     if request.method == "POST":
         
         logout(request)
         messages.success(request, ("You have been succesfully logged out!"))
-        return redirect("home")
+        return redirect("main-page")
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def account_details(request):
 
     context = {
@@ -63,6 +74,7 @@ def account_details(request):
     return render(request, "accounts/profile-details.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def edit_account_page(request):
 
     if request.method == "POST":
@@ -94,6 +106,8 @@ def edit_account_page(request):
 
     return render(request, "accounts/edit-account.html", context)
 
+
+@login_required(login_url=settings.LOGIN_URL)
 def change_account_password(request):
 
     if request.method == "POST":
@@ -116,6 +130,8 @@ def change_account_password(request):
 
     return render(request, "accounts/change-password.html", context)
 
+
+@login_required(login_url=settings.LOGIN_URL)
 def delete_account(request):
 
     if request.method == "POST":
@@ -146,6 +162,7 @@ def delete_account(request):
     return render(request, "accounts/delete-account.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_posts(request):
 
@@ -157,6 +174,7 @@ def user_posts(request):
     return render(request, "accounts/profile-posts.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_comments(request):
 

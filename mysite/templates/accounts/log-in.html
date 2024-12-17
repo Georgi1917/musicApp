@@ -9,11 +9,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
-    {% if messages %}
-        {% for msg in messages %}
-            {{ msg }}
-        {% endfor %}
-    {% endif %}
+    <p>Don't Have An Account? <a href="{% url 'register' %}">Sign Up</a></p>
 
 </body>
 {% endblock %}

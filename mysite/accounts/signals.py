@@ -24,11 +24,7 @@ def create_profile_for_user(sender, instance, created, **kwargs):
     if created:
 
         Profile.objects.create(user=instance)
-
-    else:
-
-        instance.profile.save()
-
+        
 
 @receiver(post_save, sender=UserModel)
 async def send_welcome_email(sender, instance, created, **kwargs):

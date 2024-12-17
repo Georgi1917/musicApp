@@ -2,6 +2,9 @@
 {% load static %}
 {% block content %}
 <body>
+
+    <a href="{% url 'playlist-page' %}">&laquo; Back</a>
+
     {% if songs %}
         {% for song in songs %}
         <div value="{{song.file.url}}">

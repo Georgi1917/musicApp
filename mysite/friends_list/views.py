@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from friends_list.models import FriendRequestList
@@ -13,6 +15,8 @@ from accounts.models import Profile
 
 UserModel = get_user_model()
 
+
+@login_required(login_url=settings.LOGIN_URL)
 def search_friends(request):
     form = SearchForm()
 
@@ -48,6 +52,7 @@ def search_friends(request):
     return render(request, "friends_list/search_friends.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def show_friends_list(request):
 
     context = {
@@ -59,6 +64,7 @@ def show_friends_list(request):
     return render(request, 'friends_list/friends_list.html', context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def send_friend_request(request, receiver_id):
 
     receiver = get_object_or_404(UserModel, id=receiver_id)
@@ -88,6 +94,7 @@ def send_friend_request(request, receiver_id):
         return redirect(f"{reverse_lazy('find-friends')}?searched_user={request.GET.get("searched_user", "")}&page={request.GET.get("page", 1)}")
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def accept_friend_request(request, sender_id):
 
     sender_user = get_object_or_404(UserModel, id=sender_id)
@@ -104,6 +111,7 @@ def accept_friend_request(request, sender_id):
     return redirect("friends-list")
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def see_friends_profile(request, friend_slug):
 
     friend = get_object_or_404(Profile, slug=friend_slug)
@@ -119,6 +127,7 @@ def see_friends_profile(request, friend_slug):
     return render(request, 'friends_list/friend_profile.html', context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def see_friends_playlists(request, friend_slug):
 
     friend = get_object_or_404(Profile, slug=friend_slug)
@@ -136,6 +145,7 @@ def see_friends_playlists(request, friend_slug):
     return render(request, "friends_list/friend-playlists.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def see_friends_songs(request, friend_slug, friend_album_id):
 
     songs = Song.objects.filter(album_id=friend_album_id)
@@ -154,6 +164,7 @@ def see_friends_songs(request, friend_slug, friend_album_id):
     return render(request, 'friends_list/friend_songs.html', context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def see_friends_friendlist(request, friend_slug):
 
     friend_user = get_object_or_404(Profile, slug=friend_slug)
@@ -177,6 +188,7 @@ def see_friends_friendlist(request, friend_slug):
     return render(request, "friends_list/friends_friend_list.html", context=context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def see_friends_posts(request, friend_slug):
 
     friend_user = get_object_or_404(Profile, slug=friend_slug)
@@ -194,6 +206,7 @@ def see_friends_posts(request, friend_slug):
     return render(request, "friends_list/friend-posts.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def remove_friend_request(request, friend_request_id):
 
     needed_obj = FriendRequestList.objects.filter(pk=friend_request_id).first()
@@ -205,6 +218,7 @@ def remove_friend_request(request, friend_request_id):
     return redirect('friends-list')
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def remove_friend(request, friend_id):
     
     friend_user = get_object_or_404(UserModel, pk=friend_id)
@@ -220,6 +234,7 @@ def remove_friend(request, friend_id):
     return redirect('friends-list')
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def follow_playlist(request, friend_slug, playlist_id):
 
     friend_user = get_object_or_404(Profile, slug=friend_slug)

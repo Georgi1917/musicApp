@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from contacts.forms import ContactForm
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 
 def show_contacts_success_page(request):
@@ -15,7 +16,7 @@ def show_contacts_error_page(request):
 
     return render(request, "contacts/contact-error.html")
 
-
+@login_required(login_url=settings.LOGIN_URL)
 def show_contacts_page(request):
 
     form = ContactForm(request.POST or None)

@@ -2,6 +2,8 @@
 {% block content %}
 <body>
     
+    <a href="{% url 'account-details' %}">&laquo; Back</a>
+
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{form}}

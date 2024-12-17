@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from album_creation.forms import PlaylistForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def playlist_page(request):
 
     context = {
@@ -14,6 +17,7 @@ def playlist_page(request):
     return render(request, "album_creation/playlist-page.html", context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def show_album_creation_page(request):
 
     if request.method == "POST":
@@ -37,7 +41,9 @@ def show_album_creation_page(request):
     }
 
     return render(request, 'album_creation/create-album.html', context)
-    
+
+
+@login_required(login_url=settings.LOGIN_URL)
 def show_album_edit_page(request, album_id):
     
     try:
@@ -66,6 +72,7 @@ def show_album_edit_page(request, album_id):
     return render(request, 'album_creation/edit_album.html', context)
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def delete_playlist(request, playlist_id):
 
     try:
@@ -88,6 +95,7 @@ def delete_playlist(request, playlist_id):
     return redirect("playlist-page")
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def unfollow_playlist(request, playlist_id):
 
     try:
@@ -98,8 +106,6 @@ def unfollow_playlist(request, playlist_id):
 
         raise Http404
 
-    if playlist:
-
-        playlist.delete()
+    playlist.delete()
 
     return redirect("playlist-page")

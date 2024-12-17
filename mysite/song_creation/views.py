@@ -7,9 +7,10 @@ from django.conf import settings
 from song_creation import helper_functions
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 
+@login_required(login_url=settings.LOGIN_URL)
 def show_songs_page(request, album_id):
     needed_songs = Song.objects.filter(album__pk=album_id)
 
@@ -26,6 +27,8 @@ def show_songs_page(request, album_id):
 
     return render(request, 'song_creation/song-page.html', context=context)
 
+
+@login_required(login_url=settings.LOGIN_URL)
 def create_song(request, album_id):
 
     album = get_object_or_404(Playlist, id=album_id)
@@ -68,7 +71,9 @@ def create_song(request, album_id):
     }
 
     return render(request, 'song_creation/create-song-page.html', context=context)
-    
+
+
+@login_required(login_url=settings.LOGIN_URL)
 def edit_song(request, album_id, song_id):
 
     try:
@@ -100,6 +105,7 @@ def edit_song(request, album_id, song_id):
     return render(request, 'song_creation/edit-song-page.html', context=context)
     
 
+@login_required(login_url=settings.LOGIN_URL)
 def delete_song(request, album_id, song_id):
 
     try:
@@ -117,6 +123,7 @@ def delete_song(request, album_id, song_id):
     return redirect('song-page', album_id=album_id)
     
 
+@login_required(login_url=settings.LOGIN_URL)
 def followed_playlist_songs(request, playlist_id):
 
     try:
