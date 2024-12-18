@@ -3,35 +3,48 @@
 {% block content %}
 <body>
 
-    <a href="{% url 'main-page' %}">&laquo; Back</a>
-    <a href="{% url 'create-post' %}">Add Post</a>
+    <div class="links-container">
+        <a href="{% url 'main-page' %}">&laquo; Back</a>
+        <a href="{% url 'create-post' %}">Add Post</a>
+    </div>
     <br>
-    <form method="GET">
+    <form method="GET" class="mb-3">
         {{ search_form }}
-        {{ form }}
+        <div class="filter-container">
+            {{ form }}
+        </div>
         <button>Search</button>
     </form>
     <br>
-    {% for post in posts %}
-        <div class="post">
-            <a href="{% url 'show-post' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref=all_posts" style="text-decoration: none; color: black;">
-                <div class="post-link">
+    <div class="all_posts">
+        {% for post in posts %}
+            <div class="post">
+                <a href="{% url 'show-post' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref=all_posts" style="text-decoration: none; color: black;">
+                    <div class="post-link">
                         By: {{ post.user }} | Posted: {{ post.created_at }} <br>
-                        {{post.title}} <br>
+                    </div>
+                    <div class="post-content">
+                        <b>{{post.title}}</b> <br>
                         {{post.content}} <br>
-                        Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.get_like_count }}</span> <span> |</span> Comments : {{post.get_comment_count}} |
+                    </div>
+                </a>
+                <div class="post-footer">
+                    {% if post in likes %}
+                        <span class="like-button" type="button">Unlike</span>
+                    {% else %}
+                        <span class="like-button" type="button">Like</span>
+                    {% endif %}
+                    <div class="post-footer-other">
+                        <span>Likes: <span id="{{ post.id }}" value="post-likes">{{ post.get_like_count }}</span> </span>
+                        <span>Comments : {{post.get_comment_count}}</span>
+                    </div>
                 </div>
-            </a>
-            {% if post in likes %}
-            <span class="like-button">Unlike</span>
-            {% else %}
-            <span class="like-button">Like</span>
-            {% endif %}
-        </div>
-        <br><br>
-    {% empty %}
-        <p>No posts</p>
-    {% endfor %}
+            </div>
+            <br><br>
+        {% empty %}
+            <p>No posts</p>
+        {% endfor %}
+    </div>
 
     {% if posts.paginator.num_pages > 1 %}
         <div class="pagination">
@@ -55,4 +68,8 @@
 
     <script src="{% static 'js-files/forum/toggle-post-like.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/forum/forums-page.css' %}">
 {% endblock %}
