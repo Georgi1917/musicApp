@@ -14,66 +14,91 @@
 
     <div class="post">
         <h1>Post:</h1>
-        By: {{ post.user }} | Created: {{ post.created_at }} <br>
-        {{ post.title }} <br>
-        {{ post.content }} <br>
-        Likes : <span value="post-likes" id="{{ post.id }}">{{ post.get_like_count }}</span> |
-        {% if ref == 'user_posts' or ref == 'user_comments' %}
-            <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>
-        {% elif ref == 'friend_posts' %}
-            <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}&friend_slug={{ friend_slug }}">Comments : {{ post.get_comment_count }}</a>
-        {% else %}
-            <a href="{% url 'create-comment' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>    
-        {% endif %} 
-        | <br>
-        {% if likes %}
-        <span class="like-button">Unlike</span>
-        {% else %}
-        <span class="like-button">Like</span>
-        {% endif %}
-        {% if post.user == request.user %}
-            <a href="{% url 'delete-post' post_id=post.id %}?ref={{ ref }}">Delete</a> |
-            {% if ref == 'all_posts' %}
-                <a href="{% url 'edit-post' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
-            {% else %}
-                <a href="{% url 'edit-post' post_id=post.id%}?ref={{ ref }}">Edit</a>
+        <div class="post-info">
+            By: {{ post.user }} Created: {{ post.created_at }}
+        </div>
+        <div class="post-title">
+            {{ post.title }}
+        </div>
+        <div class="post-content">
+            {{ post.content }}
+        </div>
+
+        <div class="post-footer">
+            <div class="action-group">
+                {% if likes %}
+                    <span class="like-button">Unlike</span>
+                {% else %}
+                    <span class="like-button">Like</span>
+                {% endif %}
+                Likes:<span value="post-likes" id="{{ post.id }}">{{ post.get_like_count }}</span>
+                {% if ref == 'user_posts' or ref == 'user_comments' %}
+                    <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>
+                {% elif ref == 'friend_posts' %}
+                    <a href="{% url 'create-comment' post_id=post.id %}?ref={{ ref }}&friend_slug={{ friend_slug }}">Comments : {{ post.get_comment_count }}</a>
+                {% else %}
+                    <a href="{% url 'create-comment' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Comments : {{ post.get_comment_count }}</a>    
+                {% endif %}
+            </div>
+
+            {% if post.user == request.user %}
+                <div class="edit-delete-links">
+                    <a href="{% url 'delete-post' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Delete</a>
+                    {% if ref == 'all_posts' %}
+                        <a href="{% url 'edit-post' post_id=post.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
+                    {% else %}
+                        <a href="{% url 'edit-post' post_id=post.id%}?ref={{ ref }}">Edit</a>
+                    {% endif %}
+                </div>
             {% endif %}
-        {% endif %}
+        </div>
     </div> <br> <br>
 
     <div>
         <h1>Comments:</h1>
         {% for comment in comments %}
         <div class="comment">
-            By: {{ comment.user }} <br>
-            {{ comment.content }} <br>
-            Posted: {{ comment.created_at }} <br>
-            Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.get_like_count }}</span>
-            <br>
-            {% if comment in liked_comments %}
-                <span class="like-comment">Unlike</span>
-            {% else %}
-                <span class="like-comment">Like</span>
-            {% endif %}
-            |
-            {% if comment.user == request.user %}
-                <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}&friend_slug={{ friend_slug }}">Delete</a> | 
-                {% if ref == 'all_posts' %}
-                    <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
-                {% elif ref == 'friend_posts' %}
-                    <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?ref={{ref}}&friend_slug={{ friend_slug }}">Edit</a>
+            <div class="comment-info">
+                By: {{ comment.user }} | Posted: {{ comment.created_at }}
+            </div>
+
+            <div class="comment-content">
+                {{ comment.content }} <br>
+            </div>
+
+            <div class="action-group">
+                {% if comment in liked_comments %}
+                    <span class="like-comment">Unlike</span>
                 {% else %}
-                    <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id%}?ref={{ ref }}">Edit</a>
+                    <span class="like-comment">Like</span>
                 {% endif %}
-            {% endif %}
+                Likes:<span value="comment_likes" id="{{ comment.id }}">{{ comment.get_like_count }}</span>
+            </div>
+
+            <div class="edit-delete-links">
+                {% if comment.user == request.user %}
+                    <a href="{% url 'delete-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}&friend_slug={{ friend_slug }}">Delete</a>
+                    {% if ref == 'all_posts' %}
+                        <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}&ref={{ ref }}">Edit</a>
+                    {% elif ref == 'friend_posts' %}
+                        <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id %}?ref={{ref}}&friend_slug={{ friend_slug }}">Edit</a>
+                    {% else %}
+                        <a href="{% url 'edit-comment' post_id=post.id comment_id=comment.id%}?ref={{ ref }}">Edit</a>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
         <br>
         {% empty %}
-            <p>No comments</p>
+            <p style="text-align: center;">No comments</p>
         {% endfor %}
     </div>
 
     <script src="{% static 'js-files/forum/toggle-post-like.js' %}"></script>
     <script src="{% static 'js-files/forum/toggle-comment-like.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/forum/post-page.css' %}">
 {% endblock %}

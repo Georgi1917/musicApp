@@ -29,7 +29,7 @@ def show_forum_page(request):
 
     queryset = queryset.filter(title__icontains=searched_post)
 
-    paginator = Paginator(queryset, 10)
+    paginator = Paginator(queryset, 3)
 
     page_num = request.GET.get("page", 1)
 
@@ -201,7 +201,7 @@ def delete_post(request, post_id):
     
     else:
 
-        return redirect('forum')
+        return redirect(f"{reverse_lazy("forum")}?searched_user={request.GET.get("searched_user", "")}&filter_by={request.GET.get("filter_by", "Newest")}&page={request.GET.get("page", 1)}&ref={request.GET.get("ref", "all_posts")}")
 
 
 @login_required(login_url=settings.LOGIN_URL)

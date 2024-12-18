@@ -38,13 +38,17 @@ body {
 
 .post-content {
     margin-top: 10px;
-    margin-bottom: 10px;
 }
 
-.post-content b {
-    font-size: 1.5rem;
+.post-content .title {
+    font-size: 1.8rem;
+    font-weight: bold;
     color: #333; 
     margin-bottom: 10px; 
+}
+
+.post-content .content {
+    margin-bottom: 0px;
 }
 
 .post-footer {
@@ -74,6 +78,8 @@ body {
 .pagination {
     text-align: center;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .pagination .step-links a {
@@ -92,7 +98,6 @@ body {
 a {
     text-decoration: none;
     color: #007bff;
-    font-weight: bold;
     margin-right: 20px;
     transition: color 0.3s, text-decoration 0.3s;
 }

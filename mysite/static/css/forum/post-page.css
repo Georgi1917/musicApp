@@ -1,0 +1,223 @@
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif; 
+    color: #333; 
+    margin: 0;
+    padding: 0;
+}
+
+.post, .comment {
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin: 20px auto;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); 
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.post h1, .comment h1 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.post {
+    margin-top: 40px;
+}
+
+.post-info {
+    margin-bottom: 10px;
+    color: #555; 
+    font-size: 0.9rem; 
+}
+
+.post-title {
+    margin-bottom: 10px; 
+    font-size: 1.8rem; 
+    font-weight: bold;
+    color: #333;
+}
+
+.post-content {
+    margin-bottom: 15px; 
+    font-size: 1rem;
+    line-height: 1.5; 
+    color: #444;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.post-footer .action-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-delete-links {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.comment {
+    margin-top: 10px;
+    width: 40%;
+}
+
+.comment span, .post span {
+    font-weight: bold;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.comment span:hover, .post span:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    margin-right: 20px;
+    transition: color 0.3s, text-decoration 0.3s;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.comment p {
+    font-size: 1rem;
+    margin: 0;
+    padding: 10px 0;
+}
+
+.comment a {
+    font-size: 0.9rem;
+}
+
+.comment span {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.action-group span[value="post-likes"] {
+    color: inherit;
+    font-weight: normal;
+    text-decoration: none;
+    cursor: default;
+}
+
+.action-group span[value="post-likes"]:hover {
+    color: inherit;
+    text-decoration: none; 
+    background-color: inherit;
+}
+
+.comment .action-group span[value="comment_likes"] {
+    color: inherit;
+    font-weight: normal; 
+    text-decoration: none; 
+    cursor: default; 
+    border: none; 
+    padding: 0; 
+    background-color: transparent; 
+}
+
+.comment .action-group span[value="comment_likes"]:hover {
+    color: inherit; 
+    text-decoration: none; 
+    background-color: inherit;
+}
+
+.post h1 {
+    font-size: 2.5em;
+}
+
+.comment .action-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+    margin-bottom: 10px; 
+}
+
+.comment .edit-delete-links {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.comment .edit-delete-links a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.comment .edit-delete-links a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.comment-info {
+    margin-bottom: 15px;
+    color: #555; 
+    font-size: 0.9rem; 
+}
+
+
+.post-info {
+    margin-bottom: 10px;
+    color: #555; 
+    font-size: 0.9rem; 
+}
+
+.comment-info {
+    font-size: 0.9rem;
+    color: #555; 
+}
+
+
+.comment-content {
+    margin-bottom: 15px; 
+    font-size: 1rem;
+    line-height: 1.5; 
+    color: #444;
+}
