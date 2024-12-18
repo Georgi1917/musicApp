@@ -8,24 +8,33 @@ from song_creation import helper_functions
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 
-@login_required(login_url=settings.LOGIN_URL)
-def show_songs_page(request, album_id):
-    needed_songs = Song.objects.filter(album__pk=album_id)
+class SongPage(LoginRequiredMixin, ListView):
 
-    album = get_object_or_404(Playlist, id=album_id)
+    model = Song
+    template_name = "song_creation/song-page.html"
+    login_url = settings.LOGIN_URL
+    context_object_name = "songs"
 
-    if album not in request.user.playlists.all():
+    def get_queryset(self):
+        
+        playlist = get_object_or_404(Playlist, id=self.kwargs["album_id"])
 
-        raise Http404
+        if playlist not in self.request.user.playlists.all():
 
-    context = {
-        'songs': needed_songs,
-        'album_id': album_id
-        }
+            raise Http404
+        
+        return Song.objects.filter(album=playlist)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    return render(request, 'song_creation/song-page.html', context=context)
+        context["album_id"] = self.kwargs["album_id"]
+
+        return context
 
 
 @login_required(login_url=settings.LOGIN_URL)

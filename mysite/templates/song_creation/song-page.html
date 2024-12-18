@@ -20,11 +20,6 @@
         <p>Looks like you have no songs</p>
     {% endif %}
 
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }} <br>
-        {% endfor %}
-    {% endif %}
     <br>
     <a href="{% url 'create-song' album_id=album_id %}">Add a Song</a>
     <button id="play-all">Play Playlist</button>

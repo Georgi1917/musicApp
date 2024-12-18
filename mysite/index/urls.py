@@ -1,6 +1,6 @@
 from django.urls import path
-from index.views import show_main_page
+from index.views import MainPage
 
 urlpatterns = [
-    path('', show_main_page, name="main-page"),
+    path('', MainPage.as_view(), name="main-page"),
 ]

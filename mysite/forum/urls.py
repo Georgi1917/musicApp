@@ -4,7 +4,7 @@ from forum import views
 urlpatterns = [
     path('forum-page/', include([
         path('', views.show_forum_page, name="forum"),
-        path('create-post/', views.show_forum_create_page, name="create-post"),
+        path('create-post/', views.CreateForumPost.as_view(), name="create-post"),
         path('post/<int:post_id>/', include([
             path('', views.show_post, name="show-post"),
             path('like/', views.like_post, name="like-post"),

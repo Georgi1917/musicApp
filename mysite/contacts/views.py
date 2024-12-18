@@ -5,16 +5,18 @@ from contacts.forms import ContactForm
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 
 
-def show_contacts_success_page(request):
+class ContactsSuccessPage(TemplateView):
 
-    return render(request, "contacts/contact-success.html")
+    template_name = "contacts/contact-success.html"
 
 
-def show_contacts_error_page(request):
+class ContactErrorPage(TemplateView):
 
-    return render(request, "contacts/contact-error.html")
+    template_name = "contacts/contact-error.html"
+
 
 @login_required(login_url=settings.LOGIN_URL)
 def show_contacts_page(request):

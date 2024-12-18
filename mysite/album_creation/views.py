@@ -1,46 +1,42 @@
 from django.shortcuts import render, redirect
 from album_creation.forms import PlaylistForm
+from album_creation.models import Playlist
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.conf import settings
+from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, CreateView
 
 
-@login_required(login_url=settings.LOGIN_URL)
-def playlist_page(request):
+class PlaylistPage(LoginRequiredMixin, TemplateView):
 
-    context = {
-        "user_playlists": request.user.playlists.all(),
-        "followed_playlists": request.user.followed_playlists.all()
-    }
+    template_name = "album_creation/playlist-page.html"
+    login_url = settings.LOGIN_URL
 
-    return render(request, "album_creation/playlist-page.html", context)
+    def get_context_data(self, **kwargs):
 
+        context =  super().get_context_data(**kwargs)
 
-@login_required(login_url=settings.LOGIN_URL)
-def show_album_creation_page(request):
+        context["user_playlists"] = self.request.user.playlists.all()
+        context["followed_playlists"] = self.request.user.followed_playlists.all()
 
-    if request.method == "POST":
-        form = PlaylistForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            playlist = form.save(commit=False)
-
-            playlist.user = request.user
-
-            playlist.save()
-
-            return redirect("playlist-page")
+        return context
 
 
-    else:
-        form = PlaylistForm()
+class CreatePlaylist(LoginRequiredMixin, CreateView):
+    
+    model = Playlist
+    form_class = PlaylistForm
+    template_name = "album_creation/create-album.html"
+    login_url = settings.LOGIN_URL
+    success_url = reverse_lazy("playlist-page")
 
-    context = {
-        "form": form
-    }
+    def form_valid(self, form):
 
-    return render(request, 'album_creation/create-album.html', context)
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 @login_required(login_url=settings.LOGIN_URL)

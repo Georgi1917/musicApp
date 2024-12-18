@@ -4,15 +4,16 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from forum.helpers import get_queryset
 from django.views.decorators.cache import cache_control
+from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from forum.models import ForumPost, CommentPost, LikePost, LikeComment
 from forum.forms import ForumCreationForm, CommentCreationForm, ForumEditForm, CommentEditForm, FilterPostsForm, SearchPostForm
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -58,26 +59,20 @@ def show_forum_page(request):
     return render(request, "forum/forums-page.html", context)
 
 
-@login_required(login_url=settings.LOGIN_URL)
-def show_forum_create_page(request):
+class CreateForumPost(LoginRequiredMixin, CreateView):
 
-    form = ForumCreationForm(request.POST or None)
+    model = ForumPost
+    form_class = ForumCreationForm
+    template_name = "forum/forum-create-page.html"
+    login_url = settings.LOGIN_URL
+    success_url = reverse_lazy("forum")
 
-    if request.method == "POST":
-        
-        if form.is_valid():
+    def form_valid(self, form):
 
-            post = form.save(commit=False)
-            post.user = request.user
-            post.save()
+        form.instance.user = self.request.user
 
-            return redirect('forum')
+        return super().form_valid(form)
 
-    context = {
-        "form": form
-    }
-
-    return render(request, "forum/forum-create-page.html", context)
 
 
 def show_post(request, post_id):

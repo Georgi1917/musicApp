@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from accounts.models import Profile
 from django.contrib.auth import get_user_model
@@ -117,4 +117,15 @@ class PasswordConfirmationForm(forms.Form):
         return cleaned_data
 
 
-        
+class CustomUserAddForm(UserCreationForm):
+
+    class Meta(UserCreationForm.Meta):
+        model = UserModel
+        fields = ("username", "email")
+
+
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta(UserChangeForm.Meta):
+        model = UserModel
+        fields = "__all__"        

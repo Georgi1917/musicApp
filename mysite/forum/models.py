@@ -25,6 +25,10 @@ class ForumPost(CommentAndPostMixIn):
 
         ordering = ["-created_at"]
 
+    def __str__(self):
+
+        return self.title
+
 
 class CommentPost(CommentAndPostMixIn):
     
@@ -38,6 +42,10 @@ class CommentPost(CommentAndPostMixIn):
     class Meta:
 
         ordering = ["-created_at"]
+
+    def __str__(self):
+
+        return f"{self.user} - {self.post} - Comment - {self.pk}"
 
 
 class LikePost(models.Model):

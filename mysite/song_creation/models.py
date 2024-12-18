@@ -16,4 +16,4 @@ class Song(models.Model):
         super(Song, self).delete(*args, **kwargs)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} - {self.author}"
