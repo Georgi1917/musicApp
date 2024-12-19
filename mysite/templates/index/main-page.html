@@ -3,30 +3,34 @@
 {% block content %}
 <body>
     <div class="wrapper">
-        {% if user.is_authenticated %}
-            <p>Hello, <a href="{% url 'account-details' %}">{{user.username}}!</a></p>
-        {% else %}
-            <p>Hello, <a href="{% url 'login' %}">Guest</a></p>
-        {% endif %}
+        <header>
+            <h1>Welcome!</h1>
+            {% if user.is_authenticated %}
+                <p>Hello, <a href="{% url 'account-details' %}">{{ user.username }}</a>!</p>
+            {% else %}
+                <p>Hello, <a href="{% url 'login' %}">Guest</a>!</p>
+            {% endif %}
+        </header>
 
-        {% if user.is_authenticated %}
-            <a href="#" id="logout-button">LogOut</a><br>
-        {% endif %}
+        <nav class="links">
+            {% if user.is_authenticated %}
+                <a href="#" id="logout-button">Log Out</a>
+            {% endif %}
+            <a href="{% url 'playlist-page' %}">Playlists</a>
+            <a href="{% url 'friends-list' %}">Friends List</a>
+            <a href="{% url 'forum' %}">Forum</a>
+            <a href="{% url 'contacts-page' %}">Contacts</a>
+        </nav>
 
-        <a href="{% url 'playlist-page' %}">Playlists</a> <br>
-
-        <a href="{% url 'friends-list' %}">Friends List</a> <br>
-
-        <a href="{% url 'forum' %}">Forum</a> <br>
-
-        <a href="{% url 'contacts-page' %}">Contacts</a>
-        
-        <form action="{% url 'logout' %}" method="POST" id="logout-form" display="none">
+        <form action="{% url 'logout' %}" method="POST" id="logout-form">
             {% csrf_token %}
         </form>
-
-        <script src="{% static 'js-files/accounts/logout.js' %}"></script>
     </div>
-</body>
 
+    <script src="{% static 'js-files/accounts/logout.js' %}"></script>
+</body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/index/main-page.css' %}">
 {% endblock %}
