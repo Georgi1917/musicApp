@@ -1,0 +1,94 @@
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation Styling */
+.navigation {
+    background-color: #333; /* Dark gray */
+    color: white;
+    width: 80%; /* Narrower navigation */
+    margin: 20px auto; /* Center it */
+    display: flex;
+    justify-content: space-around; /* Space links evenly */
+    padding: 10px 0;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.nav-link {
+    color: white;
+    font-size: 1.2rem; /* Slightly larger font */
+    font-weight: bold; /* Emphasize text */
+    text-decoration: none;
+    padding: 10px 20px; /* More padding for better tap experience */
+    border-radius: 5px; /* Smooth edges */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease; /* Smooth animations */
+    letter-spacing: 0.5px; /* Slight spacing for clarity */
+    font-family: 'Arial', sans-serif; /* Modern sans-serif font */
+}
+
+.nav-link:hover {
+    background-color: #555; /* Lighter gray for hover */
+    color: #fff; /* Ensure good contrast */
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3); /* Subtle text shadow */
+}
+
+/* Friends List Container */
+.friends-list-container {
+    margin: 50px auto 20px auto; /* Space below navigation */
+    max-width: 600px; /* Limit width */
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Friend Item Styling */
+.friend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.friend-name {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #444;
+}
+
+.friend-action {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    border: 1px solid transparent;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.friend-action:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.friend-status {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* No Friends Message */
+.no-friends-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 20px;
+}

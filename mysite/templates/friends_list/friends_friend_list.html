@@ -1,32 +1,42 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
 
-    <div class="links">
-        <a href="{% url 'main-page' %}">Home</a>
-        <a href="{% url 'see-profile' friend_slug=friend_user.slug %}">Profile</a>
-        <a href="{% url 'see-friends' friend_slug=friend_user.slug %}">FriendList</a>
-        <a href="{% url 'see-playlists' friend_slug=friend_user.slug %}">Playlists</a>
-        <a href="{% url 'see-posts' friend_slug=friend_user.slug %}">Posts</a>
+    <div class="navigation">
+        <a href="{% url 'main-page' %}" class="nav-link">Home</a>
+        <a href="{% url 'see-profile' friend_slug=friend_user.slug %}" class="nav-link">Profile</a>
+        <a href="{% url 'see-friends' friend_slug=friend_user.slug %}" class="nav-link">FriendList</a>
+        <a href="{% url 'see-playlists' friend_slug=friend_user.slug %}" class="nav-link">Playlists</a>
+        <a href="{% url 'see-posts' friend_slug=friend_user.slug %}" class="nav-link">Posts</a>
     </div>
     
-    {% if friends_list %}
-        {% for friend in friends_list %}
-            {% if friend.user.id == user.id %}
-                {{ friend }} - <a href="{% url 'main-page' %}">See Profile</a> <br>
-            {% elif friend.user.id in pending_requests_senders_ids %}
-                {{ friend }} - Pending <br>
-            {% elif friend.user.id in pending_requests_receivers_ids %}
-                {{ friend }} - Pending <br>
-            {% elif friend in logged_in_list %}
-                {{ friend }} - <a href="{% url 'see-profile' friend_slug=friend.user.profile.slug %}">See Profile</a> <br>
-            {% else %}
-                {{ friend }} - <a href="{% url 'send-request' receiver_id=friend.user.id %}?ref=friends_profile&friend_slug={{ friend_user.slug }}">Add Friend</a> <br>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>This user has no friends</p>
-    {% endif %}
+    <div class="friends-list-container">
+        {% if friends_list %}
+            {% for friend in friends_list %}
+            <div class="friend-item">
+                <p class="friend-name">{{ friend }}</p>
+                {% if friend.user.id == user.id %}
+                    <a href="{% url 'main-page' %}" class="friend-action">See Profile</a>
+                {% elif friend.user.id in pending_requests_senders_ids %}
+                    <p class="friend-status">Pending</p>
+                {% elif friend.user.id in pending_requests_receivers_ids %}
+                    <p class="friend-status">Pending</p>
+                {% elif friend in logged_in_list %}
+                    <a href="{% url 'see-profile' friend_slug=friend.user.profile.slug %}" class="friend-action">See Profile</a>
+                {% else %}
+                    <a href="{% url 'send-request' receiver_id=friend.user.id %}?ref=friends_profile&friend_slug={{ friend_user.slug }}" class="friend-action">Add Friend</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-friends-message">This user has no friends</p>
+        {% endif %}
+    </div>
 
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/friends_list/friends_friend_list.css' %}">
 {% endblock %}

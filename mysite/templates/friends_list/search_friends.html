@@ -1,22 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
 
-    <a href="{% url 'friends-list' %}">Back</a>
+    <a href="{% url 'friends-list' %}" class="back-link">&laquo; Back</a>
 
-    <form method="GET">
+    <form method="GET" class="search-form">
         {{ form.searched_user }}
 
         <button>Search</button>
     </form>
 
-    {% for searched_user in searched_users %}
-        {{ searched_user.username }} - <a href="{% url 'send-request' receiver_id=searched_user.id %}?searched_user={{ search_query }}&page={{ page }}&ref=user_friends">Send Request</a> <br>
-    {% empty %}
-        <p>No users match the search query</p>
-    {% endfor %}
+    <div class="search-results">
+        {% for searched_user in searched_users %}
+            <div class="searched-user">
+                <span>{{ searched_user.username }}</span>  
+                <a href="{% url 'send-request' receiver_id=searched_user.id %}?searched_user={{ search_query }}&page={{ page }}&ref=user_friends">Send Request</a>
+            </div> 
+        {% empty %}
+            <p>No users match the search query</p>
+        {% endfor %}
+    </div>
 
-    <br><br>
     {% if paginator.num_pages > 1 %}
     <div class="pagination">
         <span class="step-links">
@@ -37,4 +42,8 @@
     </div>
     {% endif %}
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/friends_list/search_friends.css' %}">
 {% endblock %}

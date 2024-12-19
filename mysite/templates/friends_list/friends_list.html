@@ -1,45 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
 
-    <a href="{% url 'main-page' %}">Back</a>
-
-    <div class="add-friends">
+    <div class="links">
+        <a href="{% url 'main-page' %}">&laquo; Back</a>
         <a href="{% url 'find-friends' %}">Add Friends</a>
     </div>
 
-    <br>
-    <br>
+    <div class="wrapper">
+        <div class="friends">
+            <h1>Friends</h1>
+            {% if friends_list %}
+                {% for friend in friends_list %}
+                    {{ friend.user.username }} - <a href="{% url 'see-profile' friend_slug=friend.user.profile.slug %}">See Profile</a> <a href="{% url 'remove-friend' friend_id=friend.user.id %}">Unfriend</a><br>
+                {% endfor %}
+            {% else %}
+                <p>No Friends</p>
+            {% endif %}
+        </div>
 
-    <div class="friends">
-        {% if friends_list %}
-            {% for friend in friends_list %}
-                {{ friend.user.username }} - <a href="{% url 'see-profile' friend_slug=friend.user.profile.slug %}">See Profile</a> | <a href="{% url 'remove-friend' friend_id=friend.user.id %}">Unfriend</a><br>
-            {% endfor %}
-        {% else %}
-            <p>No Friends</p>
-        {% endif %}
-    </div>
+        <div class="pending-requests">
+            <h1>Pending Requests</h1>
+            {% if sent_friend_requests %}
+                {% for reqs in sent_friend_requests %}
+                    {{ reqs.receiver.username }} - Pending <a href="{% url 'remove-request' friend_request_id=reqs.id %}">Remove</a> <br>
+                {% endfor %}
+            {% else %}
+                <p>No Pending Requests</p>
+            {% endif %}
+        </div>
 
-    <div class="pending-requests">
-        {% if sent_friend_requests %}
-            {% for reqs in sent_friend_requests %}
-                {{ reqs.receiver.username }} - Pending | <a href="{% url 'remove-request' friend_request_id=reqs.id %}">Remove</a> <br>
-            {% endfor %}
-        {% else %}
-            <p>No Pending Requests</p>
-        {% endif %}
-    </div>
-
-    <div class="awaiting_acceptance">
-        {% if received_friend_requests %}
-            {% for recs in received_friend_requests %}
-                {{ recs.sender.username }} - <a href="{% url 'accept-request' sender_id=recs.sender_id %}">Accept</a> | <a href="{% url 'remove-request' friend_request_id=recs.id %}">Remove</a> <br>
-            {% endfor %}
-        {% else %}
-            <p>No Requests Awaiting Acceptance</p>
-        {% endif %}
+        <div class="awaiting_acceptance">
+            <h1>Awaiting Acceptance</h1>
+            {% if received_friend_requests %}
+                {% for recs in received_friend_requests %}
+                    {{ recs.sender.username }} - <a href="{% url 'accept-request' sender_id=recs.sender_id %}">Accept</a> <a href="{% url 'remove-request' friend_request_id=recs.id %}">Remove</a> <br>
+                {% endfor %}
+            {% else %}
+                <p>No Requests Awaiting Acceptance</p>
+            {% endif %}
+        </div>
     </div>
 
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/friends_list/friends_list.css' %}">
 {% endblock %}

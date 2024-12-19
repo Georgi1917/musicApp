@@ -3,12 +3,12 @@
 {% block content %}
 <body>
 
-    <div class="links">
-        <a href="{% url 'main-page' %}">Home</a>
-        <a href="{% url 'see-profile' friend_slug=friend_user.slug %}">Profile</a>
-        <a href="{% url 'see-friends' friend_slug=friend_user.slug %}">FriendList</a>
-        <a href="{% url 'see-playlists' friend_slug=friend_user.slug %}">Playlists</a>
-        <a href="{% url 'see-posts' friend_slug=friend_user.slug %}">Posts</a>
+    <div class="navigation">
+        <a href="{% url 'main-page' %}" class="nav-link">Home</a>
+        <a href="{% url 'see-profile' friend_slug=friend_user.slug %}" class="nav-link">Profile</a>
+        <a href="{% url 'see-friends' friend_slug=friend_user.slug %}" class="nav-link">FriendList</a>
+        <a href="{% url 'see-playlists' friend_slug=friend_user.slug %}" class="nav-link">Playlists</a>
+        <a href="{% url 'see-posts' friend_slug=friend_user.slug %}" class="nav-link">Posts</a>
     </div>
 
     <header>
@@ -38,4 +38,8 @@
 
     <script src="{% static 'js-files/forum/toggle-post-like.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/friends_list/friend_posts.css' %}">
 {% endblock %}

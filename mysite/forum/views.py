@@ -29,7 +29,7 @@ def show_forum_page(request):
 
     queryset = queryset.filter(title__icontains=searched_post)
 
-    paginator = Paginator(queryset, 3)
+    paginator = Paginator(queryset, 8)
 
     page_num = request.GET.get("page", 1)
 

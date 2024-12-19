@@ -1,0 +1,141 @@
+/* General page styling */
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Wrapper to center the content */
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Back Link Styling */
+.back-link {
+    display: block;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Form Styling */
+.search-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto; /* Center the form horizontally */
+}
+
+.search-form label {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    text-align: center; /* Ensure the label is centered */
+}
+
+.search-form input {
+    padding: 15px;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 100%; /* Ensure it takes the full width of its container */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.search-form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Button Styling */
+.search-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px 20px;  /* Reduced padding to make the button smaller */
+    font-size: 1rem;     /* Slightly smaller font size */
+    border-radius: 8px;
+    width: auto;         /* The width of the button will now adjust based on content */
+    margin: 10px auto;   /* Centers the button horizontally */
+    display: block;      /* Ensures the button is block-level to be centered */
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Search Results Styling */
+.search-results {
+    text-align: center;
+}
+
+.searched-user {
+    margin: 15px 0;
+}
+
+.searched-user span {
+    font-size: 1.2rem;
+}
+
+.searched-user .btn-link {
+    display: inline-block;
+    margin-left: 10px;
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.searched-user .btn-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Pagination Styling */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.step-links {
+    display: inline-block;
+}
+
+.pagination-link {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.pagination-link:hover {
+    color: #0056b3;
+}
+
+.current {
+    font-weight: bold;
+    color: #333;
+}

@@ -2,50 +2,53 @@
 {% load static %}
 {% block content %}
 <body>
-    <div class="links">
-        <a href="{% url 'main-page' %}">Home</a>
-        <a href="{% url 'see-profile' friend_slug=friend.slug %}">Profile</a>
-        <a href="{% url 'see-friends' friend_slug=friend.slug %}">FriendList</a>
-        <a href="{% url 'see-playlists' friend_slug=friend.slug %}">Playlists</a>
-        <a href="{% url 'see-posts' friend_slug=friend.slug %}">Posts</a>
+    <div class="navigation">
+        <a href="{% url 'main-page' %}" class="nav-link">Home</a>
+        <a href="{% url 'see-profile' friend_slug=friend.slug %}" class="nav-link">Profile</a>
+        <a href="{% url 'see-friends' friend_slug=friend.slug %}" class="nav-link">FriendList</a>
+        <a href="{% url 'see-playlists' friend_slug=friend.slug %}" class="nav-link">Playlists</a>
+        <a href="{% url 'see-posts' friend_slug=friend.slug %}" class="nav-link">Posts</a>
     </div>
 
-    <main>
-        {% if friend.profile_picture %}
-            <img src="{{ friend.profile_picture.url }}" alt="Profile Picture">
-        {% else %}
-            <img src="{% static 'images/default-profile-image.jpg' %}" alt="Profile Picture">
-        {% endif %}
+    <main class="profile-container">
 
-        <p>Username: {{ friend.user.username }}</p>
+        <div class="profile-picture">
+            {% if friend.profile_picture %}
+                <img src="{{ friend.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'images/default-profile-image.jpg' %}" alt="Profile Picture">
+            {% endif %}
+        </div>
 
-        {% if friend.first_name %}
-            <p>First Name: {{ friend.first_name }}</p>
-        {% else %}
-            <p>First Name: Not Set</p>
-        {% endif %}
+        <div class="profile-details">
+            <h2>{{ friend.user.username }}'s Profile</h2>
 
-        {% if friend.last_name %}
-            <p>Last Name: {{ friend.last_name }}</p>
-        {% else %}
-            <p>Last Name: Not Set</p>
-        {% endif %}
+            <div class="user-info">
+                <div class="info-label">First Name:</div>
+                <div class="info-value">{{ friend.first_name|default:"Not Set" }}</div>
+            </div>
 
-        {% if friend.birthday %}
-            <p>Birthday: {{ app_user.profile.birthday }}</p>
-        {% else %}
-            <p>Birthday: Not Set</p>
-        {% endif %}
+            <div class="user-info">
+                <div class="info-label">Last Name:</div>
+                <div class="info-value">{{ friend.last_name|default:"Not Set" }}</div>
+            </div>
 
-        <div class="profile-stats">
-            <p>Playlists: {{ friend.get_playlist_count }}</p>
+            <div class="user-info">
+                <div class="info-label">Birthday:</div>
+                <div class="info-value">{{ friend.birthday|default:"Not Set" }}</div>
+            </div>
 
-            <p>Songs: {{ friend.get_songs_count }}</p>
-
-            <p>Posts: {{ friend.get_posts_count }}</p>
-
-            <p>Comments: {{ friend.get_comments_count }}</p>
+            <div class="profile-stats">
+                <p><strong>Playlists</strong>: {{ friend.get_playlist_count }}</p>
+                <p><strong>Songs</strong>: {{ friend.get_songs_count }}</p>
+                <p><strong>Posts</strong>: {{ friend.get_posts_count }}</p>
+                <p><strong>Comments</strong>: {{ friend.get_comments_count }}</p>
+            </div>
         </div>
     </main>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/friends_list/friend_profile.css' %}">
 {% endblock %}
