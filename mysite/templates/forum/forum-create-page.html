@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
-    <form method="POST">
+
+    <a href="{% url 'forum' %}" class="back-link">&laquo; Back</a>
+
+    <form method="POST" class="form-container">
         {% csrf_token %}
         {{ form }}
-        <button>Post</button>
+        <button class="btn-submit">Post</button>
     </form>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock %}

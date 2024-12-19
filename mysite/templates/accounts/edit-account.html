@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
     
-    <a href="{% url 'account-details' %}">&laquo; Back</a>
+    <a href="{% url 'account-details' %}" class="back-link">&laquo; Back</a>
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class="form-container">
         {% csrf_token %}
         {{form}}
-        <button>Edit</button>
+        <button class="btn-submit">Edit</button>
     </form>
 
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/accounts/edit-account.css' %}">
 {% endblock %}

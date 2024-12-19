@@ -53,7 +53,7 @@ h1 {
     border: 1px solid #ddd;
     padding: 1.5em;
     margin: 1.5em auto;
-    width: 60%;  /* Made the comment box wider */
+    width: 60%; 
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -91,7 +91,7 @@ h1 {
 
 .comment .like-counter {
     display: inline-block;
-    margin-left: 10px;  /* Space between like button and counter */
+    margin-left: 10px; 
 }
 
 .comment .actions {

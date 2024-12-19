@@ -4,15 +4,8 @@ from django.contrib.auth import get_user_model
 UserModel = get_user_model()
 
 class Playlist(models.Model):
-    name = models.CharField(max_length=15)
+    name = models.CharField(max_length=30)
     description = models.CharField(max_length=50)
-    logo = models.ImageField(
-        upload_to='album_logos/', 
-        height_field=None, width_field=None, 
-        max_length=100,
-        blank=True,
-        null=True,
-    )
     user = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, default=None, related_name="playlists")
 
     def delete(self, *args, **kwargs):

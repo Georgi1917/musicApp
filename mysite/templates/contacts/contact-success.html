@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<body>
-    <h1>You Email Has Been Sent Successfully</h1>
-    <a href="{% url 'main-page' %}">Back To The Main Page</a>
+<body class="success-page">
+    <div class="success-container">
+        <h1 class="success-title">Your Email Has Been Sent Successfully!</h1>
+        <p class="success-message">Thank you for your patience. Your email has been delivered. If you need any further assistance, feel free to reach out.</p>
+        <a href="{% url 'main-page' %}" class="btn-return">Back to the Main Page</a>
+    </div>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/contacts/contacts-success.css' %}">
 {% endblock %}

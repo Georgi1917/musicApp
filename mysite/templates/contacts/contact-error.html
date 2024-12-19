@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<body>
-    <h1>There was an error in regards to sending your Email.</h1>
-
-    <a href="{% url 'main-page' %}">Go Back To Main Page</a>
+<body class="error-page">
+    <div class="error-container">
+        <h1 class="error-title">Oops! There was an issue sending your email.</h1>
+        <p class="error-message">Please try again later or contact support if the problem persists.</p>
+        <a href="{% url 'main-page' %}" class="btn-return">Go Back to Main Page</a>
+    </div>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/contacts/contacts-error.css' %}">
 {% endblock %}

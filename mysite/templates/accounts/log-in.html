@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
-    <form action="" method="POST" style="margin: 1em 1em;">
+    <form method="POST" class="form-container">
         {% csrf_token %}
 
         {{ login_form.as_p }}
         
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn-submit">Sign In</button>
     </form>
 
     <p>Don't Have An Account? <a href="{% url 'register' %}">Sign Up</a></p>
 
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock %}

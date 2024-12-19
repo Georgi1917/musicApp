@@ -28,7 +28,7 @@ body {
     color: #fff;
 }
 
-/* Songs List */
+
 div[value] {
     background-color: #fff;
     padding: 15px 20px;
@@ -48,7 +48,7 @@ div[value]:hover {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Song Text */
+
 div[value] span {
     font-size: 0.9rem;
     font-weight: bold;
@@ -59,7 +59,7 @@ div[value] span[value="song-duration"] {
     color: #888;
 }
 
-/* Play Button */
+
 div[value] button {
     font-size: 0.9rem;
     color: #fff;
@@ -76,13 +76,13 @@ div[value] button:hover {
     transform: scale(1.1);
 }
 
-/* Volume Control */
+
 div[value] .volumeControl {
     margin-left: 10px;
     cursor: pointer;
 }
 
-/* Play Playlist Button */
+
 #play-all {
     display: block;
     margin: 30px auto;
@@ -101,7 +101,7 @@ div[value] .volumeControl {
     transform: scale(1.05);
 }
 
-/* Fallback Message */
+
 p {
     text-align: center;
     font-size: 1.2rem;

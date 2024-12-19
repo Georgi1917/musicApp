@@ -33,16 +33,16 @@ body {
 }
 
 .nav-link:hover {
-    background-color: #555; /* Lighter gray for hover */
-    color: #fff; /* Ensure good contrast */
-    transform: scale(1.05); /* Slight zoom effect on hover */
-    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3); /* Subtle text shadow */
+    background-color: #555; 
+    color: #fff; 
+    transform: scale(1.05); 
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3); 
 }
 
-/* Friends List Container */
+
 .friends-list-container {
-    margin: 50px auto 20px auto; /* Space below navigation */
-    max-width: 600px; /* Limit width */
+    margin: 50px auto 20px auto; 
+    max-width: 600px; 
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -50,7 +50,7 @@ body {
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Friend Item Styling */
+
 .friend-item {
     display: flex;
     justify-content: space-between;
@@ -86,7 +86,7 @@ body {
     color: #777;
 }
 
-/* No Friends Message */
+
 .no-friends-message {
     text-align: center;
     font-size: 1.2rem;

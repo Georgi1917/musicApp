@@ -1,4 +1,3 @@
-/* General page styling */
 body {
     background-color: #f4f4f4;
     font-family: Arial, sans-serif;
@@ -7,7 +6,7 @@ body {
     padding: 0;
 }
 
-/* Wrapper to center the content */
+
 .container {
     width: 80%;
     max-width: 1200px;
@@ -18,7 +17,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Back Link Styling */
+
 .back-link {
     display: block;
     text-align: center;
@@ -34,7 +33,7 @@ body {
     text-decoration: underline;
 }
 
-/* Form Styling */
+
 .search-form {
     display: flex;
     flex-direction: column;
@@ -42,13 +41,13 @@ body {
     margin-bottom: 30px;
     width: 80%;
     max-width: 600px;
-    margin: 0 auto; /* Center the form horizontally */
+    margin: 0 auto; 
 }
 
 .search-form label {
     font-size: 1.2rem;
     margin-bottom: 15px;
-    text-align: center; /* Ensure the label is centered */
+    text-align: center; 
 }
 
 .search-form input {
@@ -56,7 +55,7 @@ body {
     font-size: 1.2rem;
     margin-bottom: 15px;
     width: 100%;
-    max-width: 100%; /* Ensure it takes the full width of its container */
+    max-width: 100%; 
     border: 1px solid #ccc;
     border-radius: 8px;
     box-sizing: border-box;
@@ -68,26 +67,26 @@ body {
     outline: none;
 }
 
-/* Button Styling */
+
 .search-form button {
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
-    padding: 10px 20px;  /* Reduced padding to make the button smaller */
-    font-size: 1rem;     /* Slightly smaller font size */
+    padding: 10px 20px;  
+    font-size: 1rem;     
     border-radius: 8px;
-    width: auto;         /* The width of the button will now adjust based on content */
-    margin: 10px auto;   /* Centers the button horizontally */
-    display: block;      /* Ensures the button is block-level to be centered */
+    width: auto;         
+    margin: 10px auto;   
+    display: block;      
 }
 
 .search-form button:hover {
     background-color: #0056b3;
 }
 
-/* Search Results Styling */
+
 .search-results {
     text-align: center;
 }
@@ -113,7 +112,7 @@ body {
     text-decoration: underline;
 }
 
-/* Pagination Styling */
+
 .pagination {
     text-align: center;
     margin-top: 20px;

@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <body>
 
-    <a href="{% url 'account-details' %}">&laquo; Back</a>
+    <a href="{% url 'account-details' %}" class="back-link">&laquo; Back</a>
 
-    <form method="POST">
+    <form method="POST" class="form-container">
         {% csrf_token %}
         {{form}}
-        <button>Delete</button>
+        <button class="btn-submit">Delete</button>
     </form>
 
     <script>
@@ -18,4 +19,8 @@
         })
     </script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock %}
