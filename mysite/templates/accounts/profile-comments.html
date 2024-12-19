@@ -2,27 +2,42 @@
 {% load static %}
 {% block content %}
 <body>
-    <a href="{% url 'account-details' %}">&laquo; Back</a>
+    <div class="navigation">
+        <a href="{% url 'main-page' %}" class="nav-link">Home</a>
+        <a href="{% url 'account-details' %}" class="nav-link">Profile</a>
+        <a href="{% url 'profile-posts' %}" class="nav-link">Posts</a>
+        <a href="{% url 'profile-comments' %}" class="nav-link">Comments</a> <br> <br>
+    </div>
+
     <h1>Comments:</h1>
     {% for comment in comments %}
     <span value="post-likes" id="{{ comment.post.id }}"></span>
     <div class="comment">
-        <a href="{% url 'show-post' post_id=comment.post.id %}?ref=user_comments">Re: {{ comment.post.title }}</a> <br>
-        By: {{ comment.user }} <br>
-        {{ comment.content }} <br>
-        Posted: {{ comment.created_at }} <br>
-        Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.get_like_count }}</span>
-        <br>
-        {% if comment in liked_comments %}
-            <span class="like-comment">Unlike</span>
-        {% else %}
-            <span class="like-comment">Like</span>
-        {% endif %}
-        |
-        {% if comment.user == request.user %}
-            <a href="{% url 'delete-comment' post_id=comment.post.id comment_id=comment.id %}?ref=user_comments">Delete</a> | 
-            <a href="{% url 'edit-comment' post_id=comment.post.id comment_id=comment.id%}?ref=user_comments">Edit</a>
-        {% endif %}
+        <div class="original-post">
+            <a href="{% url 'show-post' post_id=comment.post.id %}?ref=user_comments">Original Post: {{ comment.post.title }}</a>
+        </div>
+        <div class="by-user">
+            <p>By: {{ comment.user }}</p>
+            <p>Posted: {{ comment.created_at }}</p>
+        </div>
+        <div class="comment-content">
+            <p>{{ comment.content }}</p>
+        </div>
+        <div class="action-div">
+            {% if comment in liked_comments %}
+                <span class="like-comment">Unlike</span>
+            {% else %}
+                <span class="like-comment">Like</span>
+            {% endif %}
+            <span>Likes: <span value="comment_likes" id="{{ comment.id }}">{{ comment.get_like_count }}</span> </span>
+            
+            <div class="action-links">
+                {% if comment.user == request.user %}
+                    <a href="{% url 'delete-comment' post_id=comment.post.id comment_id=comment.id %}?ref=user_comments">Delete</a>
+                    <a href="{% url 'edit-comment' post_id=comment.post.id comment_id=comment.id%}?ref=user_comments">Edit</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
     <br>
     {% empty %}
@@ -32,4 +47,8 @@
     <script src="{% static 'js-files/forum/toggle-comment-like.js' %}"></script>
 
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts/profile-comments.css' %}">
 {% endblock %}

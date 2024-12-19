@@ -5,7 +5,7 @@ body {
     padding: 0;
 }
 
-/* Navigation bar */
+
 .navigation {
     background-color: #333; 
     color: white;
@@ -24,6 +24,7 @@ body {
     font-size: 1.2rem; 
     font-weight: bold; 
     text-decoration: none;
+    text-align: center;
     padding: 10px 20px; 
     border-radius: 5px; 
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease; 
@@ -110,7 +111,7 @@ header h1 {
     padding-top: 10px;
 }
 
-/* Like button */
+
 .like-button {
     background-color: #007BFF;
     color: white;

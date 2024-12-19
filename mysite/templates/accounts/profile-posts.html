@@ -3,33 +3,50 @@
 {% block content %}
 <body>
 
-    <a href="{% url 'account-details' %}">&laquo; Back</a>
+    <div class="navigation">
+        <a href="{% url 'main-page' %}" class="nav-link">Home</a>
+        <a href="{% url 'account-details' %}" class="nav-link">Profile</a>
+        <a href="{% url 'profile-posts' %}" class="nav-link">Posts</a>
+        <a href="{% url 'profile-comments' %}" class="nav-link">Comments</a> <br> <br>
+    </div>
 
     <header>
-        <h1>{{request.user.username}}'s Posts:</h1>
+        <h1>Your Posts:</h1>
     </header>
 
+    <div class="all-posts">
     {% for post in posts %}
         <div class="post">
             <a href="{% url 'show-post' post_id=post.id %}?ref=user_posts" style="text-decoration: none; color: black;">
                 <div class="post-link">
-                        By: {{ post.user }} | Posted: {{ post.created_at }} <br>
-                        {{post.title}} <br>
-                        {{post.content}} <br>
-                        Upvotes : <span id="{{ post.id }}" value="post-likes">{{ post.get_like_count }}</span> <span> |</span> Comments : {{post.get_comment_count}} |
+                    By: {{ post.user }} | Posted: {{ post.created_at }} <br>
+                </div>
+                <div class="post-content">
+                    <p class="title">{{post.title}}</p>
+                    <p class="content">{{post.content}}</p>
                 </div>
             </a>
-            {% if post in likes %}
-            <span class="like-button">Unlike</span>
-            {% else %}
-            <span class="like-button">Like</span>
-            {% endif %}
+            <div class="post-footer">
+                {% if post in likes %}
+                    <span class="like-button">Unlike</span>
+                {% else %}
+                    <span class="like-button">Like</span>
+                {% endif %}
+                <div class="post-footer-other">
+                    <span>Likes : <span id="{{ post.id }}" value="post-likes">{{ post.get_like_count }}</span></span> 
+                    <span>Comments : {{post.get_comment_count}}</span>
+                </div>
+            </div>
         </div>
-        <br><br>
-    {% empty %}
-        <p>No posts</p>
-    {% endfor %}
+        {% empty %}
+            <p>No posts</p>
+        {% endfor %}
+    </div>
 
     <script src="{% static 'js-files/forum/toggle-post-like.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts/profile-posts.css' %}">
 {% endblock %}

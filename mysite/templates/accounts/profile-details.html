@@ -2,56 +2,56 @@
 {% load static %}
 {% block content %}
 <body>
-    <a href="{% url 'main-page' %}">Home</a>
-    <a href="{% url 'account-details' %}">Profile</a>
-    <a href="{% url 'profile-posts' %}">Posts</a>
-    <a href="{% url 'profile-comments' %}">Comments</a> <br> <br>
-
-    <div class="profile-details">
-
-        {% if app_user.profile.profile_picture %}
-            <img src="{{ app_user.profile.profile_picture.url }}" alt="Profile Picture">
-        {% else %}
-            <img src="{% static 'images/default-profile-image.jpg' %}" alt="Profile Picture">
-        {% endif %}
-
-        <p>Username: {{ app_user.username }}</p>
-
-        {% if app_user.profile.first_name %}
-            <p>First Name: {{ app_user.profile.first_name }}</p>
-        {% else %}
-            <p>First Name: Not Set</p>
-        {% endif %}
-
-        {% if app_user.profile.last_name %}
-            <p>Last Name: {{ app_user.profile.last_name }}</p>
-        {% else %}
-            <p>Last Name: Not Set</p>
-        {% endif %}
-
-        {% if app_user.profile.birthday %}
-            <p>Birthday: {{ app_user.profile.birthday }}</p>
-        {% else %}
-            <p>Birthday: Not Set</p>
-        {% endif %}
-
-        <div class="profile-stats">
-            <p>Playlists: {{ app_user.profile.get_playlist_count }}</p>
-
-            <p>Songs: {{ app_user.profile.get_songs_count }}</p>
-
-            <p>Posts: {{ app_user.profile.get_posts_count }}</p>
-
-            <p>Comments: {{ app_user.profile.get_comments_count }}</p>
-        </div>
-
-        <div class="profile-links">
-            <a href="{% url 'edit-account' %}">Edit Profile</a>
-            <a href="{% url 'change-password' %}">Change Password</a>
-            <a href="{% url 'delete-account' %}">Delete Profile</a>
-            <a href="#" id="logout-button">Logout</a>
-        </div>
+    <div class="navigation">
+        <a href="{% url 'main-page' %}" class="nav-link">Home</a>
+        <a href="{% url 'account-details' %}" class="nav-link">Profile</a>
+        <a href="{% url 'profile-posts' %}" class="nav-link">Posts</a>
+        <a href="{% url 'profile-comments' %}" class="nav-link">Comments</a> <br> <br>
     </div>
+
+    <main class="profile-container">
+
+        <div class="profile-picture">
+            {% if app_user.profile.profile_picture %}
+                <img src="{{ app_user.profile.profile_picture.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'images/default-profile-image.jpg' %}" alt="Profile Picture">
+            {% endif %}
+        </div>
+
+        <div class="profile-details">
+            <h2>{{ app_user.username }}'s Profile</h2>
+
+            <div class="user-info">
+                <div class="info-label">First Name:</div>
+                <div class="info-value">{{ app_user.profile.first_name|default:"Not Set" }}</div>
+            </div>
+
+            <div class="user-info">
+                <div class="info-label">Last Name:</div>
+                <div class="info-value">{{ app_user.profile.last_name|default:"Not Set" }}</div>
+            </div>
+
+            <div class="user-info">
+                <div class="info-label">Birthday:</div>
+                <div class="info-value">{{ app_user.profile.birthday|default:"Not Set" }}</div>
+            </div>
+
+            <div class="profile-stats">
+                <p><strong>Playlists</strong>: {{ app_user.profile.get_playlist_count }}</p>
+                <p><strong>Songs</strong>: {{ app_user.profile.get_songs_count }}</p>
+                <p><strong>Posts</strong>: {{ app_user.profile.get_posts_count }}</p>
+                <p><strong>Comments</strong>: {{ app_user.profile.get_comments_count }}</p>
+            </div>
+
+            <div class="profile-links">
+                <a href="{% url 'edit-account' %}">Edit Profile</a>
+                <a href="{% url 'change-password' %}">Change Password</a>
+                <a href="{% url 'delete-account' %}">Delete Account</a>
+                <a href="#" id="logout-button">Logout</a>
+            </div>
+        </div>
+    </main>
 
     <form action="{% url 'logout' %}" method="POST" id="logout-form" display="none">
         {% csrf_token %}
@@ -59,4 +59,8 @@
 
     <script src="{% static 'js-files/accounts/logout.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts/profile-details.css' %}">
 {% endblock %}
