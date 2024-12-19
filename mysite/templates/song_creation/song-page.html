@@ -2,8 +2,11 @@
 {% load static %}
 {% block content %}
 <body>
-    
-    <a href="{% url 'playlist-page' %}">&laquo; Back</a> <br>
+
+    <section class="links">
+        <a href="{% url 'playlist-page' %}" class="action-link">&laquo; Back</a>
+        <a href="{% url 'create-song' album_id=album_id %}" class="action-link">Add a Song &raquo;</a>
+    </section>
 
     {% if songs %}
         {% for song in songs %}
@@ -12,7 +15,7 @@
             <button value="{{song.duration_in_seconds}}">Play</button>
             <label for="volumeControl">Volume:</label>
             <input type="range" class="volumeControl" min="0" max="1" step="0.01" value="0.5" disabled>
-            <a href="{% url 'edit-song' album_id=album_id song_id=song.id %}">Edit</a> | <a href="{% url 'delete-song' album_id=album_id song_id=song.id %}">Delete</a> <br>
+            <a href="{% url 'edit-song' album_id=album_id song_id=song.id %}">Edit</a> | <a href="{% url 'delete-song' album_id=album_id song_id=song.id %}">Delete</a>
         </div>
         {% endfor %}
 
@@ -20,8 +23,6 @@
         <p>Looks like you have no songs</p>
     {% endif %}
 
-    <br>
-    <a href="{% url 'create-song' album_id=album_id %}">Add a Song</a>
     <button id="play-all">Play Playlist</button>
 
     <script src="{% static 'js-files/song_creation/normalize_volume.js' %}"></script>
@@ -29,4 +30,8 @@
     <script src="{% static 'js-files/song_creation/change_volume.js' %}"></script>
     <script src="{% static 'js-files/song_creation/play_all_songs_automatically.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/song_creation/song-page.css' %}">
 {% endblock %}

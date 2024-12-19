@@ -3,8 +3,10 @@
 {% block content %}
 <body>
 
-    <a href="{% url 'playlist-page' %}">&laquo; Back</a>
-
+    <section class="links">
+        <a href="{% url 'playlist-page' %}">&laquo; Back</a>
+    </section>
+    
     {% if songs %}
         {% for song in songs %}
         <div value="{{song.file.url}}">
@@ -26,4 +28,8 @@
     <script src="{% static 'js-files/song_creation/change_volume.js' %}"></script>
     <script src="{% static 'js-files/song_creation/play_all_songs_automatically.js' %}"></script>
 </body>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/song_creation/song-page.css' %}">
 {% endblock %}

@@ -2,15 +2,17 @@
 {% load static %}
 {% block content %}
 <body>
-    {% if ref == 'user_posts' %}
-        <a href="{% url 'profile-posts' %}">&laquo; Back</a>
-    {% elif ref == "user_comments" %}
-        <a href="{% url 'profile-comments' %}">&laquo; Back</a>
-    {% elif ref == "friend_posts" %}
-        <a href="{% url 'see-posts' friend_slug=friend_slug %}">&laquo; Back</a>
-    {% else %}
-        <a href="{% url 'forum' %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}">&laquo; Back</a>
-    {% endif %}
+    <div class="link-container">
+        {% if ref == 'user_posts' %}
+            <a href="{% url 'profile-posts' %}" class="action-link">&laquo; Back</a>
+        {% elif ref == "user_comments" %}
+            <a href="{% url 'profile-comments' %}" class="action-link">&laquo; Back</a>
+        {% elif ref == "friend_posts" %}
+            <a href="{% url 'see-posts' friend_slug=friend_slug %}" class="action-link">&laquo; Back</a>
+        {% else %}
+            <a href="{% url 'forum' %}?searched_post={{ searched_post }}&filter_by={{ filter_by }}&page={{ page_num }}" class="action-link">&laquo; Back</a>
+        {% endif %}
+    </div>
 
     <div class="post">
         <h1>Post:</h1>

@@ -88,17 +88,29 @@ body {
     color: #fff;
 }
 
-a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-    margin-right: 20px;
-    transition: color 0.3s, text-decoration 0.3s;
+.link-container {
+    display: flex;
+    gap: 2em;
+    justify-content: center;
+    padding: 1em 5%;
 }
 
-a:hover {
-    color: #0056b3;
-    text-decoration: underline;
+.action-link {
+    font-size: 1.4rem;
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 2px solid #007BFF;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.action-link:hover {
+    background-color: #007BFF;
+    color: white;
+    transform: scale(1.1);
 }
 
 h1 {

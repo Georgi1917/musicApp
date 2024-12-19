@@ -1,0 +1,129 @@
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif; 
+    color: #333; 
+    margin: 0;
+    padding: 0;
+}
+
+.link-container {
+    display: flex;
+    gap: 2em;
+    justify-content: flex-start;
+    padding: 1em 5%;
+}
+
+.action-link {
+    font-size: 1.4rem;
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 2px solid #007BFF;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.action-link:hover {
+    background-color: #007BFF;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Section titles */
+.section-title {
+    font-size: 1.8rem;
+    margin: 1.5em 0 1em 5%;
+    color: #333;
+    text-decoration: underline;
+}
+
+/* Playlists container */
+.playlists-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+    justify-content: flex-start;
+    padding-left: 5%;
+    margin-top: 1em;
+}
+
+/* Playlist card styling */
+.playlist-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    width: 250px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+}
+
+.playlist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Playlist name */
+.playlist-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    word-wrap: break-word;
+}
+
+/* Playlist links */
+.playlist-links {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.card-link {
+    text-decoration: none;
+    color: #007BFF;
+    transition: color 0.3s ease;
+}
+
+.card-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Playlist buttons */
+.playlist-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.playlist-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Unfollow button */
+.unfollow-button {
+    background-color: #FF4D4D;
+}
+
+.unfollow-button:hover {
+    background-color: #CC0000;
+}
+
+/* Empty message */
+.empty-message {
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+    margin-top: 2em;
+}
