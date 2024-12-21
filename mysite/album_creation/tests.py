@@ -107,7 +107,6 @@ class TestEditPlaylistPage(TestCase):
         cls.playlist = Playlist.objects.create(
             name="Rock",
             description="A cool Rock Playlist",
-            logo=None,
             user=cls.user
         )
 
