@@ -24,28 +24,24 @@ class TestPlaylistPage(TestCase):
         cls.playlist1 = Playlist.objects.create(
             name="Rock",
             description="A cool rock playlist",
-            logo=None,
             user=cls.user
         )
 
         cls.playlist2 = Playlist.objects.create(
             name="Folk",
             description="A cool folk playlist",
-            logo=None,
             user=cls.user
         )
 
         cls.playlist3 = Playlist.objects.create(
             name="Regae",
             description="A cool regae playlist",
-            logo=None,
             user=cls.another_user
         )
 
         cls.playlist4 = Playlist.objects.create(
             name="Heavy Metal",
             description="A cool Heavy Metal Playlist",
-            logo=None,
             user=cls.another_user
         )
 
