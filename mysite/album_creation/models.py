@@ -8,10 +8,6 @@ class Playlist(models.Model):
     description = models.CharField(max_length=50)
     user = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, default=None, related_name="playlists")
 
-    def delete(self, *args, **kwargs):
-        self.logo.delete()
-        super(Playlist, self).delete(*args, **kwargs)
-
     def __str__(self) -> str:
         return self.name
     
