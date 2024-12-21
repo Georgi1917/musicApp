@@ -150,7 +150,7 @@ def delete_account(request):
 
             messages.success(request, "Your account has been succesfully deleted.")
 
-            return redirect("home")
+            return redirect("main-page")
 
     else:
         form = PasswordConfirmationForm()
